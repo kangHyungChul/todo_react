@@ -1,22 +1,17 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.scss";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import type { Metadata } from 'next';
+import { Nanum_Gothic } from 'next/font/google';
+import './globals.scss';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+const nanumGothic = Nanum_Gothic({
+    subsets: ['latin'],
+    weight: ['400', '700', '800'],
 });
 
 export const metadata: Metadata = {
-    title: "Todo App",
-    description: "Todo App",
+    title: 'Todo App',
+    description: 'Todo App',
 };
 
 export default function RootLayout({
@@ -25,8 +20,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ko">
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <html lang='ko'>
+            <body className={`${nanumGothic.className}`}>
                 <Header />
                 <main>
                     {children}
