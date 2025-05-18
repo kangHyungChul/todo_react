@@ -1,26 +1,26 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+// import { usePathname } from 'next/navigation';
 import styles from './Header.module.scss';
 
 const Header = () => {
     
-    const currentPath = usePathname();
+    // const currentPath = usePathname();
 
-    const pathname = (path: string) => {
-        return currentPath.startsWith(path);
-    };
+    // const pathname = (path: string) => {
+    //     return currentPath.startsWith(path);
+    // };
 
-    const linkStyle = (path: string) => {
-        return pathname(path) ? `${styles['header__dep2-link']} ${styles['header__dep2-link--active']}` : `${styles['header__dep2-link']}`;
-    };
+    // const linkStyle = (path: string) => {
+    //     return pathname(path) ? `${styles['header__dep2-link']} ${styles['header__dep2-link--active']}` : `${styles['header__dep2-link']}`;
+    // };
 
     return (
         <header className={styles.header}>
-            <h1 className={`${styles['header__title']}`}><Link href='/'>TODO REACT</Link></h1>
+            <h1 className={`${styles['header__title']}`}><Link href="/">TODO REACT</Link></h1>
             <nav>
-                <ul className={`${styles['header__gnb']}`}>
+                {/* <ul className={`${styles['header__gnb']}`}>
                     <li>
                         <Link href='/hook/usestate' className={`${styles['header__gnb-link']}`}>hook</Link>
                         { 
@@ -35,7 +35,7 @@ const Header = () => {
                             </ul>
                         }
                     </li>
-                </ul>
+                </ul> */}
             </nav>
         </header>
     );

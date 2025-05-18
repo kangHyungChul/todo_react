@@ -1,0 +1,21 @@
+.card {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+
+    button {
+        background-color: #ff6666;
+        color: white;
+        border: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+}

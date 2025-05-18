@@ -6,7 +6,8 @@ import styles from './Button.module.scss';
 // Props 타입 정의 typescript
 interface ButtonProps {
     children: React.ReactNode;
-    type?: 'primary' | 'secondary' | 'danger'; // 버튼 스타일 타입
+    type?: 'button' | 'submit' | 'reset';
+    style?: 'primary' | 'secondary' | 'danger'; // 버튼 스타일 타입
     size?: 'small' | 'medium' | 'large'; // 버튼 크기
     disabled?: boolean; // 비활성화 여부
     onClick?: () => void; // 클릭 이벤트 핸들러
@@ -16,7 +17,8 @@ interface ButtonProps {
 // Button 컴포넌트 정의
 const Button: React.FC<ButtonProps> = ({
     children,
-    type = 'primary', // 기본값: primary
+    type = 'button', // 기본값: button
+    style = 'primary', // 기본값: primary
     size = 'medium', // 기본값: medium
     disabled = false, // 기본값: false
     onClick,
@@ -25,7 +27,7 @@ const Button: React.FC<ButtonProps> = ({
     const baseClass = styles.button;
     const buttonClasses = [
         baseClass,
-        `${baseClass}--${type}`,
+        `${baseClass}--${style}`,
         size !== 'medium' ? `${baseClass}--${size}` : '',
         className,
     ].filter(Boolean).join(' ');
@@ -33,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
     // 버튼 컴포넌트 반환
     return (
         <button
+            type={type}
             className={buttonClasses}
             disabled={disabled}
             onClick={onClick}

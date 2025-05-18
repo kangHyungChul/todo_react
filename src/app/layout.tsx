@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { Nanum_Gothic } from 'next/font/google';
-import './globals.scss';
+import '@/styles/globals.scss';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 const nanumGothic = Nanum_Gothic({
-    subsets: ['latin'],
     weight: ['400', '700', '800'],
+    subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='ko'>
+        <html lang="ko">
             <body className={`${nanumGothic.className}`}>
                 <Header />
                 <main>
