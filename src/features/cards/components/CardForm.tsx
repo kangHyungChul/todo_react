@@ -13,13 +13,14 @@ export interface CardFormRef {
 interface CardFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onAdd: (title: string, content: string, color: string) => void;
     ref: React.Ref<CardFormRef>;
+    title: string;
+    setTitle: (value: string) => void;
 }
 
 // CardForm 컴포넌트는 부모로부터 ref를 받아 내부 메서드를 외부에 노출가능
 // CardFormRef만 노출시킨 상태 / 전체노출은 HTMLInputElement
 // const CardForm = forwardRef<CardFormRef, { onAdd: (title: string, content: string) => void }>(
-const CardForm = ({onAdd, ref}: CardFormProps) => {
-    const [title, setTitle] = useState('');
+const CardForm = ({onAdd, ref, title, setTitle}: CardFormProps) => {
     const [content, setContent] = useState('');
     const [color, setColor] = useState('#ffffff');
 

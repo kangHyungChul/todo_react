@@ -29,7 +29,7 @@ const eslintConfig = [
         files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'], // 파일 확장자 지정
         rules: {
             ...defaultRules,
-            semi: ['warn', 'always'], // 세미콜론 사용 권장
+            semi: ['warn', 'always'], // 세미콜론 사용 권장            
         },
     },
 ];

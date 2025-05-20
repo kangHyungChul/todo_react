@@ -23,6 +23,14 @@ const CardList = ({ cards, onDelete, onColorChange }: Props) => {
         onColorChange(id, color);
     }, [onColorChange]);
 
+    // const handleDelete = (id: string) => {
+    //     onDelete(id);
+    // };
+
+    // const handleColorChange = (id: string, color: string) => {
+    //     onColorChange(id, color);
+    // };
+
     return (
         <>
             {cards.length > 0 ? (
