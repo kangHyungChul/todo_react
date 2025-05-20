@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CardType } from './types/card';
 import { saveToStorage, loadFromStorage } from '@/lib/utils/localStorage';
 import styles from './styles/Cardsection.module.scss';

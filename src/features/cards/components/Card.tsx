@@ -52,14 +52,14 @@ const Card = ({ id, title, content, color, onDelete, onColorChange }: CardProps)
 };
 
 // 메모이제이션된 컴포넌트로 내보냄
-// export default memo(Card, (prev, next) => {
-//     // console.log(prev, next);
-//     // console.log('prev === next', prev.id, next.id, prev.color === next.color);
-//     return (
-//         // prev.id === next.id &&
-//         // prev.title === next.title &&
-//         // prev.content === next.content &&
-//         prev.color === next.color
-//     );
-// });
-export default Card;
+export default memo(Card, (prev, next) => {
+    // console.log(prev, next);
+    // console.log('prev === next', prev.id, next.id, prev.color === next.color);
+    return (
+        // prev.id === next.id &&
+        // prev.title === next.title &&
+        // prev.content === next.content &&
+        prev.color === next.color
+    );
+});
+// export default Card;
