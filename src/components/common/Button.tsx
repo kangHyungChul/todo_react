@@ -24,11 +24,10 @@ const Button: React.FC<ButtonProps> = ({
     onClick,
     className = '', // 기본값: 빈 문자열
 }) => {
-    const baseClass = styles.button;
     const buttonClasses = [
-        baseClass,
-        `${baseClass}--${style}`,
-        size !== 'medium' ? `${baseClass}--${size}` : '',
+        styles.button,
+        styles[`button--${style}`],
+        size !== 'medium' ? styles[`button--${size}`] : '',
         className,
     ].filter(Boolean).join(' ');
 
