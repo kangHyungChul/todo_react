@@ -18,7 +18,7 @@ interface CardProps {
 // 카드가 많아졌을 때 렌더링 성능을 향상시켜줌.
 const Card = ({ id, title, content, color, onDelete, onColorChange }: CardProps) => {
 
-    console.log(`렌더링된 카드: ${id}`);
+    // console.log(`렌더링된 카드: ${id}`);
 
     // useMemo: 카드 배경색이 변할 때만 스타일 객체를 다시 계산함.
     const cardStyle = useMemo(() => {

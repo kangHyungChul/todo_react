@@ -13,16 +13,25 @@ export interface CardFormRef {
 interface CardFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onAdd: (title: string, content: string, color: string) => void;
     ref: React.Ref<CardFormRef>;
-    title: string;
-    setTitle: (value: string) => void;
+    titleState: {
+        title: string;
+        setTitle: (value: string) => void;
+    };
+    contentState: {
+        content: string;
+        setContent: (value: string) => void;
+    };
 }
 
 // CardForm 컴포넌트는 부모로부터 ref를 받아 내부 메서드를 외부에 노출가능
 // CardFormRef만 노출시킨 상태 / 전체노출은 HTMLInputElement
 // const CardForm = forwardRef<CardFormRef, { onAdd: (title: string, content: string) => void }>(
-const CardForm = ({onAdd, ref, title, setTitle}: CardFormProps) => {
-    const [content, setContent] = useState('');
+const CardForm = ({onAdd, ref, titleState, contentState}: CardFormProps) => {
+
     const [color, setColor] = useState('#ffffff');
+
+    const { title, setTitle } = titleState;
+    const { content, setContent } = contentState;
 
     // 제목 input에 포커스를 주기 위한 참조.
     // Ref가 DOM요소를 참조함으로 초기값은 null로 해야함
@@ -80,9 +89,5 @@ const CardForm = ({onAdd, ref, title, setTitle}: CardFormProps) => {
         </div>
     );
 };
-
-
-// 컴포넌트 이름 정의(디버깅용)
-CardForm.displayName = 'CardForm';
 
 export default CardForm;

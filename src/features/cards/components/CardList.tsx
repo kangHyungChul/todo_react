@@ -3,7 +3,7 @@
 import Card from './Card';
 import { CardType } from '../types/card';
 import styles from '../styles/CardList.module.scss';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 interface Props {
     cards: CardType[];
@@ -16,12 +16,22 @@ const CardList = ({ cards, onDelete, onColorChange }: Props) => {
 
     // useCallback: 함수 재생성을 막아 하위 컴포넌트에서 props 변화 감지 방지
     const handleDelete = useCallback((id: string) => {
+        console.log('카드 삭제 실행!');
         onDelete(id);
     }, [onDelete]);
 
     const handleColorChange = useCallback((id: string, color: string) => {
+        console.log('카드 색상 변경 실행!');
         onColorChange(id, color);
     }, [onColorChange]);
+
+    // useMemo: 카드 랜더링 최적화
+    const RenderedCards = useMemo(() => {
+        console.log('카드 랜더링!');
+        return cards.map((card) => (
+            <Card key={card.id} id={card.id} title={card.title} content={card.content} color={card.color} onDelete={handleDelete} onColorChange={handleColorChange} />
+        ));
+    }, [cards, handleDelete, handleColorChange]);
 
     // const handleDelete = (id: string) => {
     //     onDelete(id);
@@ -35,9 +45,7 @@ const CardList = ({ cards, onDelete, onColorChange }: Props) => {
         <>
             {cards.length > 0 ? (
                 <ul className={ styles['card-list'] }>
-                    {cards.map((card) => (
-                        <Card key={card.id} id={card.id} title={card.title} content={card.content} color={card.color} onDelete={handleDelete} onColorChange={handleColorChange} />
-                    ))}
+                    {RenderedCards}
                 </ul>
             ) : (
                 <p className={ styles['non-card'] }>카드가 없습니다.</p>
