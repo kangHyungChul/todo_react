@@ -10,7 +10,9 @@ export interface CardFormRef {
     focusContent: () => void;
 }
 
-interface CardFormProps extends React.HTMLAttributes<HTMLDivElement> {
+// 부모 컴포넌트에서 전달받는 속성 정의
+// interface CardFormProps extends React.HTMLAttributes<HTMLDivElement>  사용시 HTML속성(ClassName, Style, onClick등등 까지 전달가능)
+export interface CardFormProps {
     onAdd: (title: string, content: string, color: string) => void;
     ref: React.Ref<CardFormRef>;
     titleState: {
@@ -25,7 +27,6 @@ interface CardFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 // CardForm 컴포넌트는 부모로부터 ref를 받아 내부 메서드를 외부에 노출가능
 // CardFormRef만 노출시킨 상태 / 전체노출은 HTMLInputElement
-// const CardForm = forwardRef<CardFormRef, { onAdd: (title: string, content: string) => void }>(
 const CardForm = ({onAdd, ref, titleState, contentState}: CardFormProps) => {
 
     const [color, setColor] = useState('#ffffff');
