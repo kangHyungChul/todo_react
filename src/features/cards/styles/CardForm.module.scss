@@ -1,0 +1,21 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 400px;
+    margin: 20px auto;
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        &[type=color] {
+            padding: 4px;
+            height: 40px;
+        }
+    }
+
+}

@@ -2,8 +2,9 @@
 
 // import { useState } from 'react';
 // // import Image from 'next/image';
-// import styles from './page.module.scss';
+import styles from './page.module.scss';
 // import Button from '@/components/Button';
+import CardSection from '@/features/cards/CardSection';
 
 export default function Home() {
     // const [count, setCount] = useState(0);
@@ -26,9 +27,9 @@ export default function Home() {
     // };
 
     return (
-        <>
-            build test - main 0514 PM 05:57
-        </>
+        <main className={ styles.main }>
+            <CardSection />
+        </main>
         // <div className={styles.page}>
         //     <main className={styles.main}>
         //         <div className={styles.counter}>

@@ -15,6 +15,7 @@ const compat = new FlatCompat({
 
 const defaultRules = {
     quotes: ['warn', 'single'], // 따옴표 사용 권장
+    'jsx-quotes': ['warn', 'prefer-double'], // JSX에서 쌍따옴표 사용 권장
     indent: ['warn', 4], // 들여쓰기(4칸) 권장
 };
 
@@ -28,7 +29,7 @@ const eslintConfig = [
         files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'], // 파일 확장자 지정
         rules: {
             ...defaultRules,
-            semi: ['warn', 'always'], // 세미콜론 사용 권장
+            semi: ['warn', 'always'], // 세미콜론 사용 권장            
         },
     },
 ];
