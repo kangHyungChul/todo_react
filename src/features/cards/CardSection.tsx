@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useReducer } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { CardType } from './types/card';
 import { saveToStorage, loadFromStorage } from '@/lib/utils/localStorage';
 import styles from './styles/CardSection.module.scss';
@@ -9,24 +9,24 @@ import CardList from './components/CardList';
 
 const STORAGE_KEY = 'cards';
 
-type CardAction =
-    | { type: 'ADD_CARD'; payload: CardType }
-    | { type: 'DELETE_CARD'; payload: string } // id만 전달
-    | { type: 'CHANGE_COLOR'; payload: { id: string; color: string } }
+// type CardAction =
+//     | { type: 'ADD_CARD'; payload: CardType }
+//     | { type: 'DELETE_CARD'; payload: string } // id만 전달
+//     | { type: 'CHANGE_COLOR'; payload: { id: string; color: string } }
 
-const cardReducer = (state: CardType[], action: CardAction) => {
-    console.log(state, action.type, action.payload);
-    switch (action.type) {
-        case 'ADD_CARD':
-            return [...state, action.payload];
-        case 'DELETE_CARD':
-            return state.filter((card) => card.id !== action.payload);
-        case 'CHANGE_COLOR':
-            return state.map((card) => card.id === action.payload.id ? { ...card, color: action.payload.color } : card);
-        default:
-            return state;
-    }
-}
+// const cardReducer = (state: CardType[], action: CardAction) => {
+//     console.log(state, action.type, action.payload);
+//     switch (action.type) {
+//         case 'ADD_CARD':
+//             return [...state, action.payload];
+//         case 'DELETE_CARD':
+//             return state.filter((card) => card.id !== action.payload);
+//         case 'CHANGE_COLOR':
+//             return state.map((card) => card.id === action.payload.id ? { ...card, color: action.payload.color } : card);
+//         default:
+//             return state;
+//     }
+// }
 
 const CardSection = () => {
 
