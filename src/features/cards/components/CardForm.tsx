@@ -15,6 +15,7 @@ export interface CardFormRef {
 export interface CardFormProps {
     onAdd: (title: string, content: string, color: string) => void;
     ref: React.Ref<CardFormRef>;
+    cardAddDisabled: boolean;
     titleState: {
         title: string;
         setTitle: (value: string) => void;
@@ -27,7 +28,7 @@ export interface CardFormProps {
 
 // CardForm 컴포넌트는 부모로부터 ref를 받아 내부 메서드를 외부에 노출가능
 // CardFormRef만 노출시킨 상태 / 전체노출은 HTMLInputElement
-const CardForm = ({onAdd, ref, titleState, contentState}: CardFormProps) => {
+const CardForm = ({onAdd, ref, cardAddDisabled, titleState, contentState}: CardFormProps) => {
 
     const [color, setColor] = useState('#ffffff');
 
@@ -86,7 +87,7 @@ const CardForm = ({onAdd, ref, titleState, contentState}: CardFormProps) => {
                 <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
             </div>
 
-            <Button type="button" style="primary" onClick={handleSubmit}>카드 만들기</Button>
+            <Button type="button" disabled={cardAddDisabled} style="primary" onClick={handleSubmit}>카드 만들기</Button>
         </div>
     );
 };

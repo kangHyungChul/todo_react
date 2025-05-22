@@ -15,22 +15,24 @@ interface ButtonProps {
 }
 
 // Button 컴포넌트 정의
-const Button: React.FC<ButtonProps> = ({
-    children,
-    type = 'button', // 기본값: button
-    style = 'primary', // 기본값: primary
-    size = 'medium', // 기본값: medium
-    disabled = false, // 기본값: false
-    onClick,
-    className = '', // 기본값: 빈 문자열
-}) => {
+
+const Button = (
+    {
+        children,
+        type = 'button',
+        style = 'primary',
+        size = 'medium',
+        disabled = false,
+        onClick,
+        className = '',
+    }: ButtonProps
+) => {
     const buttonClasses = [
         styles.button,
         styles[`button--${style}`],
         size !== 'medium' ? styles[`button--${size}`] : '',
         className,
     ].filter(Boolean).join(' ');
-
     // 버튼 컴포넌트 반환
     return (
         <button

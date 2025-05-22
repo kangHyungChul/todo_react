@@ -3,7 +3,7 @@
 import Card from './Card';
 import { CardType } from '../types/card';
 import styles from '../styles/CardList.module.scss';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, memo } from 'react';
 
 interface Props {
     cards: CardType[];
@@ -14,7 +14,7 @@ interface Props {
 // 카드 리스트 컴포넌트 - 단순 배열 map으로 렌더링.
 const CardList = ({ cards, onDelete, onColorChange }: Props) => {
 
-    console.time('CardList');
+    // console.time('CardList');
 
     // useCallback: 함수 재생성을 막아 하위 컴포넌트에서 props 변화 감지 방지
     const handleDelete = useCallback((id: string) => {
@@ -29,7 +29,7 @@ const CardList = ({ cards, onDelete, onColorChange }: Props) => {
         onColorChange(id, color);
     }, [onColorChange]);
 
-    // const handleDelete = (id: string) => {
+    // const handleDelete =, [onColorChange]); (id: string) => {
     //     console.log('카드 삭제 실행!');
     //     console.timeEnd('CardList');
     //     onDelete(id);
@@ -43,8 +43,8 @@ const CardList = ({ cards, onDelete, onColorChange }: Props) => {
 
     // useMemo: 카드 랜더링 최적화
     const RenderedCards = useMemo(() => {
-        console.log('카드 랜더링!');
-        console.timeEnd('CardList');
+        console.log('카드 리스트 map 랜더링!');
+        // console.timeEnd('CardList');
         return cards.map((card) => (
             <Card key={card.id} id={card.id} title={card.title} content={card.content} color={card.color} onDelete={handleDelete} onColorChange={handleColorChange} />
         ));
@@ -71,4 +71,4 @@ const CardList = ({ cards, onDelete, onColorChange }: Props) => {
     );
 };
 
-export default CardList;
+export default memo(CardList);
