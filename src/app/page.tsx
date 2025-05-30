@@ -4,7 +4,8 @@
 // // import Image from 'next/image';
 import styles from './page.module.scss';
 // import Button from '@/components/Button';
-import CardSection from '@/features/cards/CardSection';
+// import CardSection from '@/features/cards/CardSection';
+import Link from 'next/link';
 
 export default function Home() {
     // const [count, setCount] = useState(0);
@@ -28,7 +29,8 @@ export default function Home() {
 
     return (
         <main className={ styles.main }>
-            <CardSection />
+            <Link href="/flight">Flight</Link>
+            {/* <CardSection /> */}
         </main>
         // <div className={styles.page}>
         //     <main className={styles.main}>

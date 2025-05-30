@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useImperativeHandle } from 'react';
+import { useState, useRef, useImperativeHandle, memo } from 'react';
 import Button from '@/components/common/Button';
 import styles from '../styles/CardForm.module.scss';
 
@@ -92,4 +92,4 @@ const CardForm = ({onAdd, ref, cardAddDisabled, titleState, contentState}: CardF
     );
 };
 
-export default CardForm;
+export default memo(CardForm);
