@@ -22,7 +22,7 @@ const defaultRules = {
 // ESLint 설정
 const eslintConfig = [
   // Next.js의 기본 ESLint, TypeScript 규칙 확장
-    ...compat.extends('next/core-web-vitals', 'next/typescript'),
+    ...compat.extends('next/core-web-vitals', 'next/typescript', 'plugin:tailwindcss/recommended'),
 
     // ts, tsx, js, jsx 규칙
     {
@@ -30,6 +30,12 @@ const eslintConfig = [
         rules: {
             ...defaultRules,
             semi: ['warn', 'always'], // 세미콜론 사용 권장            
+        },
+    },
+    {
+        files: ['**/*.css'],
+        rules: {
+            ...defaultRules,
         },
     },
 ];

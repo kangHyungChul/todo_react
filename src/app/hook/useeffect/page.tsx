@@ -38,13 +38,13 @@ export default function Home() {
                 <div className={styles.counter}>
                     <strong>현재 카운트: {count}</strong>
                     <div className={styles.buttonGroup}>
-                        <Button style="primary" size="large" onClick={ () => countSet(1) }>
+                        <Button style="primary" size="large" outline={true} onClick={ () => countSet(1) }>
                             증가
                         </Button>
-                        <Button style="danger" size="large" onClick={ () => countSet(-1) }>  
+                        <Button style="danger" size="large" outline={true} onClick={ () => countSet(-1) }>  
                             감소
                         </Button>
-                        <Button style="secondary" size="large" onClick={ reset }>
+                        <Button style="secondary" size="large" outline={true} onClick={ reset }>
                             초기화
                         </Button>
                     </div>

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+@import "tailwindcss";
+
+/* @layer ellipse[] */
+
+@theme {
+    --font-sans: 'Nanum Gothic', sans-serif;
+    --font-myongjo: 'Nanum Myeongjo', sans-serif;
+
+    --color-primary: #3b82f6;
+    --color-primary-100: #e0e7ff;
+    --color-primary-200: #c7d2fe;
+    --color-primary-300: #a3aefb;
+    --color-primary-400: #7f8cf9;
+    --color-primary-500: #6366ff;
+    --color-primary-600: #5252ff;
+    --color-primary-700: #4540e6;
+    --color-primary-800: #3e3aad;
+    --color-primary-900: #32328b;
+
+    --color-secondary: #46a758;
+    --color-secondary-100: #e6f9e9;
+    --color-secondary-200: #c6f1d6;
+    --color-secondary-300: #93e6b8;
+    --color-secondary-400: #52d392;
+    --color-secondary-500: #33c780;
+    --color-secondary-600: #239e61;
+    --color-secondary-700: #197b4b;
+    --color-secondary-800: #14623c;
+    --color-secondary-900: #0c4a2d;
+
+    --color-danger: #ef4444;
+    --color-danger-100: #fee2e2;
+    --color-danger-200: #fecaca;
+    --color-danger-300: #fca5a5;
+    --color-danger-400: #f87171;
+    --color-danger-500: #ef4444;
+    --color-danger-600: #dc2626;
+    --color-danger-700: #b91c1c;
+    --color-danger-800: #991b1b;
+    --color-danger-900: #7f1d1d;
+
+    --color-white: #ffffff;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-black: #000000;
+
+    --breakpoint-mobile: 768px;
+    --breakpoint-tablet: 1024px;
+    --breakpoint-desktop: 1280px;
+    --breakpoint-wide: 1536px;
+
+    --duration-short: 150ms;
+    --duration-medium: 300ms;
+    --duration-long: 500ms;
+}
+
+/* @layer components {
+
+    .button {
+        @apply h-8 px-1 py-2 border-none rounded-md text-base leading-1 font-medium cursor-pointer transition-all duration-200 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .button--primary {
+        @apply bg-primary text-white;
+    }
+
+    .button--secondary {
+        @apply bg-secondary text-black;
+    }
+
+    .button--danger {
+        @apply bg-danger text-white;
+    }
+
+    .button--small {
+        @apply h-6 px-2 py-1 text-sm;
+    }
+
+    .button--large {
+        @apply h-12 px-4 py-2 text-lg;
+    }
+
+    .button--disabled {
+        @apply opacity-50 cursor-not-allowed;
+    }
+
+} */
