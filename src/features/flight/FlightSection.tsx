@@ -1,5 +1,13 @@
 const fetchFlights = async () => {
-    await new Promise(resolve => setTimeout(resolve, 500));
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FLIGHT_API_URL}`, {
+        headers: {
+            serviceKey: `${process.env.NEXT_PUBLIC_FLIGHT_API_KEY}`,
+        }
+    });
+    // const data = await res.json();
+    console.log(process.env.NEXT_PUBLIC_FLIGHT_API_KEY);
+    console.log(res);
+    return res;
 };
 
 const FlightSection = async() => {

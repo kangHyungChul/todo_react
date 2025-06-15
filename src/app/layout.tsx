@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-
+import { ModalProvider } from '@/contexts/ModalContext';
+import Modal from '@/components/common/Modal';
 // const nanumGothic = Nanum_Gothic({
 //     weight: ['400', '700', '800'],
 //     subsets: ['latin'],
@@ -25,7 +26,10 @@ export default function RootLayout({
             <body>
                 <Header />
                 <main>
-                    {children}
+                    <ModalProvider>
+                        {children}
+                        <Modal />
+                    </ModalProvider>
                 </main>
                 <Footer />
             </body>

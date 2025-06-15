@@ -29,7 +29,8 @@ export default function Home() {
 
     return (
         <main className={ styles.main }>
-            <Link href="/flight">Flight</Link>
+            <Link href="/modal">Modal</Link>
+            {/* <Link href="/flight">Flight</Link> */}
             {/* <CardSection /> */}
         </main>
         // <div className={styles.page}>
