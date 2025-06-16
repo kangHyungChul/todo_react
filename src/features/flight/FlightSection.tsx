@@ -1,19 +1,26 @@
-const fetchFlights = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FLIGHT_API_URL}`, {
-        headers: {
-            serviceKey: `${process.env.NEXT_PUBLIC_FLIGHT_API_KEY}`,
-        }
-    });
-    // const data = await res.json();
-    console.log(process.env.NEXT_PUBLIC_FLIGHT_API_KEY);
+import { fetchFlights } from "./services/flightApi";
+import { FlightType } from "./types/flights";
+
+const FlightSection = async () => {
+
+    const responseBody: FlightType = {
+        searchdtCode: 'E',
+        searchDate: '20250616',
+        searchFrom: '0000',
+        searchTo: '2400',
+        flightId: '',
+        passengerOrCargo: '',
+        airportCode: '',
+    };
+
+    const res = await fetchFlights(responseBody);
     console.log(res);
-    return res;
-};
+    // console.log(res);
 
-const FlightSection = async() => {
-
-    await fetchFlights();
-
+    // useEffect(() => {
+    //     getFlights();
+    // }, []);
+    
     return (
         <div className="px-4 py-8 grid-cols-2">
             <a href="#" className="block mb-1 text-2xl font-bold text-center transition-color duration-[var(--duration-long)] text-primary/50 hover:text-primary-500 desktop:hover:text-secondary ring-4 ring-primary-500 ring-offset-1">항공편 목록</a>
