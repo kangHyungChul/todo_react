@@ -1,10 +1,12 @@
 'use client';
 
 import Button from '@/components/common/Button';
-import { useModal } from '@/contexts/ModalContext';
+// import { useModal } from '@/contexts/ModalContext';
+import useModalStore from '@/store/ModalStore';
 
 const ModalSection = () => {
-    const { openModal } = useModal();
+    // const { openModal } = useModal();
+    const { openModal } = useModalStore();
 
     return (
         <div className="px-4 py-8 grid-cols-2">

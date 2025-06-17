@@ -1,9 +1,15 @@
-import { fetchFlights } from "./services/flightApi";
-import { FlightType } from "./types/flights";
+// 'use client';
+import { fetchFlights } from './services/flightApi';
+import { FlightArrivalType } from './types/flights';
+import Button from '@/components/common/Button';
+import FlightCard from './components/FlightCard'
+// import { useSearchParams } from 'next/navigation';
 
 const FlightSection = async () => {
+    // const searchParams = useSearchParams();
+    // const page = searchParams.get('page') || '1';
 
-    const responseBody: FlightType = {
+    const responseBody: FlightArrivalType = {
         searchdtCode: 'E',
         searchDate: '20250616',
         searchFrom: '0000',
@@ -22,19 +28,13 @@ const FlightSection = async () => {
     // }, []);
     
     return (
-        <div className="px-4 py-8 grid-cols-2">
-            <a href="#" className="block mb-1 text-2xl font-bold text-center transition-color duration-[var(--duration-long)] text-primary/50 hover:text-primary-500 desktop:hover:text-secondary ring-4 ring-primary-500 ring-offset-1">항공편 목록</a>
-            <a href="#" className="block mb-1 text-2xl font-bold text-center text-primary/50 hover:text-primary-500 desktop:hover:text-secondary ring-4 ring-primary-500 ring-offset-1">항공편 목록</a>
-            <a href="#" className="block mb-1 text-2xl font-bold text-center text-primary/50 hover:text-primary-500 desktop:hover:text-secondary ring-4 ring-primary-500 ring-offset-1">항공편 목록</a>
-            {/* <ul>
-                {flights?.map((flight, index) => (
-                    <li key={index}>{flight}</li>
-                ))}
-            </ul> */}
-            <ul>
-                <li className="text-2xl">1</li>
-                <li>2</li>
+        <div className="max-w-[600px] mx-auto my-6">
+            <ul className="flex flex-col gap-4">
+                <FlightCard flight={res} />
             </ul>
+            {/* <Button type="link" href="?page=2" style="primary" size="large" outline={true}>
+                <span>더보기</span>
+            </Button> */}
         </div>
     );
 };

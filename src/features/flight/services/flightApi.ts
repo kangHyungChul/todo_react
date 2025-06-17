@@ -1,6 +1,6 @@
-import { FlightType } from '../types/flights';
+import { FlightArrivalType } from '../types/flights';
 
-const fetchFlights = async (responseBody: FlightType) => {
+const fetchFlights = async (responseBody: FlightArrivalType) => {
 
     // const url = `https://apis.data.go.kr/B551177/statusOfAllFltDeOdp/getFltArrivalsDeOdp?serviceKey=mgmocvfWzvWnvYVWMnE4RhRkM4iz3NbgedmhFfxBiSimGhi%2ByrWfvox%2FyvolU1NtfEaaWFytgEJFuy52aj7Frg%3D%3D&pageNo=1&numOfRows=10&searchdtCode=E&searchDate=20250616&searchFrom=0000&searchTo=2400&passengerOrCargo=P&airportCode=BKI&tmp1=-&tmp2=-&type=json`;
     const url = `${process.env.FLIGHT_API_URL}`;
@@ -8,7 +8,7 @@ const fetchFlights = async (responseBody: FlightType) => {
     const body = new URLSearchParams({
         serviceKey: `${process.env.FLIGHT_API_KEY}`,
         pageNo: responseBody.pageNo || '1',
-        numOfRows: responseBody.numOfRows || '10',
+        numOfRows: responseBody.numOfRows || '30',
         searchdtCode: responseBody.searchdtCode || 'E', // 스케줄조회기준 (S: 예정시간, E: 변경시간, default=E)
         searchDate: responseBody.searchDate || '20250616', // 조회일자
         searchFrom: responseBody.searchFrom || '0000', // 스케줄 ~~부터

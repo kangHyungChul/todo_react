@@ -1,14 +1,16 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 // import styles from './Button.module.css';
 
 // Props 타입 정의 typescript
 interface ButtonProps {
     children: React.ReactNode;
-    type?: 'button' | 'submit' | 'reset';
+    type?: 'button' | 'submit' | 'reset' | 'link';
     style?: 'primary' | 'secondary' | 'danger'; // 버튼 스타일 타입
     size?: 'small' | 'medium' | 'large'; // 버튼 크기
+    href?: string; // 링크 주소
     outline?: boolean; // 버튼 테두리 여부
     disabled?: boolean; // 비활성화 여부
     onClick?: () => void; // 클릭 이벤트 핸들러
@@ -86,6 +88,7 @@ const Button = (
         type = 'button',
         style = 'primary',
         size = 'medium',
+        href,
         outline = false,
         disabled = false,
         onClick,
@@ -101,6 +104,11 @@ const Button = (
     // ].filter(Boolean).join(' ');
     // 버튼 컴포넌트 반환
     return (
+        type === 'link' ? (
+            <Link href={href || ''} className={buttonClasses}>
+                {children}
+            </Link>
+        ) : (
         <button
             type={type}
             className={buttonClasses}
@@ -109,6 +117,7 @@ const Button = (
         >
             {children}
         </button>
+        )
     );
 };
 

@@ -1,9 +1,11 @@
 'use client';
 
-import { useModal } from '@/contexts/ModalContext';
+// import { useModal } from '@/contexts/ModalContext';
+import useModalStore from '@/store/ModalStore';
 
 const Modal = () => {
-    const { isOpen, content, closeModal } = useModal();
+    // const { isOpen, content, closeModal } = useModal();
+    const { isOpen, content, closeModal } = useModalStore();
 
     if (!isOpen) return null;
 
