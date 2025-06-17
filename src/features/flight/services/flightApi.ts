@@ -2,7 +2,6 @@ import { FlightArrivalType } from '../types/flights';
 
 const fetchFlights = async (responseBody: FlightArrivalType) => {
 
-    // const url = `https://apis.data.go.kr/B551177/statusOfAllFltDeOdp/getFltArrivalsDeOdp?serviceKey=mgmocvfWzvWnvYVWMnE4RhRkM4iz3NbgedmhFfxBiSimGhi%2ByrWfvox%2FyvolU1NtfEaaWFytgEJFuy52aj7Frg%3D%3D&pageNo=1&numOfRows=10&searchdtCode=E&searchDate=20250616&searchFrom=0000&searchTo=2400&passengerOrCargo=P&airportCode=BKI&tmp1=-&tmp2=-&type=json`;
     const url = `${process.env.FLIGHT_API_URL}`;
 
     const body = new URLSearchParams({
@@ -39,20 +38,10 @@ const fetchFlights = async (responseBody: FlightArrivalType) => {
 
         return data.response.body;
 
-        // const data = await res.json();
-        // console.log(data.response.body);
-
-        // const json = await res.json();
-        // return data; // 실제 데이터 위치
-
     } catch (error) {
         console.error('Error fetching flights:', error);
         throw error;
     }
-    // const data = await res.json();
-    // console.log(process.env.NEXT_PUBLIC_FLIGHT_API_KEY);
-    // console.log(res);
-    // return res;
 };
 
 export { fetchFlights };

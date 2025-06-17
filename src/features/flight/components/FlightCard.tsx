@@ -5,8 +5,9 @@ import useModalStore from '@/store/ModalStore';
 import FlightDetailModal from './FlightDetailModal';
 
 const FlightCard = ({ flight }: { flight: FlightArrivalResponseType }) => {
-    const { openModal } = useModalStore();
-    
+    const openModal = useModalStore((state) => state.openModal);
+    // const { openModal } = useModalStore();
+
     return (
         <>
             {flight.items.map((flight: FlightArrivalItemType) => (
