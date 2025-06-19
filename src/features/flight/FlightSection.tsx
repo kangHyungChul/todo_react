@@ -25,9 +25,10 @@ const getFlights = async () => {
         passengerOrCargo: '',
         airportCode: '',
     };
-
+    
     const res = await fetchFlights('arrival', responseBody);
-    return { resNowDate: getNowDate, resNowTime: getNowTime, resSearchEndTime: getSearchEndTime, ...res };
+    // console.log({ dateInfo: { resNowDate: getNowDate, resNowTime: getNowTime, resSearchEndTime: getSearchEndTime }, ...res });
+    return { dateInfo: { resNowDate: getNowDate, resNowTime: getNowTime, resSearchEndTime: getSearchEndTime }, ...res };
 };
 
 const FlightSection = async () => {
@@ -37,11 +38,10 @@ const FlightSection = async () => {
     // 초기 데이터 로드
     const res = await getFlights();
 
-    console.log(res);
     
     return (
         <div className="max-w-[600px] mx-auto my-6">
-            <FlightCardList searchDate={res.resNowDate} searchFrom={res.resNowTime} searchTo={res.resSearchEndTime} flight={res.items} getFlights={getFlights}/>
+            <FlightCardList dateInfo={res.dateInfo} flight={res.items} getFlights={getFlights}/>
         </div>
     );
 };
