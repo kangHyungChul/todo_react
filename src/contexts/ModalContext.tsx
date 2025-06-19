@@ -2,21 +2,21 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
-import useModalManager from '@/hooks/useModalManager';
+import useModalManagerContext from '@/hooks/useModalManagerContext';
 
 // context 타입 정의
 interface ModalContextType {
-    isOpen: boolean;
-    content: ReactNode;
-    openModal: (component: ReactNode) => void;
-    closeModal: () => void;
+    isOpenContext: boolean;
+    contentContext: ReactNode;
+    openModalContext: (component: ReactNode) => void;
+    closeModalContext: () => void;
 }
 
 const ModalContext = createContext<ModalContextType | null>(null);
 
-// provider는 외부에서 useModalManager를 호출해서 사용
+// provider는 외부에서 useModalManagerContext를 호출해서 사용
 const ModalProvider = ({ children }: { children: ReactNode }) => {
-    const modal = useModalManager();
+    const modal = useModalManagerContext();
 
     return (
         <ModalContext.Provider value={modal}>
@@ -25,13 +25,12 @@ const ModalProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-// context 사용을 위한 커스텀 훅
-const useModal = () => {
+const useModalContext = () => {
     const context = useContext(ModalContext);
     if (!context) {
-        throw new Error('useModal은 ModalProvider 내부에서 사용되어야 합니다.');
+        throw new Error('useModalContext는 ModalProvider 내부에서 사용되어야 합니다.');
     }
     return context;
 };
 
-export { ModalProvider, useModal };
+export { ModalProvider, useModalContext };

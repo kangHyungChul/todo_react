@@ -64,7 +64,7 @@ const setButtonSize = (size: string) => {
         case 'large':                               
             return 'h-12 px-4 py-2 text-lg';
         default:
-            return 'h-8 px-1 py-2 text-base';
+            return 'h-8 px-2 py-2 text-base';
     }
 };
 

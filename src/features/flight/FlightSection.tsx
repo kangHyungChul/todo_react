@@ -1,40 +1,47 @@
 // 'use client';
 import { fetchFlights } from './services/flightApi';
 import { FlightArrivalType } from './types/flights';
-import Button from '@/components/common/Button';
-import FlightCard from './components/FlightCard'
+// import Button from '@/components/common/Button';
+import FlightCardList from './components/FlightCardList'
 // import { useSearchParams } from 'next/navigation';
+import { nowDate, nowTime, nowTimeAdd } from '@/lib/utils/dateTime';
 
-const FlightSection = async () => {
-    // const searchParams = useSearchParams();
-    // const page = searchParams.get('page') || '1';
+// 서버 액션으로 정의 - 클라이언트 컴포넌트에서 호출 가능
+const getFlights = async () => {
+    'use server';
+    
+    const getNowDate = nowDate();
+    const getNowTime = nowTime();
+    const getSearchEndTime = nowTimeAdd(30); // 30분 더하기
 
     const responseBody: FlightArrivalType = {
+        pageNo: '1',
+        numOfRows: '20',
         searchdtCode: 'E',
-        searchDate: '20250616',
-        searchFrom: '0000',
-        searchTo: '2400',
+        searchDate: getNowDate,
+        searchFrom: getNowTime,
+        searchTo: getSearchEndTime,
         flightId: '',
         passengerOrCargo: '',
         airportCode: '',
     };
 
-    const res = await fetchFlights(responseBody);
-    console.log(res);
-    // console.log(res);
+    const res = await fetchFlights('arrival', responseBody);
+    return { resNowDate: getNowDate, resNowTime: getNowTime, resSearchEndTime: getSearchEndTime, ...res };
+};
 
-    // useEffect(() => {
-    //     getFlights();
-    // }, []);
+const FlightSection = async () => {
+    // const searchParams = useSearchParams();
+    // const page = searchParams.get('page') || '1';
+    
+    // 초기 데이터 로드
+    const res = await getFlights();
+
+    console.log(res);
     
     return (
         <div className="max-w-[600px] mx-auto my-6">
-            <ul className="flex flex-col gap-4">
-                <FlightCard flight={res} />
-            </ul>
-            {/* <Button type="link" href="?page=2" style="primary" size="large" outline={true}>
-                <span>더보기</span>
-            </Button> */}
+            <FlightCardList searchDate={res.resNowDate} searchFrom={res.resNowTime} searchTo={res.resSearchEndTime} flight={res.items} getFlights={getFlights}/>
         </div>
     );
 };

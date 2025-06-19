@@ -1,13 +1,13 @@
 import { FlightArrivalType } from '../types/flights';
 
-const fetchFlights = async (responseBody: FlightArrivalType) => {
+const fetchFlights = async (type: string, responseBody: FlightArrivalType) => {
 
-    const url = `${process.env.FLIGHT_API_URL}`;
+    const url = (type === 'arrival') ? `${process.env.FLIGHT_ARRIVAL_API_URL}` : `${process.env.FLIGHT_DEPARTURE_API_URL}`;
 
     const body = new URLSearchParams({
         serviceKey: `${process.env.FLIGHT_API_KEY}`,
         pageNo: responseBody.pageNo || '1',
-        numOfRows: responseBody.numOfRows || '30',
+        numOfRows: responseBody.numOfRows || '100',
         searchdtCode: responseBody.searchdtCode || 'E', // 스케줄조회기준 (S: 예정시간, E: 변경시간, default=E)
         searchDate: responseBody.searchDate || '20250616', // 조회일자
         searchFrom: responseBody.searchFrom || '0000', // 스케줄 ~~부터
@@ -22,6 +22,8 @@ const fetchFlights = async (responseBody: FlightArrivalType) => {
 
     try {
 
+        console.log(`Requesting URL: ${url}?${body.toString()}`);
+
         const res = await fetch(`${url}?${body.toString()}`, {
             method: 'GET',
             // body: body.toString(),
@@ -31,12 +33,19 @@ const fetchFlights = async (responseBody: FlightArrivalType) => {
         });
 
         if (!res.ok) {
-            throw new Error('Failed to fetch arrival information');
+            throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }
 
-        const data = await res.json();
+        try {
+            const data = await res.json();
+            // console.log('API Response:', data);
+            return data.response.body;
+        } catch (error) {
+            const data = await res.text();
+            console.error('JSON Parse Error:', error);
+            throw new Error(`Failed to parse API response: ${data}`);
+        }
 
-        return data.response.body;
 
     } catch (error) {
         console.error('Error fetching flights:', error);
