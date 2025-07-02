@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { FlightArrivalType } from '@/features/flight/types/flights';
 
 const GET = async (request: NextRequest) => {
     
@@ -7,17 +8,7 @@ const GET = async (request: NextRequest) => {
 const POST = async (request: NextRequest) => {
     try {
 
-        const { searchParams } = new URL(request.url);
-
-        const pageNo = searchParams.get('pageNo');
-        const numOfRows = searchParams.get('numOfRows');
-        const searchdtCode = searchParams.get('searchdtCode');
-        const searchDate = searchParams.get('searchDate');
-        const searchFrom = searchParams.get('searchFrom');
-        const searchTo = searchParams.get('searchTo');
-        const flightId = searchParams.get('flightId');
-        const passengerOrCargo = searchParams.get('passengerOrCargo');
-        const airportCode = searchParams.get('airportCode');
+        const requestBody: FlightArrivalType = await request.json();
 
         const url = process.env.FLIGHT_ARRIVAL_API_URL;
         const apiKey = process.env.FLIGHT_API_KEY;
@@ -29,15 +20,15 @@ const POST = async (request: NextRequest) => {
 
         const body = new URLSearchParams({
             serviceKey: apiKey,
-            pageNo: pageNo || '1',
-            numOfRows: numOfRows || '100',
-            searchdtCode: searchdtCode || 'E',
-            searchDate: searchDate || '20250616',
-            searchFrom: searchFrom || '0000',
-            searchTo: searchTo || '2400',
-            flightId: flightId || '',
-            passengerOrCargo: passengerOrCargo || 'P',
-            airportCode: airportCode || '',
+            pageNo: requestBody.pageNo || '1',
+            numOfRows: requestBody.numOfRows || '100',
+            searchdtCode: requestBody.searchdtCode || 'E',
+            searchDate: requestBody.searchDate || '20250616',
+            searchFrom: requestBody.searchFrom || '0000',
+            searchTo: requestBody.searchTo || '2400',
+            flightId: requestBody.flightId || '',
+            passengerOrCargo: requestBody.passengerOrCargo || 'P',
+            airportCode: requestBody.airportCode || '',
             type: 'json',
         });
 
@@ -48,8 +39,9 @@ const POST = async (request: NextRequest) => {
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }
-
+        // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
         const text = await res.text();
+        console.log('API Response Text:', text);
 
         try {
             const json = JSON.parse(text);

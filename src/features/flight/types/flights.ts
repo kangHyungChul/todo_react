@@ -42,5 +42,4 @@ export interface FlightArrivalResponseType {
     numOfRows: number;
     pageNo: number;
     totalCount: number; 
-
 }
