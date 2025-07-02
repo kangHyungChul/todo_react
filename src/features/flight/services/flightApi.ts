@@ -6,11 +6,10 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
         const res = await fetch(`http://localhost:3000/api/flight`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(responseBody),
         });
+
+        console.log(res);
 
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
