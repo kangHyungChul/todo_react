@@ -9,8 +9,6 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
             body: JSON.stringify(responseBody),
         });
 
-        console.log(res);
-
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }

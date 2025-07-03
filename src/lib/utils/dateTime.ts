@@ -6,7 +6,7 @@ const UTCDate = () => {
 }
 
 // 현재 날짜를 YYYYMMDD 형식으로 반환하는 함수
-export const nowDate = () => {
+export const funcNowDate = () => {
     const date = UTCDate();
     // 연도, 월, 일을 각각 추출하여 문자열로 변환
     const year = date.getFullYear().toString();
@@ -18,7 +18,7 @@ export const nowDate = () => {
 
 // 현재 시간 반환
 // 현재 시간을 HHMM 형식으로 24시간제로 반환하는 함수
-export const nowTime = () => {
+export const funcNowTime = () => {
     const date = UTCDate();
     // 시간과 분을 각각 추출하여 문자열로 변환
     const hours = date.getHours().toString().padStart(2, '0'); // 24시간제
@@ -29,7 +29,7 @@ export const nowTime = () => {
 
 // 현재 시간에 더하기기
 // 현재 시간을 HHMM 형식으로 24시간제로 반환하는 함수
-export const nowTimeAdd = (addTime: number) => {
+export const funcNowTimeAdd = (addTime: number) => {
     // 현재 시간에 특정 분을 더해서 HHMM 형식으로 변환
     const date = UTCDate();
     // 현재 시간에 addTime을 더한 총 분 계산
@@ -41,6 +41,6 @@ export const nowTimeAdd = (addTime: number) => {
 };
 
 // 현재 날짜와 시간 반환
-export const nowDateTime = () => {
-    return `${nowDate()}${nowTime()}`;
+export const funcNowDateTime = () => {
+    return `${funcNowDate()}${funcNowTime()}`;
 };

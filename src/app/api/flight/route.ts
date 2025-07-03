@@ -39,13 +39,23 @@ const POST = async (request: NextRequest) => {
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }
+
         // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
         const text = await res.text();
-        console.log('API Response Text:', text);
+        // console.log('API Response Text:', text);
 
         try {
             const json = JSON.parse(text);
-            return NextResponse.json(json.response.body);
+            //json.response.body에 조회날자정보 추가
+            const dateInfo = {
+                searchDate: requestBody.searchDate,
+                searchFrom: requestBody.searchFrom,
+                searchTo: requestBody.searchTo,
+            }
+            return NextResponse.json({ 
+                ...dateInfo,
+                ...json.response.body,
+            });
         } catch (parseErr) {
             return NextResponse.json({ error: '응답 파싱 실패', raw: text }, { status: 500 });
         }

@@ -5,11 +5,13 @@ export const metadata: Metadata = {
     description: 'Flight',
 };
 
-const Flight = () => {
+const Flight = async({ searchParams } : { searchParams: Promise<{ searchDate?: string, searchFrom?: string, searchTo?: string, pageNo?: string, numOfRows?: string }> }) => {
+
+    const parsedParams = await searchParams;
 
     return (
         <>
-            <FlightSection />
+            <FlightSection parsedParams={parsedParams} />
         </>
     );
 };

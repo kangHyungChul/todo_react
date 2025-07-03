@@ -1,6 +1,6 @@
 // card기능 타입정의
 
-// 도착조회 보내기 타입입
+// 도착조회 보내기 타입
 export interface FlightArrivalType {
     pageNo?: string;
     numOfRows?: string;
@@ -13,7 +13,7 @@ export interface FlightArrivalType {
     airportCode?: string | undefined; // 도착하는 비행기 출발지 공항코드
 }
 
-// 도착조회 받기 타입
+// 도착조회 받을때 items 타입
 export interface FlightArrivalItemType {
     aircraftRegNo: string; // 항공기 등록번호
     aircraftSubtype: string; // 서브타입 (IATA)
@@ -37,9 +37,23 @@ export interface FlightArrivalItemType {
     tmp2: string; // 임시2
     typeOfFlight: string; // 운항타입(I = 국제, D = 국내)
 }
+
+// 도착조회 받을때 전체타입
 export interface FlightArrivalResponseType {
-    items: FlightArrivalItemType[];
     numOfRows: number;
     pageNo: number;
     totalCount: number; 
+    searchDate: string;
+    searchFrom: string;
+    searchTo: string;
+    items: FlightArrivalItemType[];
+}
+
+// 도착조회할때 파라미터 타입
+export interface FlightArrivalSearchParamsType {
+    searchDate?: string;
+    searchFrom?: string;
+    searchTo?: string;
+    pageNo?: string;
+    numOfRows?: string;
 }
