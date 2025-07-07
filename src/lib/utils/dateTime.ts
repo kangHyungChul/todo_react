@@ -27,6 +27,11 @@ export const funcNowTime = () => {
     return `${hours}${minutes}`;
 };
 
+// 시간을 HHMM타입으로 변환
+export const funcTimeToHHMM = (time: string) => {
+    return time.replace(':', '');
+};
+
 // 현재 시간에 더하기기
 // 현재 시간을 HHMM 형식으로 24시간제로 반환하는 함수
 export const funcNowTimeAdd = (addTime: number) => {

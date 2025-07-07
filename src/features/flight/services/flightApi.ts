@@ -7,6 +7,8 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
         const res = await fetch(`http://localhost:3000/api/flight`, {
             method: 'POST',
             body: JSON.stringify(responseBody),
+            cache: 'no-store',
+            next: { revalidate: 0 },
         });
 
         if (!res.ok) {

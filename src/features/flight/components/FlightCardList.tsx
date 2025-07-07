@@ -22,15 +22,18 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
 
     // resFlightData가 변경될 때마다 상태 업데이트 (router.push + refresh 후 서버에서 새로운 데이터가 전달됨)
     useEffect(() => {
-        console.log('서버에서 새로운 데이터 수신:', resFlightData);
-        setFlightData(resFlightData.items);
-        setTotalCount(resFlightData.totalCount);
-        setSearchDate(resFlightData.searchDate);
-        setSearchFrom(resFlightData.searchFrom);
-        setSearchTo(resFlightData.searchTo);
+        // 새로운 데이터가 도착하면 로딩 상태 해제
+        if (resFlightData) {
+            setFlightData(resFlightData.items);
+            setTotalCount(resFlightData.totalCount);
+            setSearchDate(resFlightData.searchDate);
+            setSearchFrom(resFlightData.searchFrom);
+            setSearchTo(resFlightData.searchTo);
+            setIsLoading(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
+        }
     }, [resFlightData]);
 
-    console.log('현재 비행기 데이터:', resFlightData);
+    // console.log('현재 비행기 데이터:', resFlightData);
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
     const handleRefresh = async () => {
@@ -39,18 +42,21 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
             // 현재 시간 기준으로 새로운 데이터 요청
             const getSearchDate = funcNowDate();
             const getSearchFrom = funcNowTime();
-            const getSearchTo = funcNowTimeAdd(60);
+            const getSearchTo = funcNowTimeAdd(20);
             const getPageNo = '1';
             const getNumOfRows = '20';
 
             // URL 업데이트 후 서버 컴포넌트 재실행
+            // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
             router.push(`/flight?searchDate=${getSearchDate}&searchFrom=${getSearchFrom}&searchTo=${getSearchTo}&pageNo=${getPageNo}&numOfRows=${getNumOfRows}`);
             router.refresh();
+            
+            // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
+            // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
 
         } catch (error) {
             console.error('비행기 데이터 새로고침 실패:', error);
-        } finally {
-            setIsLoading(false);
+            setIsLoading(false); // 에러 발생 시에만 로딩 상태 해제
         }
     };
 
@@ -63,6 +69,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
             <Button style="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading}>
                 {isLoading ? '새로고침 중...' : '새로고침'}
             </Button>
+
             <ul className="flex flex-col gap-4">
                 {flightData && flightData.length > 0 ? (
                     flightData.map((flight: FlightArrivalItemType) => (
@@ -70,7 +77,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                     ))
                 ) : (
                     <li className="text-center text-gray-500">비행기 정보가 없습니다.</li>
-                )}
+                    )}
             </ul>
         </>
     );
