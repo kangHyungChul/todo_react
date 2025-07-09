@@ -3,10 +3,9 @@ import { FlightArrivalItemType } from '../types/flights';
 const exitGate = (terminalId: string) => {
     return (
         <>
-            {terminalId === 'P01' && '1터미널'} 
-            {terminalId === 'P02' && '1터미널' /* 탑승동 */ } 
+            {terminalId === 'P01' || terminalId === 'P02' && '1터미널' /* 탑승동 */ } 
             {terminalId === 'P03' && '2터미널'}
-            {terminalId === 'C01' && '화물터미널 남측'}
+            {terminalId === 'C01' || terminalId === 'C02' && '화물터미널 남측'}
             {terminalId === 'C02' && '화물터미널 북측'}
             {terminalId === 'C03' && '화물터미널(3단계)'}
         </>
