@@ -3,7 +3,6 @@ import { FlightArrivalType } from '../types/flights';
 const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     try {
-
         const res = await fetch(`http://localhost:3000/api/flight/arrival`, {
             method: 'POST',
             body: JSON.stringify(responseBody),

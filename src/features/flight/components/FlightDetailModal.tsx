@@ -15,7 +15,7 @@ const exitGate = (terminalId: string) => {
 const FlightDetailModal = ({ flight }: { flight: FlightArrivalItemType }) => {
     // console.log(flight);
     return (
-        <>
+        <div className="flex flex-col gap-2">
             <p>{flight.airline}({flight.aircraftRegNo})</p>
             <p>
                 {flight.airport}({flight.airportCode}) - 인천(ICN) 
@@ -24,7 +24,7 @@ const FlightDetailModal = ({ flight }: { flight: FlightArrivalItemType }) => {
                 {flight.remark} /
                 출구번호 : {exitGate(flight.terminalId)} - {flight.exitNumber}
             </p>
-        </>
+        </div>
     );
 };
 

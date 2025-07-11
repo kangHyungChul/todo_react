@@ -20,15 +20,15 @@ const Modal = () => {
     if (!isOpen) return null;
 
     return (
-        <div className='fixed inset-0 bg-black/50 z-50 flex justify-center items-center'>
-            <div className='bg-white p-6 rounded shadow-lg w-[90%] max-w-md relative'>
-                <button
-                    onClick={closeModal}
-                    className='absolute top-2 right-2 text-gray-500 hover:text-black'
-                >
-                    ✕
-                </button>
+        <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center" onClick={closeModal}>
+            <div className="bg-white p-6 rounded shadow-lg w-[90%] max-w-md relative" onClick={(e) => e.stopPropagation()}>
                 {content}
+                <button type="button" onClick={closeModal} className="absolute top-3 right-3">
+                    <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
             </div>
         </div>
     );

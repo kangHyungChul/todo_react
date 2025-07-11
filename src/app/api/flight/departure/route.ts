@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FlightArrivalType } from '@/features/flight/types/flights';
+import { FlightDepartureType } from '@/features/flight/types/flights';
 
 const GET = async (request: NextRequest) => {
     
@@ -8,9 +8,9 @@ const GET = async (request: NextRequest) => {
 const POST = async (request: NextRequest) => {
     try {
 
-        const requestBody: FlightArrivalType = await request.json();
+        const requestBody: FlightDepartureType = await request.json();
 
-        const url = process.env.FLIGHT_ARRIVAL_API_URL;
+        const url = process.env.FLIGHT_DEPARTURE_API_URL;
         const apiKey = process.env.FLIGHT_API_KEY;
 
         // 환경변수 체크

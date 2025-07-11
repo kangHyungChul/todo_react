@@ -1,5 +1,5 @@
 // Start of Selection
-const UTCDate = () => {
+export const UTCDate = () => {
     const date = new Date();
     date.setHours(date.getUTCHours() + 9);
     return date;
@@ -30,6 +30,10 @@ export const funcNowTime = () => {
 // 시간을 HHMM타입으로 변환
 export const funcTimeToHHMM = (time: string) => {
     return time.replace(':', '');
+};
+
+export const funcTimeToHHMMReverse = (time: string) => {
+    return time.slice(0, 2) + ':' + time.slice(2);
 };
 
 // 현재 시간에 더하기기
