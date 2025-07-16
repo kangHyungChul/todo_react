@@ -54,7 +54,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
 
     return (
         <div className="max-w-[600px] mx-auto my-6">
-            <FlightSearchForm />
+            {resFlightData && <FlightSearchForm resFlightData={resFlightData} />}
             {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}
             {resFlightData && <FlightCardList resFlightData={resFlightData} />}
         </div>

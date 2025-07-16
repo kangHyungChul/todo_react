@@ -2,17 +2,23 @@
 
 import Button from '@/components/common/Button';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FlightArrivalResponseType } from '../types/flights';
 
-const FlightSearchForm = () => {
+const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
     const router = useRouter();
 
-    const getSearchFrom = funcTimeToHHMMReverse(funcNowTime());
-    const getSearchTo = funcTimeToHHMMReverse(funcNowTimeAdd(30));
+    const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
+    const getSearchTo = resFlightData?.searchTo ? funcTimeToHHMMReverse(resFlightData.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
 
     const [searchFrom, setSearchFrom] = useState(getSearchFrom);
     const [searchTo, setSearchTo] = useState(getSearchTo);
+
+    useEffect(() => {
+        setSearchFrom(getSearchFrom);
+        setSearchTo(getSearchTo);
+    }, [getSearchFrom, getSearchTo]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         try {
