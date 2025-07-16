@@ -15,9 +15,13 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
     // 라우터 인스턴스 생성
     const router = useRouter();
 
+    // const { 
+    //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
+    //     setFlightData, setTotalCount, setPageNo, setNumOfRows, setSearchDate, setSearchFrom, setSearchTo 
+    // } = useFlightArrival();
     const { 
         flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
-        setFlightData, setTotalCount, setPageNo, setNumOfRows, setSearchDate, setSearchFrom, setSearchTo 
+        setBulkState
     } = useFlightArrival();
 
 
@@ -27,11 +31,18 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
     useEffect(() => {
         // 새로운 데이터가 도착하면 로딩 상태 해제
         if (resFlightData) {
-            setFlightData(resFlightData.items);
-            setTotalCount(resFlightData.totalCount);
-            setSearchDate(resFlightData.searchDate);
-            setSearchFrom(resFlightData.searchFrom); 
-            setSearchTo(resFlightData.searchTo);
+            // setFlightData(resFlightData.items);
+            // setTotalCount(resFlightData.totalCount);
+            // setSearchDate(resFlightData.searchDate);
+            // setSearchFrom(resFlightData.searchFrom); 
+            // setSearchTo(resFlightData.searchTo);
+            setBulkState({
+                flightData: resFlightData.items,
+                totalCount: resFlightData.totalCount,
+                searchDate: resFlightData.searchDate,
+                searchFrom: resFlightData.searchFrom,
+                searchTo: resFlightData.searchTo,
+            });
             setIsLoading(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
         }
     }, [resFlightData]);
@@ -44,14 +55,15 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
         try {
 
             // 현재 시간 기준으로 새로운 데이터 요청
+            const refreshSearchDate = funcNowDate();
             const refreshSearchFrom = funcNowTime();
             const refreshSearchTo = funcNowTimeAdd(60);
             const refreshPageNo = '1';
-            const refreshNumOfRows = '20';
+            const refreshNumOfRows = '40';
 
             // URL 업데이트 후 서버 컴포넌트 재실행
             // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-            router.push(`/flight?searchDate=${searchDate}&searchFrom=${refreshSearchFrom}&searchTo=${refreshSearchTo}&pageNo=${refreshPageNo}&numOfRows=${refreshNumOfRows}`);
+            router.push(`/flight?searchDate=${refreshSearchDate}&searchFrom=${refreshSearchFrom}&searchTo=${refreshSearchTo}&pageNo=${refreshPageNo}&numOfRows=${refreshNumOfRows}`);
             // router.refresh();
             
             // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
@@ -80,7 +92,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                     ))
                 ) : (
                     <li className="text-center text-gray-500">비행기 정보가 없습니다.</li>
-                    )}
+                )}
             </ul>
         </>
     );

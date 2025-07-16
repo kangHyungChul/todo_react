@@ -24,24 +24,27 @@ const useFlightArrival = () => {
     const [state, setState] = useState(initialState);
 
     // 각 상태별 set 함수들을 별도로 제공
-    const setFlightData = (flightData: FlightArrivalItemType[]) => setState((prev) => ({ ...prev, flightData }));
-    const setTotalCount = (totalCount: number) => setState((prev) => ({ ...prev, totalCount }));
-    const setPageNo = (pageNo: number) => setState((prev) => ({ ...prev, pageNo }));
-    const setNumOfRows = (numOfRows: number) => setState((prev) => ({ ...prev, numOfRows }));
-    const setSearchDate = (searchDate: string) => setState((prev) => ({ ...prev, searchDate }));
-    const setSearchFrom = (searchFrom: string) => setState((prev) => ({ ...prev, searchFrom }));
-    const setSearchTo = (searchTo: string) => setState((prev) => ({ ...prev, searchTo }));
+    // const setFlightData = (flightData: FlightArrivalItemType[]) => setState((prev) => ({ ...prev, flightData }));
+    // const setTotalCount = (totalCount: number) => setState((prev) => ({ ...prev, totalCount }));
+    // const setPageNo = (pageNo: number) => setState((prev) => ({ ...prev, pageNo }));
+    // const setNumOfRows = (numOfRows: number) => setState((prev) => ({ ...prev, numOfRows }));
+    // const setSearchDate = (searchDate: string) => setState((prev) => ({ ...prev, searchDate }));
+    // const setSearchFrom = (searchFrom: string) => setState((prev) => ({ ...prev, searchFrom }));
+    // const setSearchTo = (searchTo: string) => setState((prev) => ({ ...prev, searchTo }));
+
+    const setBulkState = (newState: Partial<typeof initialState>) => setState((prev) => ({ ...prev, ...newState }));
 
     // 반환값에 state의 각 필드와 set 함수들을 모두 포함시켜 사용 가능하도록 함
     return {
         ...state,
-        setFlightData,
-        setTotalCount,
-        setPageNo,
-        setNumOfRows,
-        setSearchDate,
-        setSearchFrom,
-        setSearchTo,
+        // setFlightData,
+        // setTotalCount,
+        // setPageNo,
+        // setNumOfRows,
+        // setSearchDate,
+        // setSearchFrom,
+        // setSearchTo,
+        setBulkState,
     };
 };
 
