@@ -20,7 +20,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
     //     setFlightData, setTotalCount, setPageNo, setNumOfRows, setSearchDate, setSearchFrom, setSearchTo 
     // } = useFlightArrival();
     const { 
-        flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
+        flightData, totalCount, pageNo, searchDate, searchFrom, searchTo, 
         setBulkState
     } = useFlightArrival();
 
@@ -59,11 +59,10 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
             const refreshSearchFrom = funcNowTime();
             const refreshSearchTo = funcNowTimeAdd(60);
             const refreshPageNo = '1';
-            const refreshNumOfRows = '40';
 
             // URL 업데이트 후 서버 컴포넌트 재실행
             // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-            router.push(`/flight?searchDate=${refreshSearchDate}&searchFrom=${refreshSearchFrom}&searchTo=${refreshSearchTo}&pageNo=${refreshPageNo}&numOfRows=${refreshNumOfRows}`);
+            router.push(`/flight?searchDate=${refreshSearchDate}&searchFrom=${refreshSearchFrom}&searchTo=${refreshSearchTo}&pageNo=${refreshPageNo}`);
             // router.refresh();
             
             // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
@@ -82,7 +81,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                 {searchDate} {searchFrom} ~ {searchTo}
             </p>
             <Button style="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading}>
-                {isLoading ? '최신정보 조회 중...' : '최신정보 조회'}
+                {isLoading ? '조회중...' : '이후 한시간 조회'}
             </Button>
 
             <ul className="flex flex-col gap-4">
