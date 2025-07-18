@@ -57,7 +57,7 @@ const useFlightArrivalSearch = () => {
     const FlightArrivalSearch = async (arrivalSearchParams: FlightArrivalSearchParamsType) => {
         setIsLoading(true);
         try {
-            console.log(arrivalSearchParams);
+            // console.log(arrivalSearchParams);
             const searchDate = arrivalSearchParams.searchDate;
             const searchFrom = arrivalSearchParams.searchFrom;
             const searchTo = arrivalSearchParams.searchTo;

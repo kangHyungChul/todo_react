@@ -15,7 +15,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
     const estimatedDatetime = funcDateTimeToType(flight.estimatedDatetime, 'HHMM');
     const isCodeshare = flight.codeshare === 'Slave';
     // const { openModal } = useModalStore();
-    console.log(flight)
+    // console.log(flight)
     return (
         <li key={flight.fid} className={`p-4 border border-gray-300 rounded-lg flex flex-col items-center${flight.codeshare === 'Slave' ? ' bg-gray-100 border-t-0 -mt-4' : ''}`}>
             <p>

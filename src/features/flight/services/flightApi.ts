@@ -4,7 +4,9 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     try {
 
-        const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `/api/flight/arrival`;
+        const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
+
+        console.log(process.env.NODE_ENV, path);
 
         const res = await fetch(path, {
             method: 'POST',
