@@ -27,16 +27,7 @@ export const funcNowTime = () => {
     return `${hours}${minutes}`;
 };
 
-// 시간을 HHMM타입으로 변환
-export const funcTimeToHHMM = (time: string) => {
-    return time.replace(':', '');
-};
-
-export const funcTimeToHHMMReverse = (time: string) => {
-    return time.slice(0, 2) + ':' + time.slice(2);
-};
-
-// 현재 시간에 더하기기
+// 현재 시간에 더하기
 // 현재 시간을 HHMM 형식으로 24시간제로 반환하는 함수
 export const funcNowTimeAdd = (addTime: number) => {
     // 현재 시간에 특정 분을 더해서 HHMM 형식으로 변환
@@ -52,4 +43,25 @@ export const funcNowTimeAdd = (addTime: number) => {
 // 현재 날짜와 시간 반환
 export const funcNowDateTime = () => {
     return `${funcNowDate()}${funcNowTime()}`;
+};
+
+// 시간을 HHMM타입으로 변환
+export const funcTimeToHHMM = (time: string) => {
+    return time.replace(':', '');
+};
+
+// HHMM타입을 HH:MM타입으로 변환
+export const funcTimeToHHMMReverse = (time: string) => {
+    return time.slice(0, 2) + ':' + time.slice(2);
+};
+
+// YYYYMMDDHHMM타입중 원하는타입으로 반환
+export const funcDateTimeToType = (dateTime: string, type: 'YYYYMMDD' | 'HHMM') => {
+    if (type === 'YYYYMMDD') {
+        const date = dateTime.slice(0, 8);
+        return `${date.slice(0, 4)}.${date.slice(4, 6)}.${date.slice(6, 8)}`;
+    } else if (type === 'HHMM') {
+        const time = dateTime.slice(8);
+        return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
+    }
 };
