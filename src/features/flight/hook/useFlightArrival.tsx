@@ -1,9 +1,10 @@
 'use client';
 
-import { FlightArrivalItemType } from "../types/flights";
+import { FlightArrivalItemType, FlightArrivalSearchParamsType } from "../types/flights";
 // import { funcNowTime, funcNowTimeAdd } from "@/lib/utils/dateTime";
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMMReverse } from "@/lib/utils/dateTime";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const useFlightArrival = () => {
     // 상태값들을 하나의 객체(state)로 묶어서 관리하여 코드의 중복을 줄이고, setState도 하나로 통합하여 효율적으로 리팩토링합니다.
@@ -48,4 +49,45 @@ const useFlightArrival = () => {
     };
 };
 
-export default useFlightArrival;
+// useFlightArrivalSearch를 올바른 React Hook으로 수정
+const useFlightArrivalSearch = () => {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const FlightArrivalSearch = async (arrivalSearchParams: FlightArrivalSearchParamsType) => {
+        setIsLoading(true);
+        try {
+            console.log(arrivalSearchParams);
+            const searchDate = arrivalSearchParams.searchDate;
+            const searchFrom = arrivalSearchParams.searchFrom;
+            const searchTo = arrivalSearchParams.searchTo;
+            const pageNo = arrivalSearchParams.pageNo;
+            const numOfRows = arrivalSearchParams.numOfRows;
+
+            // const searchFromHHMM = funcTimeToHHMM(arrivalSearchParams.searchFrom);  
+            // const searchToHHMM = funcTimeToHHMM(arrivalSearchParams.searchTo);
+
+            // // 현재 시간 기준으로 새로운 데이터 요청
+            // // const refreshSearchDate = funcNowDate();
+            // const refreshSearchFrom = searchFromHHMM;
+            // const refreshSearchTo = searchToHHMM;
+            // const refreshPageNo = '1';
+
+            // // URL 업데이트 후 서버 컴포넌트 재실행
+            // // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
+            router.push(`/flight?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}`);
+            // // router.refresh();
+            
+            // // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
+            // // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
+
+        } catch (error) {
+            console.error('비행기 데이터 새로고침 실패:', error);
+            setIsLoading(false); // 에러 발생 시에만 로딩 상태 해제
+        }
+    };
+
+    return { FlightArrivalSearch, isLoading, setIsLoading };
+};
+
+export { useFlightArrival, useFlightArrivalSearch };

@@ -8,6 +8,7 @@
 - AppRouter
 - Turbopack
 - ESLint
+- tailwind
 
 ## 세팅
 1. 노드버전 확인 (위 설치환경 참조)

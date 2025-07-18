@@ -3,7 +3,10 @@ import { FlightArrivalType } from '../types/flights';
 const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     try {
-        const res = await fetch(`http://localhost:3000/api/flight/arrival`, {
+
+        const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `/api/flight/arrival`;
+
+        const res = await fetch(path, {
             method: 'POST',
             body: JSON.stringify(responseBody),
             cache: 'no-store',
@@ -31,7 +34,7 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
 const fetchFlightTrack = async () => {
     try {
-        const res = await fetch(`https://opensky-network.org/api/tracks/all?icao24=71c071`, {
+        const res = await fetch(`https://opensky-network.org/api/tracks/all?icao24=71BF57`, {
             method: 'GET'
         });
 
