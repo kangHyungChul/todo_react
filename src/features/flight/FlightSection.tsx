@@ -8,8 +8,7 @@ import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 // 서버 컴포넌트 - 서버 사이드에서 데이터를 가져와서 클라이언트 컴포넌트에 전달
 const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSearchParamsType }) => {
 
-    const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `/api/flight/arrival`;
-    console.log(process.env.NODE_ENV, path);
+    console.log('로그확인 - flightSection', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.BASE_URL);
 
     // const [resFlightData, setResFlightData] = useState<FlightArrivalResponseType>();
 
