@@ -6,7 +6,7 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
         const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `https://${process.env.VERCEL_URL}/api/flight/arrival`;
 
-        console.log(process.env.NODE_ENV, process.env.VERCEL_URL, process.env.BASE_URL, path);
+        console.log('로그확인', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.BASE_URL, path);
 
         const res = await fetch(path, {
             method: 'POST',
