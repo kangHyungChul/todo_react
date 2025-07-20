@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useReducer } from 'react';
 import { CardType } from './types/card';
 import { saveToStorage, loadFromStorage } from '@/lib/utils/localStorage';
-// import styles from './styles/CardSection.module.scss';
+import styles from './styles/CardSection.module.scss';
 import CardForm, { CardFormRef } from './components/CardForm';
 import CardList from './components/CardList';
 import CardTitle from './components/CardTitle';
@@ -30,7 +30,7 @@ const cardReducer = (state: CardType[], action: CardAction) => {
         default:
             return state;
     }
-}
+};
 
 const CardSection = () => {
 
@@ -107,7 +107,7 @@ const CardSection = () => {
     }, []);
 
     return (
-        <section>
+        <section className={styles['card-section']}>
             <CardTitle title={titlePreview} content={contentPreview} />
             <CardForm onAdd={handleAddCard} ref={formRef} cardAddDisabled={cardAddDisabled} titleState={{ title: titlePreview, setTitle: setTitlePreview }} contentState={{ content: contentPreview, setContent: setContentPreview }} />
             <CardList cards={cards} onDelete={handleDeleteCard} onColorChange={handleChangeColor} />

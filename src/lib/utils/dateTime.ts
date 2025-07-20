@@ -3,7 +3,7 @@ export const UTCDate = () => {
     const date = new Date();
     date.setHours(date.getUTCHours() + 9);
     return date;
-}
+};
 
 // 현재 날짜를 YYYYMMDD 형식으로 반환하는 함수
 export const funcNowDate = () => {

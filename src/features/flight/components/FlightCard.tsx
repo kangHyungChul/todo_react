@@ -2,8 +2,9 @@
 
 import { FlightArrivalItemType } from '../types/flights';
 import useModalStore from '@/store/ModalStore';
-import { useModalContext } from '@/contexts/ModalContext';
+// import { useModalContext } from '@/contexts/ModalContext';
 import FlightDetailModal from './FlightDetailModal';
+import FlightTrackModal from './FlightTrackModal';
 import Button from '@/components/common/Button';
 import { funcDateTimeToType } from '@/lib/utils/dateTime';
 
@@ -51,7 +52,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                         {
                             (
                                 (flight.remark === null || flight.remark === '지연') && (
-                                    <Button style="secondary" onClick={() => alert('현재위치')}>현재위치</Button>
+                                    <Button style="secondary" onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} />, 'xl')}>현재위치</Button>
                                 )
                             )
                         }

@@ -4,7 +4,8 @@
 import useModalStore from '@/store/ModalStore';
 import { useShallow } from 'zustand/react/shallow';
 
-const Modal = () => {
+const Modal = ({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' }) => {
+    console.log(size);
     // const { isOpen, content, closeModal } = useModal();
     // 객체나 배열의 최상위 레벨에서만 비교를 수행하는 얕은 비교 방식이다. 중첩된 객체나 배열의 내부 변경사항은 감지하지 않는다.
     // Zustand에서 shallow 비교는 불필요한 리렌더링을 방지하는 역할을 한다. 
@@ -21,7 +22,7 @@ const Modal = () => {
 
     return (
         <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center" onClick={closeModal}>
-            <div className="bg-white p-6 rounded shadow-lg w-[90%] max-w-md relative" onClick={(e) => e.stopPropagation()}>
+            <div className={`bg-white p-6 rounded shadow-lg w-full max-w-${size} relative`} onClick={(e) => e.stopPropagation()}>
                 {content}
                 <button type="button" onClick={closeModal} className="absolute top-3 right-3">
                     <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

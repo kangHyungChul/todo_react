@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 type ModalStore = {
     isOpen: boolean;
     content: ReactNode | null;
-    openModal: (content: ReactNode) => void;
+    openModal: (content: ReactNode, size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl') => void;
     closeModal: () => void;
 }
 

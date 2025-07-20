@@ -2,28 +2,28 @@
 
 // import { fetchArrivalFlights } from '../services/flightApi';
 import { FlightArrivalItemType, FlightArrivalResponseType } from '../types/flights';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
     
     // 라우터 인스턴스 생성
-    const router = useRouter();
+    // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    const { FlightArrivalSearch, isLoading, setIsLoading } = useFlightArrivalSearch();
+    const { FlightArrivalSearch, isLoading, setLoadingState } = useFlightArrivalSearch();
 
     // const { 
     //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
     //     setFlightData, setTotalCount, setPageNo, setNumOfRows, setSearchDate, setSearchFrom, setSearchTo 
     // } = useFlightArrival();
     const { 
-        flightData, totalCount, pageNo, searchDate, searchFrom, searchTo, 
+        flightData, totalCount, searchDate, searchFrom, searchTo, 
         setBulkState
     } = useFlightArrival(resFlightData);
 
@@ -46,9 +46,9 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                 searchFrom: resFlightData.searchFrom,
                 searchTo: resFlightData.searchTo,
             });
-            setIsLoading(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
+            setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
         }
-    }, [resFlightData]);
+    }, [resFlightData, setBulkState, setLoadingState]);
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
     const handleRefresh = async () => {

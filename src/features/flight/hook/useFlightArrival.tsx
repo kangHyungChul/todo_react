@@ -1,14 +1,14 @@
 'use client';
 
-import { FlightArrivalItemType, FlightArrivalSearchParamsType, FlightArrivalResponseType } from "../types/flights";
+import { FlightArrivalItemType, FlightArrivalSearchParamsType, FlightArrivalResponseType } from '../types/flights';
 // import { funcNowTime, funcNowTimeAdd } from "@/lib/utils/dateTime";
-import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMMReverse } from "@/lib/utils/dateTime";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+// import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMMReverse } from "@/lib/utils/dateTime";
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 
 const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
-    // 상태값들을 하나의 객체(state)로 묶어서 관리하여 코드의 중복을 줄이고, setState도 하나로 통합하여 효율적으로 리팩토링합니다.
-    // 각 필드의 초기값을 별도의 상수로 분리하여 가독성을 높입니다.
+    // 상태값들을 하나의 객체(state)로 묶어서 관리
+    // 각 필드의 초기값은 최초 렌더링 시 서버에서 받은 데이터로 설정 <- 그렇지 않으면 초기값이 없어 빈상태로 노출됨
 
     // 초기 상태값을 상수로 선언
     const initialState = {
@@ -16,9 +16,9 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
         totalCount: resFlightData.totalCount, // 전체 건수
         pageNo: resFlightData.pageNo, // 페이지 번호
         numOfRows: resFlightData.numOfRows, // 한 페이지당 행 수
-        searchDate: funcNowDate(), // 검색 날짜 (오늘)
-        searchFrom: funcTimeToHHMMReverse(funcNowTime()), // 검색 시작 시간 (현재 시간)
-        searchTo: funcTimeToHHMMReverse(funcNowTimeAdd(60)), // 검색 종료 시간 (현재 시간 + 60분)
+        searchDate: resFlightData.searchDate, // 검색 날짜 (오늘)
+        searchFrom: resFlightData.searchFrom, // 검색 시작 시간 (현재 시간)
+        searchTo: resFlightData.searchTo, // 검색 종료 시간 (현재 시간 + 60분)
     };
 
     // useState를 객체 형태로 사용하여 모든 상태를 한 번에 관리
@@ -33,7 +33,10 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
     // const setSearchFrom = (searchFrom: string) => setState((prev) => ({ ...prev, searchFrom }));
     // const setSearchTo = (searchTo: string) => setState((prev) => ({ ...prev, searchTo }));
 
-    const setBulkState = (newState: Partial<typeof initialState>) => setState((prev) => ({ ...prev, ...newState }));
+    // partial타입이란?
+    // 객체의 일부 속성만 업데이트하고 싶을 때 사용, 전부 옵셔널로 설정
+    // 옵셔널 타입은 값이 없어도 되는 속성을 표시하는 데 사용 / ? 표시
+    const setBulkState = useCallback((newState: Partial<typeof initialState>) => setState((prev) => ({ ...prev, ...newState })), []);
 
     // 반환값에 state의 각 필드와 set 함수들을 모두 포함시켜 사용 가능하도록 함
     return {
@@ -53,6 +56,11 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
 const useFlightArrivalSearch = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    
+    // setIsLoading을 useCallback으로 메모이제이션
+    const setLoadingState = useCallback((loading: boolean) => {
+        setIsLoading(loading);
+    }, []);
     
     const FlightArrivalSearch = async (arrivalSearchParams: FlightArrivalSearchParamsType) => {
         setIsLoading(true);
@@ -87,7 +95,7 @@ const useFlightArrivalSearch = () => {
         }
     };
 
-    return { FlightArrivalSearch, isLoading, setIsLoading };
+    return { FlightArrivalSearch, isLoading, setLoadingState };
 };
 
 export { useFlightArrival, useFlightArrivalSearch };

@@ -47,12 +47,13 @@ const GET = async (request: NextRequest) => {
                 searchDate: requestBody.searchDate,
                 searchFrom: requestBody.searchFrom,
                 searchTo: requestBody.searchTo,
-            }
+            };
             return NextResponse.json({ 
                 ...dateInfo,
                 ...json.response.body,
             });
-        } catch (parseErr) {
+        } catch (error) {
+            console.error('error:', error);
             return NextResponse.json({ error: '응답 파싱 실패', raw: text }, { status: 500 });
         }
 
@@ -60,7 +61,7 @@ const GET = async (request: NextRequest) => {
         console.error('Error fetching flights:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-}
+};
 
 const POST = async (request: NextRequest) => {
     try {
@@ -108,12 +109,13 @@ const POST = async (request: NextRequest) => {
                 searchDate: requestBody.searchDate,
                 searchFrom: requestBody.searchFrom,
                 searchTo: requestBody.searchTo,
-            }
+            };
             return NextResponse.json({ 
                 ...dateInfo,
                 ...json.response.body,
             });
-        } catch (parseErr) {
+        } catch (error) {
+            console.error('error:', error);
             return NextResponse.json({ error: '응답 파싱 실패', raw: text }, { status: 500 });
         }
 
@@ -121,6 +123,6 @@ const POST = async (request: NextRequest) => {
         console.error('Error fetching flights:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-}
+};
 
 export { GET, POST };

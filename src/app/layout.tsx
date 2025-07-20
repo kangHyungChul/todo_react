@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 // import { Nanum_Gothic } from 'next/font/google';
+import styles from './page.module.scss';
 import '../styles/globals.css';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -26,7 +27,7 @@ export default function RootLayout({
             {/* <body className={`${nanumGothic.className}`}> */}
             <body>
                 <Header />
-                <main>
+                <main className={styles['main']}>
                     <ModalProvider>
                         {children}
                         <Modal />

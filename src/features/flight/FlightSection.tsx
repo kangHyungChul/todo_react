@@ -1,8 +1,8 @@
-import { fetchArrivalFlights, fetchFlightTrack } from './services/flightApi';
+import { fetchArrivalFlights } from './services/flightApi';
 import { FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType } from './types/flights';
 // import Button from '@/components/common/Button';
-import FlightCardList from './components/FlightCardList'
-import FlightSearchForm from './components/FlightSearchForm'
+import FlightCardList from './components/FlightCardList';
+import FlightSearchForm from './components/FlightSearchForm';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 
 // 서버 컴포넌트 - 서버 사이드에서 데이터를 가져와서 클라이언트 컴포넌트에 전달

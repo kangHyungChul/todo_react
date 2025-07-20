@@ -6,11 +6,18 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     try {
 
-        const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
+        const path = () => {
+            if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
+                return `${process.env.BASE_URL}/api/flight/arrival`;
+            } else {
+                return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
+            }
+        };
+        // const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
 
-        // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path);
+        // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
 
-        const res = await fetch(path, {
+        const res = await fetch(path(), {
             method: 'POST',
             body: JSON.stringify(responseBody),
             cache: 'no-store',
@@ -37,7 +44,7 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
 const fetchFlightTrack = async () => {
     try {
-        const res = await fetch(`https://opensky-network.org/api/tracks/all?icao24=71BF57`, {
+        const res = await fetch('https://opensky-network.org/api/tracks/all?icao24=71BF57', {
             method: 'GET'
         });
 

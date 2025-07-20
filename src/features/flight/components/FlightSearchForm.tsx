@@ -3,13 +3,13 @@
 import Button from '@/components/common/Button';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { FlightArrivalResponseType } from '../types/flights';
 import { useFlightArrivalSearch } from '../hook/useFlightArrival';
 
 const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
-    const router = useRouter();
-    const { FlightArrivalSearch, isLoading, setIsLoading } = useFlightArrivalSearch();
+    // const router = useRouter();
+    const { FlightArrivalSearch } = useFlightArrivalSearch();
 
     // 서버에서 받은 데이터를 기반으로 초기값 설정
     const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
@@ -25,7 +25,7 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
         setSearchFrom(getSearchFrom);
         setSearchTo(getSearchTo);
         setSearchNumOfRows(getSearchNumOfRows);
-    }, [getSearchFrom]);
+    }, [getSearchFrom, getSearchTo, getSearchNumOfRows]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

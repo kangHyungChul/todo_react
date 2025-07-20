@@ -18,14 +18,14 @@ const exitGate = (terminalId: string) => {
                 } as Record<string, string>)[terminalId] || ''
             }
         </>
-    )
-}
+    );
+};
 
 const FlightDetailModal = ({ flight }: { flight: FlightArrivalItemType }) => {
     // console.log(flight);
     return (
         <div className="flex flex-col gap-2">
-            <p>{flight.airline}({flight.aircraftRegNo})</p>
+            <p>{flight.airline}({flight.flightId} / {flight.aircraftRegNo})</p>
             <p>
                 {flight.airport}({flight.airportCode}) - 인천(ICN) 
             </p>
