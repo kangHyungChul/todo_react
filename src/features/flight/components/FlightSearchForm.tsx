@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 import { FlightArrivalResponseType } from '../types/flights';
 import { useFlightArrivalSearch } from '../hook/useFlightArrival';
 
-
 const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
     const router = useRouter();
     const { FlightArrivalSearch, isLoading, setIsLoading } = useFlightArrivalSearch();
 
+    // 서버에서 받은 데이터를 기반으로 초기값 설정
     const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
     const getSearchTo = resFlightData?.searchTo ? funcTimeToHHMMReverse(resFlightData.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
     const getSearchNumOfRows = resFlightData?.numOfRows ? resFlightData.numOfRows.toString() : '30';
@@ -20,15 +20,17 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
     const [searchTo, setSearchTo] = useState(getSearchTo);
     const [searchNumOfRows, setSearchNumOfRows] = useState('30');
 
+    // 서버 데이터가 변경될 때마다 폼 값 업데이트
     useEffect(() => {
         setSearchFrom(getSearchFrom);
         setSearchTo(getSearchTo);
         setSearchNumOfRows(getSearchNumOfRows);
-    }, [getSearchFrom, getSearchTo]);
+    }, [getSearchFrom]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
+        // 검색 실행
         FlightArrivalSearch({
             searchDate: funcNowDate(),
             searchFrom: funcTimeToHHMM(searchFrom),

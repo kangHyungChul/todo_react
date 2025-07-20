@@ -25,7 +25,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
     const { 
         flightData, totalCount, pageNo, searchDate, searchFrom, searchTo, 
         setBulkState
-    } = useFlightArrival();
+    } = useFlightArrival(resFlightData);
 
 
     // const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +49,6 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
             setIsLoading(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
         }
     }, [resFlightData]);
-
-    // console.log('현재 비행기 데이터:', resFlightData);
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
     const handleRefresh = async () => {
