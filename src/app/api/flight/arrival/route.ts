@@ -63,7 +63,7 @@ const GET = async (request: NextRequest) => {
 }
 
 const POST = async (request: NextRequest) => {
-    console.log('로그확인 - route_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.BASE_URL);
+    console.log('로그확인 - route_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL);
     try {
 
         const requestBody: FlightArrivalType = await request.json();
