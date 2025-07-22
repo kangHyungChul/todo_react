@@ -34,9 +34,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
     
     try {
         resFlightData = await fetchArrivalFlights(responseBody);
-        // const resFlightTrack = await fetchFlightTrack();
         console.log('서버에서 가져온 비행기 데이터:', resFlightData);
-        // console.log('서버에서 가져온 비행기 추적 데이터:', resFlightTrack);
     } catch (error) {
         console.error('서버에서 비행기 데이터 가져오기 실패:', error);
         // 에러 발생 시 기본 데이터 구조 제공

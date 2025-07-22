@@ -7,6 +7,7 @@ import FlightDetailModal from './FlightDetailModal';
 import FlightTrackModal from './FlightTrackModal';
 import Button from '@/components/common/Button';
 import { funcDateTimeToType } from '@/lib/utils/dateTime';
+import { memo } from 'react';
 
 const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
 
@@ -52,7 +53,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                         {
                             (
                                 (flight.remark === null || flight.remark === '지연') && (
-                                    <Button style="secondary" onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} />, 'xl')}>현재위치</Button>
+                                    <Button style="secondary" onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} />, '2xl')}>현재위치</Button>
                                 )
                             )
                         }
@@ -63,4 +64,4 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
     );
 };
 
-export default FlightCard;
+export default memo(FlightCard);

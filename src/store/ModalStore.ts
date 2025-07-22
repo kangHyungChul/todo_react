@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 type ModalStore = {
     isOpen: boolean;
     content: ReactNode | null;
+    modalSize: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | null;
     openModal: (content: ReactNode, size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl') => void;
     closeModal: () => void;
 }
@@ -50,8 +51,22 @@ const useModalStore = create<ModalStore>()(
         (set) => ({
             isOpen: false,
             content: null,
-            openModal: (content) => set({ isOpen: true, content }),
-            closeModal: () => set({ isOpen: false, content: null }),
+            modalSize: 'md',
+            openModal: (content, size = 'md') => {
+                console.log('openModal size:', size);
+                set((state) => ({ 
+                    ...state, 
+                    isOpen: true, 
+                    content,
+                    modalSize: size
+                }));
+            },
+            closeModal: () => set((state) => ({ 
+                ...state, 
+                isOpen: false, 
+                content: null,
+                modalSize: 'md'
+            })),
         }), // 로직과 상태 정의 전달
         {
             name: 'ModalStore', // devtools에서 표시될 이름

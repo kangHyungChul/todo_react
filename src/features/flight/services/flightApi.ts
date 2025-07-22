@@ -13,6 +13,8 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
                 return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
             }
         };
+
+        console.log('path:', path());
         // const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
 
         // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
@@ -44,16 +46,29 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
 const fetchFlightTrack = async () => {
     try {
-        const res = await fetch('https://opensky-network.org/api/tracks/all?icao24=71BF57', {
-            method: 'GET'
-        });
+        // const path = () => {
+        //     if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
+        //         return `${process.env.BASE_URL}/api/flight/tracker`;
+        //     } else {
+        //         return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/tracker`;
+        //     }
+        // };
 
-        if (!res.ok) {
-            throw new Error(`Failed to fetch flight track: ${res.status} ${res.statusText}`);
-        }
+        // BASE_URL이 undefined인지 확인하기 위한 디버깅 로그
+        console.log('BASE_URL:', process.env.BASE_URL);
+        console.log('NODE_ENV:', process.env.NODE_ENV);
+        console.log('NEXT_PUBLIC_VERCEL_URL:', process.env.NEXT_PUBLIC_VERCEL_URL);
 
-        const data = await res.json();
-        return data;
+        // const res = await fetch('http://localhost:3000/api/flight/tracker', {
+        //     method: 'GET'
+        // });
+
+        // if (!res.ok) {
+        //     throw new Error(`Failed to fetch flight track: ${res.status} ${res.statusText}`);
+        // }
+
+        // const data = await res.json();
+        // return data;
     } catch (error) {
         console.error('Error fetching flight track:', error);
         throw error;
