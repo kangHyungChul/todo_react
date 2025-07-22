@@ -52,16 +52,19 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
     }
 };
 
-const fetchFlightTrack = async () => {
+const fetchFlightTrack = async ( icao24: string ) => {
     try {
+        console.log('icao24:', icao24);
+        // // flights 데이터를 query parameter로 전달
+        // const queryParams = new URLSearchParams({
+        //     flights: flights
+        // }).toString();
 
-        // BASE_URL이 undefined인지 확인하기 위한 디버깅 로그
-        // console.log('BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
-        // console.log('NODE_ENV:', process.env.NODE_ENV);
-        // console.log('NEXT_PUBLIC_VERCEL_URL:', process.env.NEXT_PUBLIC_VERCEL_URL);
+        // console.log('queryParams:', queryParams);
 
-        const res = await fetch(`${path()}/api/flight/tracker`, {
-            method: 'GET'
+        const res = await fetch(`${path()}/api/flight/tracker?icao24=${icao24}`, {
+            method: 'GET',
+            cache: 'no-store',
         });
 
         if (!res.ok) {
@@ -70,6 +73,7 @@ const fetchFlightTrack = async () => {
 
         const data = await res.json();
         return data;
+
     } catch (error) {
         console.error('Error fetching flight track:', error);
         throw error;

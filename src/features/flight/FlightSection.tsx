@@ -1,4 +1,4 @@
-import { fetchArrivalFlights } from './services/flightApi';
+import { fetchArrivalFlights, fetchFlightTrack } from './services/flightApi';
 import { FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType } from './types/flights';
 // import Button from '@/components/common/Button';
 import FlightCardList from './components/FlightCardList';
