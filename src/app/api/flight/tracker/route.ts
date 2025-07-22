@@ -5,24 +5,24 @@ const GET = async (request: NextRequest) => {
     try {
 
         // searchParams를 사용한 방식
-        const { searchParams } = new URL(request.url);
-        const icao24 = searchParams.get('icao24');
-        if (!icao24) {
-            return NextResponse.json({ error: 'icao24 parameter is required' }, { status: 400 });
-        }
-        const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${encodeURIComponent(icao24)}`, {
-            method: 'GET'
-        });
-
-        // // search가 비어있는 경우 체크
-        // if (!request.nextUrl.search) {
+        // const { searchParams } = new URL(request.url);
+        // const icao24 = searchParams.get('icao24');
+        // if (!icao24) {
         //     return NextResponse.json({ error: 'icao24 parameter is required' }, { status: 400 });
         // }
-
-        // // request.nextUrl.search -> ?포함해서 반환하니 주의
-        // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
+        // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${encodeURIComponent(icao24)}`, {
         //     method: 'GET'
         // });
+
+        // search가 비어있는 경우 체크
+        if (!request.nextUrl.search) {
+            return NextResponse.json({ error: 'icao24 parameter is required' }, { status: 400 });
+        }
+
+        // request.nextUrl.search -> ?포함해서 반환하니 주의
+        const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
+            method: 'GET'
+        });
 
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);

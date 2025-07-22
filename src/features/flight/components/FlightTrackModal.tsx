@@ -26,9 +26,19 @@ const FlightTrackModal = ({ flightId }: { flightId: string }) => {
 
     const getFlightTrack = useCallback(async () => {
         try {
-            const resFlightTrack = await fetchFlightTrack('06a111');
+            // const resFlightTrack = await fetchFlightTrack('abde5b');
+            const token = btoa('ratshou-api-client:LBfFdiUEuxvUyaxzLOLeLGCHQpQTSMXC');
+
+            // request.nextUrl.search -> ?포함해서 반환하니 주의
+            const res = await fetch(`https://opensky-network.org/api/states/all?icao24=abde5b`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Basic ${token}`
+                }
+            });
+            console.log('res:', res);
             // 비행 추적 데이터를 가져온 후 지도 로드 상태를 true로 설정
-            setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5] });
+            // setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5] });
         } catch (error) {
             console.error('서버에서 비행기 추적 데이터 가져오기 실패:', error);
         }
