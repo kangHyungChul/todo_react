@@ -1,25 +1,33 @@
 import { FlightArrivalType } from '../types/flights';
 
+const path = () => {
+    if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
+        return `${process.env.NEXT_PUBLIC_BASE_URL}`;
+    } else {
+        return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    }
+};
+
 const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     // console.log('로그확인 - flightApi_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL);
 
     try {
 
-        const path = () => {
-            if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
-                return `${process.env.BASE_URL}/api/flight/arrival`;
-            } else {
-                return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
-            }
-        };
+        // const path = () => {
+        //     if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
+        //         return `${process.env.NEXT_PUBLIC_BASE_URL}/api/flight/arrival`;
+        //     } else {
+        //         return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
+        //     }
+        // };
 
-        console.log('path:', path());
+        // console.log('path:', path());
         // const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
 
         // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
 
-        const res = await fetch(path(), {
+        const res = await fetch(`${path()}/api/flight/arrival`, {
             method: 'POST',
             body: JSON.stringify(responseBody),
             cache: 'no-store',
@@ -46,29 +54,22 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
 const fetchFlightTrack = async () => {
     try {
-        // const path = () => {
-        //     if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
-        //         return `${process.env.BASE_URL}/api/flight/tracker`;
-        //     } else {
-        //         return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/tracker`;
-        //     }
-        // };
 
         // BASE_URL이 undefined인지 확인하기 위한 디버깅 로그
-        console.log('BASE_URL:', process.env.BASE_URL);
-        console.log('NODE_ENV:', process.env.NODE_ENV);
-        console.log('NEXT_PUBLIC_VERCEL_URL:', process.env.NEXT_PUBLIC_VERCEL_URL);
+        // console.log('BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
+        // console.log('NODE_ENV:', process.env.NODE_ENV);
+        // console.log('NEXT_PUBLIC_VERCEL_URL:', process.env.NEXT_PUBLIC_VERCEL_URL);
 
-        // const res = await fetch('http://localhost:3000/api/flight/tracker', {
-        //     method: 'GET'
-        // });
+        const res = await fetch(`${path()}/api/flight/tracker`, {
+            method: 'GET'
+        });
 
-        // if (!res.ok) {
-        //     throw new Error(`Failed to fetch flight track: ${res.status} ${res.statusText}`);
-        // }
+        if (!res.ok) {
+            throw new Error(`Failed to fetch flight track: ${res.status} ${res.statusText}`);
+        }
 
-        // const data = await res.json();
-        // return data;
+        const data = await res.json();
+        return data;
     } catch (error) {
         console.error('Error fetching flight track:', error);
         throw error;

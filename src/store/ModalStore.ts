@@ -53,7 +53,7 @@ const useModalStore = create<ModalStore>()(
             content: null,
             modalSize: 'md',
             openModal: (content, size = 'md') => {
-                console.log('openModal size:', size);
+                // console.log('openModal size:', size);
                 set((state) => ({ 
                     ...state, 
                     isOpen: true, 

@@ -52,7 +52,7 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
     };
 };
 
-// useFlightArrivalSearch를 올바른 React Hook으로 수정
+// useFlightArrivalSearch hook (검색관련련)
 const useFlightArrivalSearch = () => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);

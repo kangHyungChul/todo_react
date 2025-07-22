@@ -4,7 +4,7 @@
 import useModalStore from '@/store/ModalStore';
 // import { useShallow } from 'zustand/react/shallow';
 
-    const Modal = () => {
+const Modal = () => {
     // const { isOpen, content, closeModal } = useModal();
     // 객체나 배열의 최상위 레벨에서만 비교를 수행하는 얕은 비교 방식이다. 중첩된 객체나 배열의 내부 변경사항은 감지하지 않는다.
     // Zustand에서 shallow 비교는 불필요한 리렌더링을 방지하는 역할을 한다. 

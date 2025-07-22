@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { FlightArrivalType } from '@/features/flight/types/flights';
+import { NextResponse } from 'next/server';
+// import { FlightArrivalType } from '@/features/flight/types/flights';
 
-const GET = async (request: NextRequest) => {
+const GET = async () => {
     try {
 
         // const requestBody: FlightArrivalType = await request.json();
@@ -28,7 +28,7 @@ const GET = async (request: NextRequest) => {
         //     type: 'json',
         // });
 
-        const res = await fetch('https://opensky-network.org/api/tracks/all?icao24=71c544', {
+        const res = await fetch('https://opensky-network.org/api/tracks/all?icao24=71bf07', {
             method: 'GET',
         });
 
@@ -42,8 +42,7 @@ const GET = async (request: NextRequest) => {
 
         try {
             const json = JSON.parse(text);
-
-            return NextResponse.json(json.response.body);
+            return NextResponse.json(json);
         } catch (error) {
             console.error('error:', error);
             return NextResponse.json({ error: '응답 파싱 실패', raw: text }, { status: 500 });

@@ -27,7 +27,6 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
         setBulkState
     } = useFlightArrival(resFlightData);
 
-
     // const [isLoading, setIsLoading] = useState(false);
 
     // resFlightData가 변경될 때마다 상태 업데이트 (router.push + refresh 후 서버에서 새로운 데이터가 전달됨)
@@ -49,6 +48,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
             setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
         }
     }, [resFlightData, setBulkState, setLoadingState]);
+    
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
     const handleRefresh = async () => {
