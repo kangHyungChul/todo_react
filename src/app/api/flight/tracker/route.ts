@@ -23,40 +23,74 @@ const GET = async (request: NextRequest) => {
         const flightReg = request.nextUrl.search.split('=')[1];
         console.log('flightReg:', `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
 
-        const icao24Response = await fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
-            method: 'GET',
-            headers: {
-                'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
-                'x-rapidapi-host': 'aerodatabox.p.rapidapi.com'
-            }
-        });
-
-        const icao24Data = await icao24Response.json();
-        console.log('icao24Data:', icao24Data);
-        const icao24 = icao24Data[0].hexIcao.toLowerCase();
-
-
-        // 토큰발급 open sky
-        const tokenUrl = 'https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token';
-        const tokenResponse = await fetch(tokenUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                'grant_type': 'client_credentials',
-                'client_id': `${process.env.FLIGHT_TRACK_CLIENT_ID}`,
-                'client_secret': `${process.env.FLIGHT_TRACK_CLIENT_SECRET}`,
+        const [icao24Response, tokenResponse] = await Promise.all([
+            fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
+                    'x-rapidapi-host': 'aerodatabox.p.rapidapi.com'
+                }
             }),
-        });
+            fetch('https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'grant_type': 'client_credentials',
+                    'client_id': `${process.env.FLIGHT_TRACK_CLIENT_ID}`,
+                    'client_secret': `${process.env.FLIGHT_TRACK_CLIENT_SECRET}`,
+                }),
+            }),
+        ]);
 
-        const tokenData = await tokenResponse.json();
+        const [icao24Data, tokenData] = await Promise.all([
+            icao24Response.json(),
+            tokenResponse.json(),
+        ]);
+
+        if(!icao24Response.ok || !tokenResponse.ok) {
+            return NextResponse.json({ error: 'Failed to fetch flight information' }, { status: 500 });
+        }
+        
+        const icao24 = icao24Data[0].hexIcao.toLowerCase();
         const accessToken = tokenData.access_token;
-        console.log('accessToken:', accessToken);
+
+        // const icao24Response = await fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
+        //     method: 'GET',
+        //     headers: {
+        //         'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
+        //         'x-rapidapi-host': 'aerodatabox.p.rapidapi.com'
+        //     }
+        // });
+
+        // const icao24Data = await icao24Response.json();
+        // console.log('icao24Data:', icao24Data);
+        // const icao24 = icao24Data[0].hexIcao.toLowerCase();
+
+
+        // // 토큰발급 open sky
+        // const tokenUrl = 'https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token';
+        // const tokenResponse = await fetch(tokenUrl, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded',
+        //     },
+        //     body: new URLSearchParams({
+        //         'grant_type': 'client_credentials',
+        //         'client_id': `${process.env.FLIGHT_TRACK_CLIENT_ID}`,
+        //         'client_secret': `${process.env.FLIGHT_TRACK_CLIENT_SECRET}`,
+        //     }),
+        // });
+
+        // const tokenData = await tokenResponse.json();
+        // const accessToken = tokenData.access_token;
+        // console.log('accessToken:', accessToken);
 
         // request.nextUrl.search -> ?포함해서 반환하니 주의
         // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
         // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
+
         const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}`, {
             method: 'GET',
             headers: {

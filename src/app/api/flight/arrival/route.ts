@@ -4,7 +4,12 @@ import { FlightArrivalType } from '@/features/flight/types/flights';
 const GET = async (request: NextRequest) => {
     try {
 
-        const requestBody: FlightArrivalType = await request.json();
+        // const requestBody: FlightArrivalType = await request.json();
+
+        const searchParams = new URLSearchParams(request.nextUrl.searchParams);
+
+        // console.log('requestBody:', requestBody);
+        console.log('searchParams:', searchParams);
 
         const url = process.env.FLIGHT_ARRIVAL_API_URL;
         const apiKey = process.env.FLIGHT_API_KEY;
@@ -16,15 +21,15 @@ const GET = async (request: NextRequest) => {
 
         const body = new URLSearchParams({
             serviceKey: apiKey,
-            pageNo: requestBody.pageNo || '1',
-            numOfRows: requestBody.numOfRows || '100',
-            searchdtCode: requestBody.searchdtCode || 'E',
-            searchDate: requestBody.searchDate || '20250616',
-            searchFrom: requestBody.searchFrom || '0000',
-            searchTo: requestBody.searchTo || '2400',
-            flightId: requestBody.flightId || '',
-            passengerOrCargo: requestBody.passengerOrCargo || 'P',
-            airportCode: requestBody.airportCode || '',
+            pageNo: searchParams.get('pageNo') || '1',
+            numOfRows: searchParams.get('numOfRows') || '100',
+            searchdtCode: searchParams.get('searchdtCode') || 'E',
+            searchDate: searchParams.get('searchDate') || '20250616',
+            searchFrom: searchParams.get('searchFrom') || '0000',
+            searchTo: searchParams.get('searchTo') || '2400',
+            flightId: searchParams.get('flightId') || '',
+            passengerOrCargo: searchParams.get('passengerOrCargo') || 'P',
+            airportCode: searchParams.get('airportCode') || '',
             type: 'json',
         });
 
@@ -44,9 +49,9 @@ const GET = async (request: NextRequest) => {
             const json = JSON.parse(text);
             //json.response.body에 조회날자정보 추가
             const dateInfo = {
-                searchDate: requestBody.searchDate,
-                searchFrom: requestBody.searchFrom,
-                searchTo: requestBody.searchTo,
+                searchDate: searchParams.get('searchDate'),
+                searchFrom: searchParams.get('searchFrom'),
+                searchTo: searchParams.get('searchTo'),
             };
             return NextResponse.json({ 
                 ...dateInfo,
