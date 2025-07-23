@@ -1,18 +1,21 @@
 'use client';
 
 // import { FlightArrivalItemType } from '../types/flights';
-
+import useModalStore from '@/store/ModalStore';
 import { useCallback, useEffect, useState } from 'react';
 import { fetchFlightTrack } from '../services/flightApi';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, OverlayView } from '@react-google-maps/api';
 // import type { Map } from '@react-google-maps/api';
 
 interface LatLngLiteral {
     lat: number,
-    lng: number
+    lng: number,
+    rotation: number
 }
 
-const FlightTrackModal = ({ flightId }: { flightId: string }) => {
+const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId: string }) => {
+
+    const closeModal = useModalStore((state) => state.closeModal);
 
     // const [flightTrack, setFlightTrack] = useState([]);
     // const [isLoaded, setIsLoaded] = useState(false);
@@ -26,14 +29,20 @@ const FlightTrackModal = ({ flightId }: { flightId: string }) => {
 
     const getFlightTrack = useCallback(async () => {
         try {
-            const resFlightTrack = await fetchFlightTrack('abde5b');
-            console.log('resFlightTrack:', resFlightTrack);
+            const resFlightTrack = await fetchFlightTrack(flightReg);
             // 비행 추적 데이터를 가져온 후 지도 로드 상태를 true로 설정
-            setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5] });
+            setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5], rotation: Math.round(resFlightTrack.states[0][10] - 45) });
+
+            // 각도값을 정수로 반올림하고 Tailwind 클래스로 변환
+            // const degree = Math.round(resFlightTrack.states[0][10]);
+            // // setFlightDirection(degree);
+            // console.log('flightDirection:', `rotate-[${degree}deg]`);
         } catch (error) {
+            alert('이미 착륙했거나 위치조회가 불가능한 항공기입니다');
+            closeModal();
             console.error('서버에서 비행기 추적 데이터 가져오기 실패:', error);
         }
-    }, []);
+    }, [flightReg, closeModal]);
 
     useEffect(() => {
         getFlightTrack();
@@ -58,21 +67,19 @@ const FlightTrackModal = ({ flightId }: { flightId: string }) => {
     };
 
     return (
-        <div className="flex flex-col gap-2">
-            항공기 위치 - {flightId}
+        <div className={`flex flex-col gap-2`}>
+            항공기 위치 - {flightId} / {flightReg}
             <div className="aspect-square w-full">
                 {isLoaded && flightTrack ? (
                     <GoogleMap
                         mapContainerStyle={{ width: '100%', height: '100%' }}
-                        center={flightTrack}
-                        zoom={10}
+                        center={{ lat: flightTrack.lat, lng: flightTrack.lng }}
+                        zoom={12}
                         onLoad={onLoad}
                         onUnmount={onUnmount}
                     >
-                        {/* Child components, such as markers, info windows, etc. */}
-                        {/* {center.map((item: LatLngLiteral, index: number) => ( */}
-                        <Marker
-                            position={flightTrack}
+                        {/* <Marker
+                            position={{ lat: flightTrack.lat, lng: flightTrack.lng }}
                             onClick={handleMarkerClick}
                             title={`Flight ${flightId}`}
                             // 마커가 지도 위에서 더 잘 보이도록 z-index 설정
@@ -89,11 +96,16 @@ const FlightTrackModal = ({ flightId }: { flightId: string }) => {
                                 label: {
                                     text: '✈️',
                                     fontSize: '30px',
-                                    className: 'cursor-pointer p-0.1 bg-white border-1 border-black rounded-sm',
+                                    className: `cursor-pointer p-0.1 bg-white border border-black rounded-sm ${flightTrack.rotation}`,
                                 }
                             }}
-                        />
-                        {/* ))} */}
+                        /> */}
+                        <OverlayView
+                            position={{ lat: flightTrack.lat, lng: flightTrack.lng }}
+                            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                        >
+                            <div onClick={handleMarkerClick} className={'text-[30px] cursor-pointer border-0'} style={{ transform: `rotate(${flightTrack.rotation}deg)` }}>✈️</div>
+                        </OverlayView>
                     </GoogleMap>
                 ) : (
                     <div className="flex h-full w-full items-center justify-center">

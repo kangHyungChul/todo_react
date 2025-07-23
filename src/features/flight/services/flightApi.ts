@@ -52,9 +52,9 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
     }
 };
 
-const fetchFlightTrack = async ( icao24: string ) => {
+const fetchFlightTrack = async ( flightReg: string ) => {
+    
     try {
-        console.log('icao24:', icao24);
         // // flights 데이터를 query parameter로 전달
         // const queryParams = new URLSearchParams({
         //     flights: flights
@@ -62,9 +62,9 @@ const fetchFlightTrack = async ( icao24: string ) => {
 
         // console.log('queryParams:', queryParams);
 
-        const res = await fetch(`${path()}/api/flight/tracker?icao24=${icao24}`, {
+        const res = await fetch(`${path()}/api/flight/tracker?flightReg=${flightReg}`, {
             method: 'GET',
-            cache: 'no-store',
+            cache: 'no-store'
         });
 
         if (!res.ok) {

@@ -16,12 +16,51 @@ const GET = async (request: NextRequest) => {
 
         // search가 비어있는 경우 체크
         if (!request.nextUrl.search) {
-            return NextResponse.json({ error: 'icao24 parameter is required' }, { status: 400 });
+            return NextResponse.json({ error: 'flightReg parameter is required' }, { status: 400 });
         }
 
+        // 기체등록번호로로 icao24 조회
+        const flightReg = request.nextUrl.search.split('=')[1];
+
+        const icao24Response = await fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
+                'x-rapidapi-host': 'aerodatabox.p.rapidapi.com'
+            }
+        });
+
+        const icao24Data = await icao24Response.json();
+        // console.log('icao24:', icao24Data);
+        const icao24 = icao24Data[0].hexIcao.toLowerCase();
+
+
+        // 토큰발급 open sky
+        const tokenUrl = 'https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token';
+        const tokenResponse = await fetch(tokenUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'grant_type': 'client_credentials',
+                'client_id': `${process.env.FLIGHT_TRACK_CLIENT_ID}`,
+                'client_secret': `${process.env.FLIGHT_TRACK_CLIENT_SECRET}`,
+            }),
+        });
+
+        const tokenData = await tokenResponse.json();
+        const accessToken = tokenData.access_token;
+
         // request.nextUrl.search -> ?포함해서 반환하니 주의
-        const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
-            method: 'GET'
+        // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
+        // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
+        const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
         });
 
         if (!res.ok) {
@@ -30,7 +69,7 @@ const GET = async (request: NextRequest) => {
 
         // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
         const text = await res.text();
-        console.log('API Response Text:', text);
+        // console.log('API Response Text:', text);
 
         try {
             const json = JSON.parse(text);

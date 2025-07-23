@@ -53,7 +53,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                         {
                             (
                                 (flight.remark === null || flight.remark === '지연') && (
-                                    <Button style="secondary" onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} />, '2xl')}>현재위치</Button>
+                                    <Button style="secondary" onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
                                 )
                             )
                         }
