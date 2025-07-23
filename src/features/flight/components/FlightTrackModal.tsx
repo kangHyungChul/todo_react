@@ -24,7 +24,8 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     // Google Maps API 로드 설정
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+        // googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+        googleMapsApiKey: 'AIzaSyDiXtbbv1lNaJNMmgcyIl6RRb4cirSBSFs',
     });
 
     const getFlightTrack = useCallback(async () => {
