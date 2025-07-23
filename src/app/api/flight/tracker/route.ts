@@ -31,7 +31,7 @@ const GET = async (request: NextRequest) => {
         });
 
         const icao24Data = await icao24Response.json();
-        // console.log('icao24:', icao24Data);
+        console.log('icao24Data:', icao24Data);
         const icao24 = icao24Data[0].hexIcao.toLowerCase();
 
 
