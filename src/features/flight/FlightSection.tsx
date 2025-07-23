@@ -10,10 +10,12 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
 
     // const [resFlightData, setResFlightData] = useState<FlightArrivalResponseType>();
 
+    const setSearchTo = Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60);
+
     // 서버 사이드에서 비행기 데이터 가져오기
     const getSearchDate = parsedParams.searchDate ?? funcNowDate();
     const getSearchFrom = parsedParams.searchFrom ?? funcNowTime();
-    const getSearchTo = parsedParams.searchTo ?? Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60);
+    const getSearchTo = parsedParams.searchTo ?? setSearchTo;
     const getPageNo = parsedParams.pageNo ?? '1';
     const getNumOfRows = parsedParams.numOfRows ?? '20';
 
@@ -34,7 +36,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
     
     try {
         resFlightData = await fetchArrivalFlights(responseBody);
-        console.log('서버에서 가져온 비행기 데이터:', resFlightData);
+        // console.log('서버에서 가져온 비행기 데이터:', resFlightData);
     } catch (error) {
         console.error('서버에서 비행기 데이터 가져오기 실패:', error);
         // 에러 발생 시 기본 데이터 구조 제공

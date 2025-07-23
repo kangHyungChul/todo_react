@@ -45,7 +45,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                 totalCount: resFlightData.totalCount,
                 searchDate: resFlightData.searchDate,
                 searchFrom: resFlightData.searchFrom,
-                searchTo: resFlightData.searchTo,
+                searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo,
             });
             setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
         }
@@ -59,7 +59,7 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
         FlightArrivalSearch({
             searchDate: funcNowDate(),
             searchFrom: funcNowTime(),
-            searchTo: funcNowTimeAdd(60),
+            searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),
             numOfRows: '30',
             pageNo: '1',
         });

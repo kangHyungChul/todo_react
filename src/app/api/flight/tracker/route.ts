@@ -21,7 +21,7 @@ const GET = async (request: NextRequest) => {
 
         // 기체등록번호로로 icao24 조회
         const flightReg = request.nextUrl.search.split('=')[1];
-        console.log('flightReg:', `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
+        console.log('flightReg:', request.nextUrl.search, `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
 
         const [icao24Response, tokenResponse] = await Promise.all([
             fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {

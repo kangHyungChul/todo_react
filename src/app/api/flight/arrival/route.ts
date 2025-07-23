@@ -6,10 +6,8 @@ const GET = async (request: NextRequest) => {
 
         // const requestBody: FlightArrivalType = await request.json();
 
+        console.log('request:', request.nextUrl.searchParams);
         const searchParams = new URLSearchParams(request.nextUrl.searchParams);
-
-        // console.log('requestBody:', requestBody);
-        console.log('searchParams:', searchParams);
 
         const url = process.env.FLIGHT_ARRIVAL_API_URL;
         const apiKey = process.env.FLIGHT_API_KEY;

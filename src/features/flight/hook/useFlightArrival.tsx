@@ -39,7 +39,14 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
     // partial타입이란?
     // 객체의 일부 속성만 업데이트하고 싶을 때 사용, 전부 옵셔널로 설정
     // 옵셔널 타입은 값이 없어도 되는 속성을 표시하는 데 사용 / ? 표시
-    const setBulkState = useCallback((newState: Partial<typeof initialState>) => setState((prev) => ({ ...prev, ...newState })), []);
+    // setBulkState 함수에서 prev(이전 상태)와 newState(새로 전달된 상태)를 콘솔에 출력하여 상태 변경 추적
+    const setBulkState = useCallback((newState: Partial<typeof initialState>) => {
+        setState((prev) => {
+            // console.log('setBulkState 호출 - prev:', prev); // 이전 상태 출력
+            // console.log('setBulkState 호출 - newState:', newState); // 새로 전달된 상태 출력
+            return { ...prev, ...newState };
+        });
+    }, []);
 
     // 반환값에 state의 각 필드와 set 함수들을 모두 포함시켜 사용 가능하도록 함
     return {
