@@ -64,15 +64,13 @@ const GET = async (request: NextRequest) => {
             },
         });
 
-        console.log('res:', res);
-
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }
 
         // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
         const text = await res.text();
-        // console.log('API Response Text:', text);
+        console.log('API Response Text:', text);
 
         try {
             const json = JSON.parse(text);
