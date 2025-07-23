@@ -69,7 +69,7 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     };
 
     return (
-        <div className={`flex flex-col gap-2`}>
+        <div className={'flex flex-col gap-2'}>
             항공기 위치 - {flightId} / {flightReg}
             <div className="aspect-square w-full">
                 {isLoaded && flightTrack ? (

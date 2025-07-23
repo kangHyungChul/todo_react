@@ -59,47 +59,41 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
 const useFlightArrivalSearch = () => {
     const router = useRouter();
     // const [isLoading, setIsLoading] = useState(false);
-    const { isLoading, setLoadingState } = useFlightStore();
+    const { setLoadingState } = useFlightStore();
     
     // setIsLoading을 useCallback으로 메모이제이션
     // const setLoadingState = useCallback((loading: boolean) => {
     //     setIsLoading(loading);
     // }, []);
     
-    const FlightArrivalSearch = async (arrivalSearchParams: FlightArrivalSearchParamsType) => {
+    const FlightArrivalSearch = (arrivalSearchParams: FlightArrivalSearchParamsType) => {
         setLoadingState(true);
-        try {
-            // console.log(arrivalSearchParams);
-            const searchDate = arrivalSearchParams.searchDate;
-            const searchFrom = arrivalSearchParams.searchFrom;
-            const searchTo = arrivalSearchParams.searchTo;
-            const pageNo = arrivalSearchParams.pageNo;
-            const numOfRows = arrivalSearchParams.numOfRows;
+        // console.log(arrivalSearchParams);
+        const searchDate = arrivalSearchParams.searchDate;
+        const searchFrom = arrivalSearchParams.searchFrom;
+        const searchTo = arrivalSearchParams.searchTo;
+        const pageNo = arrivalSearchParams.pageNo;
+        const numOfRows = arrivalSearchParams.numOfRows;
 
-            // const searchFromHHMM = funcTimeToHHMM(arrivalSearchParams.searchFrom);  
-            // const searchToHHMM = funcTimeToHHMM(arrivalSearchParams.searchTo);
+        // const searchFromHHMM = funcTimeToHHMM(arrivalSearchParams.searchFrom);  
+        // const searchToHHMM = funcTimeToHHMM(arrivalSearchParams.searchTo);
 
-            // // 현재 시간 기준으로 새로운 데이터 요청
-            // // const refreshSearchDate = funcNowDate();
-            // const refreshSearchFrom = searchFromHHMM;
-            // const refreshSearchTo = searchToHHMM;
-            // const refreshPageNo = '1';
+        // // 현재 시간 기준으로 새로운 데이터 요청
+        // // const refreshSearchDate = funcNowDate();
+        // const refreshSearchFrom = searchFromHHMM;
+        // const refreshSearchTo = searchToHHMM;
+        // const refreshPageNo = '1';
 
-            // // URL 업데이트 후 서버 컴포넌트 재실행
-            // // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-            router.push(`/flight?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}`);
-            // // router.refresh();
-            
-            // // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
-            // // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
-
-        } catch (error) {
-            console.error('비행기 데이터 새로고침 실패:', error);
-            setLoadingState(false); // 에러 발생 시에만 로딩 상태 해제
-        }
+        // // URL 업데이트 후 서버 컴포넌트 재실행
+        // // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
+        router.push(`/flight?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}`);
+        // // router.refresh();
+        
+        // // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
+        // // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
     };
 
-    return { FlightArrivalSearch, isLoading, setLoadingState };
+    return { FlightArrivalSearch };
 };
 
 export { useFlightArrival, useFlightArrivalSearch };
