@@ -51,6 +51,7 @@ const GET = async (request: NextRequest) => {
 
         const tokenData = await tokenResponse.json();
         const accessToken = tokenData.access_token;
+        console.log('accessToken:', accessToken);
 
         // request.nextUrl.search -> ?포함해서 반환하니 주의
         // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
@@ -62,6 +63,8 @@ const GET = async (request: NextRequest) => {
                 'Authorization': `Bearer ${accessToken}`
             },
         });
+
+        console.log('res:', res);
 
         if (!res.ok) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
