@@ -5,6 +5,7 @@ import { FlightArrivalItemType, FlightArrivalSearchParamsType, FlightArrivalResp
 // import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMMReverse } from "@/lib/utils/dateTime";
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useFlightStore } from '../store/FlightStore';
 
 const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
     // 상태값들을 하나의 객체(state)로 묶어서 관리
@@ -21,7 +22,7 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
         searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo, // 검색 종료 시간 (현재 시간 + 60분)
     };
 
-    console.log('initialState:', initialState);
+    // console.log('initialState:', initialState);
 
     // useState를 객체 형태로 사용하여 모든 상태를 한 번에 관리
     const [state, setState] = useState(initialState);
@@ -57,15 +58,16 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
 // useFlightArrivalSearch hook (검색관련련)
 const useFlightArrivalSearch = () => {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
+    const { isLoading, setLoadingState } = useFlightStore();
     
     // setIsLoading을 useCallback으로 메모이제이션
-    const setLoadingState = useCallback((loading: boolean) => {
-        setIsLoading(loading);
-    }, []);
+    // const setLoadingState = useCallback((loading: boolean) => {
+    //     setIsLoading(loading);
+    // }, []);
     
     const FlightArrivalSearch = async (arrivalSearchParams: FlightArrivalSearchParamsType) => {
-        setIsLoading(true);
+        setLoadingState(true);
         try {
             // console.log(arrivalSearchParams);
             const searchDate = arrivalSearchParams.searchDate;
@@ -93,7 +95,7 @@ const useFlightArrivalSearch = () => {
 
         } catch (error) {
             console.error('비행기 데이터 새로고침 실패:', error);
-            setIsLoading(false); // 에러 발생 시에만 로딩 상태 해제
+            setLoadingState(false); // 에러 발생 시에만 로딩 상태 해제
         }
     };
 

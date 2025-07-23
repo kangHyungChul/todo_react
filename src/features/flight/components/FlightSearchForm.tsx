@@ -6,10 +6,12 @@ import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import { FlightArrivalResponseType } from '../types/flights';
 import { useFlightArrivalSearch } from '../hook/useFlightArrival';
+import { useFlightStore } from '../store/FlightStore';
 
 const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
     // const router = useRouter();
     const { FlightArrivalSearch } = useFlightArrivalSearch();
+    const { isLoading } = useFlightStore();
 
     // 서버에서 받은 데이터를 기반으로 초기값 설정
     const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
@@ -88,7 +90,7 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
                     </select>
                 </div>
                 <div className="mt-4">
-                    <Button type="submit" size="large" style="primary" className="w-full">검색</Button>
+                    <Button type="submit" size="large" style="primary" className="w-full" disabled={isLoading}>검색</Button>
                 </div>
             </form>
         </div>

@@ -8,6 +8,7 @@ import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
 import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
+import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
@@ -16,7 +17,8 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    const { FlightArrivalSearch, isLoading, setLoadingState } = useFlightArrivalSearch();
+    const { FlightArrivalSearch } = useFlightArrivalSearch();
+    const { isLoading, setLoadingState } = useFlightStore();
 
     // const { 
     //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
@@ -94,15 +96,23 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                 {isLoading ? '조회중...' : '이후 한시간 조회'}
             </Button>
 
-            <ul className="flex flex-col gap-4">
-                {flightData && flightData.length > 0 ? (
-                    flightData.map((flight: FlightArrivalItemType) => (
-                        <FlightCard key={flight.fid} flight={flight} />
-                    ))
+            {
+                isLoading ? (
+                    <div className="text-center text-gray-500">로딩중...</div>
                 ) : (
-                    <li className="text-center text-gray-500">비행기 정보가 없습니다.</li>
-                )}
-            </ul>
+                    <>
+                        {flightData && flightData.length > 0 ? (
+                            <ul className="flex flex-col gap-4">
+                                {flightData.map((flight: FlightArrivalItemType) => (
+                                    <FlightCard key={flight.fid} flight={flight} />
+                                ))}
+                            </ul>
+                        ) : (
+                            <div className="text-center text-gray-500">비행기 정보가 없습니다.</div>
+                        )}
+                    </>
+                )
+            }
         </>
     );
 };
