@@ -52,7 +52,7 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
     }
 };
 
-const fetchFlightTrack = async ( flightReg: string ) => {
+const fetchFlightTrack = async ( flightReg: string, signal: { signal?: AbortSignal } ) => {
     
     try {
         // // flights 데이터를 query parameter로 전달
@@ -64,7 +64,8 @@ const fetchFlightTrack = async ( flightReg: string ) => {
 
         const res = await fetch(`${path()}/api/flight/tracker?flightReg=${flightReg}`, {
             method: 'GET',
-            cache: 'no-store'
+            cache: 'no-store',
+            signal: signal?.signal
         });
 
         if (!res.ok) {

@@ -21,10 +21,10 @@ const GET = async (request: NextRequest) => {
 
         // 기체등록번호로로 icao24 조회
         const flightReg = request.nextUrl.search.split('=')[1];
-        console.log('flightReg:', request.nextUrl.search, `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
+        // console.log('flightReg:', request.nextUrl.search, `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
 
         const [icao24Response, tokenResponse] = await Promise.all([
-            fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
+            fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/HL8252/all`, {
                 method: 'GET',
                 headers: {
                     'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
@@ -53,6 +53,9 @@ const GET = async (request: NextRequest) => {
             icao24Response.json(),
             tokenResponse.json(),
         ]);
+
+        // console.log('icao24:', icao24Data);
+        // console.log('tokenData:', tokenData);
 
         if(!icao24Response.ok || !tokenResponse.ok) {
             return NextResponse.json({ error: 'Failed to fetch flight information' }, { status: 500 });

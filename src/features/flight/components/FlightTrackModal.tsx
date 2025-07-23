@@ -28,9 +28,11 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
         googleMapsApiKey: 'AIzaSyDiXtbbv1lNaJNMmgcyIl6RRb4cirSBSFs',
     });
 
-    const getFlightTrack = useCallback(async () => {
+    const getFlightTrack = useCallback(async (controller: AbortController) => {
         try {
-            const resFlightTrack = await fetchFlightTrack(flightReg);
+            // fetchFlightTrack 호출 시 signal 값 로그 출력
+            console.log('fetchFlightTrack 호출 - signal:', controller.signal);
+            const resFlightTrack = await fetchFlightTrack(flightReg, { signal: controller.signal });
             console.log('resFlightTrack:', resFlightTrack);
             // 비행 추적 데이터를 가져온 후 지도 로드 상태를 true로 설정
             setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5], rotation: Math.round(resFlightTrack.states[0][10] - 45) });
@@ -47,7 +49,12 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     }, [flightReg, closeModal]);
 
     useEffect(() => {
-        getFlightTrack();
+        const controller = new AbortController();
+        getFlightTrack(controller);
+        return () => {
+            console.log('controller.abort() 호출 - signal:', controller.signal);
+            controller.abort();
+        };
     }, [getFlightTrack]);
 
     // useEffect(() => {
