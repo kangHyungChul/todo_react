@@ -60,7 +60,7 @@ const fetchFlightTrack = async ( flightReg: string ) => {
         //     flights: flights
         // }).toString();
 
-        // console.log('queryParams:', queryParams);
+        console.log('flightReg:', `${path()}/api/flight/tracker?flightReg=${flightReg}`);
 
         const res = await fetch(`${path()}/api/flight/tracker?flightReg=${flightReg}`, {
             method: 'GET',

@@ -31,6 +31,7 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     const getFlightTrack = useCallback(async () => {
         try {
             const resFlightTrack = await fetchFlightTrack(flightReg);
+            console.log('resFlightTrack:', resFlightTrack);
             // 비행 추적 데이터를 가져온 후 지도 로드 상태를 true로 설정
             setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5], rotation: Math.round(resFlightTrack.states[0][10] - 45) });
 
