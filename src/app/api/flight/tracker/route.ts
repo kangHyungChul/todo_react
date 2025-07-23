@@ -24,7 +24,7 @@ const GET = async (request: NextRequest) => {
         // console.log('flightReg:', request.nextUrl.search, `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
 
         const [icao24Response, tokenResponse] = await Promise.all([
-            fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/HL8252/all`, {
+            fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
                 method: 'GET',
                 headers: {
                     'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
