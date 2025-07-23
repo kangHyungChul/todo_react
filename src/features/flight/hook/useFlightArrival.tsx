@@ -18,8 +18,10 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
         numOfRows: resFlightData.numOfRows, // 한 페이지당 행 수
         searchDate: resFlightData.searchDate, // 검색 날짜 (오늘)
         searchFrom: resFlightData.searchFrom, // 검색 시작 시간 (현재 시간)
-        searchTo: resFlightData.searchTo, // 검색 종료 시간 (현재 시간 + 60분)
+        searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo, // 검색 종료 시간 (현재 시간 + 60분)
     };
+
+    console.log('initialState:', initialState);
 
     // useState를 객체 형태로 사용하여 모든 상태를 한 번에 관리
     const [state, setState] = useState(initialState);

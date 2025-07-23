@@ -13,7 +13,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
     // 서버 사이드에서 비행기 데이터 가져오기
     const getSearchDate = parsedParams.searchDate ?? funcNowDate();
     const getSearchFrom = parsedParams.searchFrom ?? funcNowTime();
-    const getSearchTo = parsedParams.searchTo ?? funcNowTimeAdd(30);
+    const getSearchTo = parsedParams.searchTo ?? Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60);
     const getPageNo = parsedParams.pageNo ?? '1';
     const getNumOfRows = parsedParams.numOfRows ?? '20';
 

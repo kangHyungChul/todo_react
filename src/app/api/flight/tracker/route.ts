@@ -33,6 +33,11 @@ const GET = async (request: NextRequest) => {
             }),
             fetch('https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token', {
                 method: 'POST',
+                next: {
+                    // 25분(1500초) 동안 revalidate 설정
+                    // 토큰발급시간 30분, 캐시 25분 설정
+                    revalidate: 60 * 25,
+                },
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -55,6 +60,9 @@ const GET = async (request: NextRequest) => {
         
         const icao24 = icao24Data[0].hexIcao.toLowerCase();
         const accessToken = tokenData.access_token;
+
+        console.log('icao24:', icao24);
+        console.log('accessToken:', accessToken);
 
         // const icao24Response = await fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
         //     method: 'GET',
@@ -93,6 +101,9 @@ const GET = async (request: NextRequest) => {
 
         const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}`, {
             method: 'GET',
+            next: {
+                revalidate: 10,
+            },
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
