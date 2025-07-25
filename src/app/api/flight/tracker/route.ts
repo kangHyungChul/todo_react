@@ -102,7 +102,7 @@ const GET = async (request: NextRequest) => {
         // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
         // const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}${request.nextUrl.search}`, {
 
-        const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}`, {
+        const res = await fetch(`${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}&time=0`, {
             method: 'GET',
             next: {
                 revalidate: 10,
@@ -119,7 +119,8 @@ const GET = async (request: NextRequest) => {
 
         // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
         const text = await res.text();
-        console.log('API Response Text:', `${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}`,text);
+        console.log('API Response Text:', `${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}&time=0`,text);
+
 
         try {
             const json = JSON.parse(text);
