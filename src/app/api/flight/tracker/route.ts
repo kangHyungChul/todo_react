@@ -54,8 +54,8 @@ const GET = async (request: NextRequest) => {
             tokenResponse.json(),
         ]);
 
-        // console.log('icao24:', icao24Data);
-        // console.log('tokenData:', tokenData);
+        console.log('icao24:', icao24Data);
+        console.log('tokenData:', tokenData);
 
         if(!icao24Response.ok || !tokenResponse.ok) {
             return NextResponse.json({ error: 'Failed to fetch flight information' }, { status: 500 });
@@ -119,8 +119,7 @@ const GET = async (request: NextRequest) => {
 
         // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
         const text = await res.text();
-        console.log('API Response Text:', `${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}&time=0`,text);
-
+        console.log('API Response Text:', `${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}&time=0`, text);
 
         try {
             const json = JSON.parse(text);
