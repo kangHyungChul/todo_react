@@ -41,6 +41,17 @@
     --color-danger-800: #991b1b;
     --color-danger-900: #7f1d1d;
 
+    --color-warning: #f59e0b;
+    --color-warning-100: #fef3c7;
+    --color-warning-200: #fde68a;
+    --color-warning-300: #f59e0b;
+    --color-warning-400: #f59e0b;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #dc2626;
+    --color-warning-700: #b91c1c;
+    --color-warning-800: #991b1b;
+    --color-warning-900: #7f1d1d;
+
     --color-white: #ffffff;
     --color-gray-100: #f3f4f6;
     --color-gray-200: #e5e7eb;
@@ -94,3 +105,15 @@
     }
 
 } */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    padding: 0;
+    margin: 0;
+    flex: 1;
+}

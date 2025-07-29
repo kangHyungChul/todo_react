@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 // import { usePathname } from 'next/navigation';
-import styles from './Header.module.scss';
+// import styles from './Header.module.scss';
 
 const Header = () => {
     
@@ -17,26 +17,11 @@ const Header = () => {
     // };
 
     return (
-        <header className={styles.header}>
-            <h1 className={`${styles['header__title']}`}><Link href="/">TODO REACT</Link></h1>
-            <nav>
-                {/* <ul className={`${styles['header__gnb']}`}>
-                    <li>
-                        <Link href='/hook/usestate' className={`${styles['header__gnb-link']}`}>hook</Link>
-                        { 
-                            pathname('/hook') &&
-                            <ul className={`${styles['header__dep2']}`}>
-                                <li>
-                                    <Link href='/hook/usestate' className={linkStyle('/hook/usestate')}>useState</Link>
-                                </li>
-                                <li>
-                                    <Link href='/hook/useeffect' className={linkStyle('/hook/useeffect')}>useEffect</Link>
-                                </li>
-                            </ul>
-                        }
-                    </li>
-                </ul> */}
-            </nav>
+        <header className="flex items-center justify-center p-5 border-b-1 border-gray-200 border-gray-300">
+            <h1 className="text-2xl font-bold text-center"><Link href="/">FLIGHT TRACKER</Link></h1>
+            {/* <nav className="text-right">
+                <Link href="#" className="text-sm text-gray-500">Login</Link>
+            </nav> */}
         </header>
     );
 

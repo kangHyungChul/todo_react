@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/common/Button';
+import Select from '@/components/common/Select';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
 import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation';
@@ -73,21 +74,26 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
                 </div> */}
                 <div className="flex items-center gap-3">
                     <label htmlFor="searchFrom">조회범위(시작시간)</label>
-                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} />
+                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={isLoading}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchTo">조회범위(종료시간)</label>
-                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} />
+                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={isLoading}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchNumOfRows">표시수</label>
-                    <select id="searchNumOfRows" value={searchNumOfRows} onChange={(e) => setSearchNumOfRows(e.target.value)}>
+                    <Select
+                        id="searchNumOfRows"
+                        value={searchNumOfRows}
+                        onChange={(e) => setSearchNumOfRows(e.target.value)}    
+                        disabled={isLoading}
+                    >
                         <option value="10">10</option>
                         <option value="20">20</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
-                    </select>
+                    </Select>
                 </div>
                 <div className="mt-4">
                     <Button type="submit" size="large" style="primary" className="w-full" disabled={isLoading}>검색</Button>

@@ -93,7 +93,7 @@ const useFlightArrivalSearch = () => {
 
         // // URL 업데이트 후 서버 컴포넌트 재실행
         // // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-        router.push(`/flight?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}`);
+        router.push(`?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}`);
         // // router.refresh();
         
         // // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨

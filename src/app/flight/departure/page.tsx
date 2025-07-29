@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcDateTimeToType, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
 import FlightSection from '@/features/flight/FlightSection';
 export const metadata: Metadata = {
-    title: 'Flight',
-    description: 'Flight',
+    title: 'Flight Departure',
+    description: 'Flight Departure',
 };
 
-const Flight = async({ searchParams } : { searchParams: Promise<{ searchDate?: string, searchFrom?: string, searchTo?: string, pageNo?: string, numOfRows?: string }> }) => {
+const FlightDeparture = async({ searchParams } : { searchParams: Promise<{ searchDate?: string, searchFrom?: string, searchTo?: string, pageNo?: string, numOfRows?: string }> }) => {
 
     const parsedParams = await searchParams;
 
@@ -15,8 +15,8 @@ const Flight = async({ searchParams } : { searchParams: Promise<{ searchDate?: s
     const searchFrom = funcTimeToHHMMReverse(parsedParams.searchFrom ?? funcNowTime());
     const searchTo = funcTimeToHHMMReverse(parsedParams.searchTo ?? setSearchTo);
 
-    metadata.title = `항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
-    metadata.description = `항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+    metadata.title = `항공기 출발정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+    metadata.description = `항공기 출발정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
 
     return (
         <>
@@ -25,4 +25,4 @@ const Flight = async({ searchParams } : { searchParams: Promise<{ searchDate?: s
     );
 };
 
-export default Flight;
+export default FlightDeparture;

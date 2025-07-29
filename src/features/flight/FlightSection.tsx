@@ -1,9 +1,10 @@
 import { fetchArrivalFlights } from './services/flightApi';
 import { FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType } from './types/flights';
 // import Button from '@/components/common/Button';
+import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 import FlightCardList from './components/FlightCardList';
 import FlightSearchForm from './components/FlightSearchForm';
-import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
+import FlightTab from './components/FlightTab';
 
 // 서버 컴포넌트 - 서버 사이드에서 데이터를 가져와서 클라이언트 컴포넌트에 전달
 const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSearchParamsType }) => {
@@ -53,6 +54,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
 
     return (
         <div className="max-w-[600px] mx-auto my-6">
+            <FlightTab />
             {resFlightData && <FlightSearchForm resFlightData={resFlightData} />}
             {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}
             {resFlightData && <FlightCardList resFlightData={resFlightData} />}
