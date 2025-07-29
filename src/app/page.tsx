@@ -7,14 +7,6 @@ import styles from './page.module.scss';
 // import CardSection from '@/features/cards/CardSection';
 import Link from 'next/link';
 
-const TextComponent = () => {
-    return (
-        <div>
-            <h1>TextComponent</h1>
-        </div>
-    );
-};
-
 export default function Home() {
     // const [count, setCount] = useState(0);
 
@@ -38,7 +30,6 @@ export default function Home() {
     return (
         <main className={ styles.main }>
             <Link href="/modal">Modal</Link>
-            <TextComponent />
             {/* <Link href="/flight">Flight</Link> */}
             {/* <CardSection /> */}
         </main>
