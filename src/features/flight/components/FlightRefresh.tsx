@@ -1,23 +1,26 @@
 'use client';
 
 // import { fetchArrivalFlights } from '../services/flightApi';
-import { FlightArrivalResponseType } from '../types/flights';
+import { 
+    FlightArrivalResponseType, 
+    FlightDepartureResponseType 
+} from '../types/flights';
 import { useEffect } from 'react';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
-import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
+import { useFlightState, useFlightSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
+const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
     
     // 라우터 인스턴스 생성
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    const { FlightArrivalSearch } = useFlightArrivalSearch();
+    const { FlightSearch } = useFlightSearch();
     const { isLoading, setLoadingState } = useFlightStore();
 
     // const { 
@@ -27,7 +30,7 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     const { 
         // flightData, totalCount, searchDate, searchFrom, searchTo, 
         setBulkState
-    } = useFlightArrival(resFlightData);
+    } = useFlightState(resFlightData);
 
     // const [isLoading, setIsLoading] = useState(false);
 
@@ -56,7 +59,7 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     const handleRefresh = async () => {
 
         // FlightArrivalSearch 함수를 올바르게 호출
-        FlightArrivalSearch({
+        FlightSearch({
             searchDate: funcNowDate(),
             searchFrom: funcNowTime(),
             searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),

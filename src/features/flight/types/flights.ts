@@ -115,3 +115,5 @@ export interface FlightArrivalSearchParamsType {
     pageNo?: string;
     numOfRows?: string;
 }
+
+export type FlightType = 'arrival' | 'departure';

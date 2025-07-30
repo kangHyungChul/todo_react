@@ -5,13 +5,16 @@ import Select from '@/components/common/Select';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
 import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation';
-import { FlightArrivalResponseType } from '../types/flights';
-import { useFlightArrivalSearch } from '../hook/useFlightArrival';
+import { 
+    FlightArrivalResponseType, 
+    FlightDepartureResponseType 
+} from '../types/flights';
+import { useFlightSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
 
-const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
+const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
     // const router = useRouter();
-    const { FlightArrivalSearch } = useFlightArrivalSearch();
+    const { FlightSearch } = useFlightSearch();
     const { isLoading } = useFlightStore();
 
     // 서버에서 받은 데이터를 기반으로 초기값 설정
@@ -34,13 +37,14 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
         e.preventDefault();
         
         // 검색 실행
-        FlightArrivalSearch({
+        FlightSearch({
             searchDate: funcNowDate(),
             searchFrom: funcTimeToHHMM(searchFrom),
             searchTo: funcTimeToHHMM(searchTo),
             numOfRows: searchNumOfRows,
             pageNo: '1',
         });
+
         // try {
         //     const searchFromHHMM = funcTimeToHHMM(searchFrom);  
         //     const searchToHHMM = funcTimeToHHMM(searchTo);

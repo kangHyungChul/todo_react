@@ -12,9 +12,8 @@ const FlightTab = () => {
             label: '도착조회',
         },
         {
-            href: '#',
+            href: '/flight/departure',
             label: '출발조회',
-            className: 'bg-gray-200 text-gray-400 cursor-not-allowed',
         },
     ];
 

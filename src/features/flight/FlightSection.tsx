@@ -1,5 +1,10 @@
 import { fetchArrivalFlights } from './services/flightArrivalApi';
-import { FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType, FlightDepartureType, FlightDepartureSearchParamsType } from './types/flights';
+import { fetchDepartureFlights } from './services/flightDepartureApi';
+import { 
+    FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType, 
+    FlightDepartureResponseType, FlightDepartureType, FlightDepartureSearchParamsType, 
+    FlightType
+} from './types/flights';
 // import Button from '@/components/common/Button';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 import FlightCardList from './components/FlightCardList';
@@ -7,7 +12,7 @@ import FlightSearchForm from './components/FlightSearchForm';
 import FlightTab from './components/FlightTab';
 
 // 서버 컴포넌트 - 서버 사이드에서 데이터를 가져와서 클라이언트 컴포넌트에 전달
-const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: 'arrival' | 'departure' }) => {
+const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
 
     // const [resFlightData, setResFlightData] = useState<FlightArrivalResponseType>();
 
@@ -33,10 +38,14 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     };
 
     // 서버에서 데이터 가져오기 - 에러 핸들링 추가
-    let resFlightData: FlightArrivalResponseType | FlightDepartureSearchParamsType | null = null;
+    let resFlightData: FlightArrivalResponseType | FlightDepartureResponseType | null = null;
     
     try {
-        resFlightData = await fetchArrivalFlights(responseBody);
+        if(type === 'arrival') {
+            resFlightData = await fetchArrivalFlights(responseBody);
+        } else {
+            resFlightData = await fetchDepartureFlights(responseBody);
+        }
         console.log('서버에서 가져온 비행기 데이터:', resFlightData);
     } catch (error) {
         console.error('서버에서 비행기 데이터 가져오기 실패:', error);
@@ -57,7 +66,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
             <FlightTab />
             {resFlightData && <FlightSearchForm resFlightData={resFlightData} />}
             {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}
-            {resFlightData && <FlightCardList resFlightData={resFlightData} />}
+            {resFlightData && <FlightCardList resFlightData={resFlightData} type={type} />}
         </div>
     );
 };

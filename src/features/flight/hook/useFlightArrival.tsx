@@ -1,19 +1,22 @@
 'use client';
 
-import { FlightArrivalItemType, FlightArrivalSearchParamsType, FlightArrivalResponseType } from '../types/flights';
+import { 
+    FlightArrivalItemType, FlightArrivalSearchParamsType, FlightArrivalResponseType, 
+    FlightDepartureItemType, FlightDepartureResponseType, FlightDepartureSearchParamsType
+} from '../types/flights';
 // import { funcNowTime, funcNowTimeAdd } from "@/lib/utils/dateTime";
 // import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMMReverse } from "@/lib/utils/dateTime";
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFlightStore } from '../store/FlightStore';
 
-const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
+const useFlightState = (resFlightData: FlightArrivalResponseType | FlightDepartureResponseType) => {
     // 상태값들을 하나의 객체(state)로 묶어서 관리
     // 각 필드의 초기값은 최초 렌더링 시 서버에서 받은 데이터로 설정 <- 그렇지 않으면 초기값이 없어 빈상태로 노출됨
 
     // 초기 상태값을 상수로 선언
     const initialState = {
-        flightData: resFlightData.items as FlightArrivalItemType[], // 비행기 데이터 배열
+        flightData: resFlightData.items as FlightArrivalItemType[] | FlightDepartureItemType[], // 비행기 데이터 배열
         totalCount: resFlightData.totalCount, // 전체 건수
         pageNo: resFlightData.pageNo, // 페이지 번호
         numOfRows: resFlightData.numOfRows, // 한 페이지당 행 수
@@ -63,7 +66,7 @@ const useFlightArrival = (resFlightData: FlightArrivalResponseType) => {
 };
 
 // useFlightArrivalSearch hook (검색관련련)
-const useFlightArrivalSearch = () => {
+const useFlightSearch = () => {
     const router = useRouter();
     // const [isLoading, setIsLoading] = useState(false);
     const { setLoadingState } = useFlightStore();
@@ -73,7 +76,7 @@ const useFlightArrivalSearch = () => {
     //     setIsLoading(loading);
     // }, []);
     
-    const FlightArrivalSearch = (arrivalSearchParams: FlightArrivalSearchParamsType) => {
+    const FlightSearch = (arrivalSearchParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => {
         setLoadingState(true);
         // console.log(arrivalSearchParams);
         const searchDate = arrivalSearchParams.searchDate;
@@ -100,7 +103,7 @@ const useFlightArrivalSearch = () => {
         // // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
     };
 
-    return { FlightArrivalSearch };
+    return { FlightSearch };
 };
 
-export { useFlightArrival, useFlightArrivalSearch };
+export { useFlightState, useFlightSearch };

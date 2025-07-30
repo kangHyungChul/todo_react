@@ -10,11 +10,10 @@ const FlightDetailModal = ({ flight }: { flight: FlightDepartureItemType }) => {
                 {flight.airport}({flight.airportCode}) - 인천(ICN) 
             </p>
             <p>
-                {flight.remark} /
                 <FlightExitGate terminalId={flight.terminalId} /> {flight.chkinRange} 카운터
             </p>
             <p>
-                게이트번호: {flight.gateNumber}
+                탑승게이트: {flight.gateNumber} / {flight.remark}
             </p>
         </div>
     );

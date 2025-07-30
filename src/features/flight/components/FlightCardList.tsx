@@ -1,9 +1,13 @@
 'use client';
 
 // import { fetchArrivalFlights } from '../services/flightApi';
-import { FlightArrivalItemType, FlightArrivalResponseType, FlightDepartureItemType, FlightDepartureResponseType } from '../types/flights';
+import { 
+    FlightArrivalItemType, FlightArrivalResponseType, 
+    FlightDepartureItemType, FlightDepartureResponseType, 
+    FlightType
+} from '../types/flights';
 // import { useEffect } from 'react';
-// import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
+import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 // import { useRouter } from 'next/navigation';
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
@@ -15,9 +19,11 @@ import FlightArrivalCard from './arrival/FlightCard';
 import FlightDepartureCard from './departure/FlightCard';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
+const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType, type: FlightType }) => {
 
     const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = resFlightData;
+
+    const title = type === 'arrival' ? '도착조회' : '출발조회';
     
     console.log('flightData:', flightData);
     
@@ -61,9 +67,9 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
 
     return (
         <>
-            <h2 className="text-2xl font-bold mb-4 text-center">도착조회 - {totalCount}건</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{title} - {totalCount}건</h2>
             <p className="text-center mb-4">
-                {searchDate} {searchFrom} ~ {searchTo}
+                {funcDateTimeToType(searchDate, 'YYYYMMDD')} {funcTimeToHHMMReverse(searchFrom)} ~ {funcTimeToHHMMReverse(searchTo)}
             </p>
 
             <FlightRefresh resFlightData={resFlightData} />
@@ -77,7 +83,11 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                             <ul className="flex flex-col gap-4">
                                 {flightData.map((flight: FlightArrivalItemType | FlightDepartureItemType) => (
                                     <FlightCardLayout key={flight.fid} codeshare={flight.codeshare}>
-                                        <FlightCard flight={flight} />
+                                        {type === 'arrival' ? (
+                                            <FlightArrivalCard flight={flight as FlightArrivalItemType} />
+                                        ) : (
+                                            <FlightDepartureCard flight={flight as FlightDepartureItemType} />
+                                        )}
                                     </FlightCardLayout>
                                 ))}
                             </ul>
