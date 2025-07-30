@@ -20,7 +20,7 @@ const FlightDeparture = async({ searchParams } : { searchParams: Promise<{ searc
 
     return (
         <>
-            <FlightSection parsedParams={parsedParams} />
+            <FlightSection parsedParams={parsedParams} type="departure" />
         </>
     );
 };

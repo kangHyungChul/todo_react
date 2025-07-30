@@ -1,7 +1,7 @@
 'use client';
 
 // import { fetchArrivalFlights } from '../services/flightApi';
-import { FlightArrivalItemType, FlightArrivalResponseType } from '../types/flights';
+import { FlightArrivalItemType, FlightArrivalResponseType, FlightDepartureItemType, FlightDepartureResponseType } from '../types/flights';
 // import { useEffect } from 'react';
 // import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
@@ -9,12 +9,16 @@ import { FlightArrivalItemType, FlightArrivalResponseType } from '../types/fligh
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
 import FlightRefresh from './FlightRefresh';
-import FlightCard from './FlightCard';
+import FlightCardLayout from './FlightCardLayout';
+
+import FlightArrivalCard from './arrival/FlightCard';
+import FlightDepartureCard from './departure/FlightCard';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalResponseType }) => {
+const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
 
     const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = resFlightData;
+    
     console.log('flightData:', flightData);
     
     // 라우터 인스턴스 생성
@@ -71,8 +75,10 @@ const FlightCardList = ({ resFlightData }: { resFlightData: FlightArrivalRespons
                     <>
                         {flightData && flightData.length > 0 ? (
                             <ul className="flex flex-col gap-4">
-                                {flightData.map((flight: FlightArrivalItemType) => (
-                                    <FlightCard key={flight.fid} flight={flight} />
+                                {flightData.map((flight: FlightArrivalItemType | FlightDepartureItemType) => (
+                                    <FlightCardLayout key={flight.fid} codeshare={flight.codeshare}>
+                                        <FlightCard flight={flight} />
+                                    </FlightCardLayout>
                                 ))}
                             </ul>
                         ) : (

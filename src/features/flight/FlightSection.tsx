@@ -1,5 +1,5 @@
-import { fetchArrivalFlights } from './services/flightApi';
-import { FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType } from './types/flights';
+import { fetchArrivalFlights } from './services/flightArrivalApi';
+import { FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType, FlightDepartureType, FlightDepartureSearchParamsType } from './types/flights';
 // import Button from '@/components/common/Button';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 import FlightCardList from './components/FlightCardList';
@@ -7,7 +7,7 @@ import FlightSearchForm from './components/FlightSearchForm';
 import FlightTab from './components/FlightTab';
 
 // 서버 컴포넌트 - 서버 사이드에서 데이터를 가져와서 클라이언트 컴포넌트에 전달
-const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSearchParamsType }) => {
+const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: 'arrival' | 'departure' }) => {
 
     // const [resFlightData, setResFlightData] = useState<FlightArrivalResponseType>();
 
@@ -20,7 +20,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
     const getPageNo = parsedParams.pageNo ?? '1';
     const getNumOfRows = parsedParams.numOfRows ?? '20';
 
-    const responseBody: FlightArrivalType = {
+    const responseBody: FlightArrivalType | FlightDepartureType = {
         pageNo: getPageNo,
         numOfRows: getNumOfRows,
         searchdtCode: 'E',
@@ -33,7 +33,7 @@ const FlightSection = async({ parsedParams } : { parsedParams : FlightArrivalSea
     };
 
     // 서버에서 데이터 가져오기 - 에러 핸들링 추가
-    let resFlightData: FlightArrivalResponseType | null = null;
+    let resFlightData: FlightArrivalResponseType | FlightDepartureSearchParamsType | null = null;
     
     try {
         resFlightData = await fetchArrivalFlights(responseBody);

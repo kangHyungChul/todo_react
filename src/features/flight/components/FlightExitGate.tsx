@@ -1,6 +1,4 @@
-import { FlightArrivalItemType } from '../types/flights';
-
-const exitGate = (terminalId: string) => {
+const FlightExitGate = ({ terminalId }: { terminalId: string }) => {
     return (
         <>
             {/* 
@@ -21,20 +19,4 @@ const exitGate = (terminalId: string) => {
     );
 };
 
-const FlightDetailModal = ({ flight }: { flight: FlightArrivalItemType }) => {
-    // console.log(flight);
-    return (
-        <div className="flex flex-col gap-2">
-            <p>{flight.airline}({flight.flightId} / {flight.aircraftRegNo})</p>
-            <p>
-                {flight.airport}({flight.airportCode}) - 인천(ICN) 
-            </p>
-            <p>
-                {flight.remark} /
-                출구번호 : {exitGate(flight.terminalId)} - {flight.exitNumber}
-            </p>
-        </div>
-    );
-};
-
-export default FlightDetailModal;
+export default FlightExitGate;

@@ -3,7 +3,7 @@
 // import { FlightArrivalItemType } from '../types/flights';
 import useModalStore from '@/store/ModalStore';
 import { useCallback, useEffect, useState } from 'react';
-import { fetchFlightTrack } from '../services/flightApi';
+import { fetchFlightTrack } from '../services/flightArrivalApi';
 import { GoogleMap, useJsApiLoader, OverlayView } from '@react-google-maps/api';
 // import type { Map } from '@react-google-maps/api';
 

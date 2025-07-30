@@ -20,7 +20,7 @@ const FlightArrival = async({ searchParams } : { searchParams: Promise<{ searchD
 
     return (
         <>
-            <FlightSection parsedParams={parsedParams} />
+            <FlightSection parsedParams={parsedParams} type="arrival" />
         </>
     );
 };

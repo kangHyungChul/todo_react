@@ -20,10 +20,9 @@ export interface FlightDepartureItemType {
     airline: string; // 항공사
     airport: string; // 공항
     airportCode: string; // 공항코드
-    carousel: string; // 수하물수취대번호
     codeshare: string; // 코드쉐어
+    chkinRange: string // 체크인카운터
     estimatedDatetime: string; // 출발발변경시간
-    exitNumber: string; // 출구번호
     fid: string; // 항공편번호
     flightId: string; // 항공편번호
     fstandPosition: string; // 주기장위치

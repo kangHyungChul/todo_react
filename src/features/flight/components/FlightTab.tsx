@@ -12,8 +12,9 @@ const FlightTab = () => {
             label: '도착조회',
         },
         {
-            href: '/flight/departure',
+            href: '#',
             label: '출발조회',
+            className: 'bg-gray-200 text-gray-400 cursor-not-allowed',
         },
     ];
 
@@ -25,7 +26,7 @@ const FlightTab = () => {
         <ul className="flex gap-4 text-center">
             {tabList.map((tab) => (
                 <li className="flex-1" key={tab.href}>
-                    <Link href={tab.href} className={`block p-2 rounded-md ${setTabStyle(pathname === tab.href)}`}>{tab.label}</Link>
+                    <Link href={tab.href} className={`block p-2 rounded-md ${setTabStyle(pathname === tab.href)} ${tab.className}`}>{tab.label}</Link>
                 </li>
             ))}
         </ul>

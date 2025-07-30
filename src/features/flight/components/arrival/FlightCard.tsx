@@ -1,10 +1,10 @@
 'use client';
 
-import { FlightArrivalItemType } from '../types/flights';
+import { FlightArrivalItemType } from '../../types/flights';
 import useModalStore from '@/store/ModalStore';
 // import { useModalContext } from '@/contexts/ModalContext';
 import FlightDetailModal from './FlightDetailModal';
-import FlightTrackModal from './FlightTrackModal';
+import FlightTrackModal from '../FlightTrackModal';
 import Button from '@/components/common/Button';
 import { funcDateTimeToType } from '@/lib/utils/dateTime';
 import { memo } from 'react';
@@ -18,7 +18,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
     const isCodeshare = flight.codeshare === 'Slave';
     // const { openModal } = useModalStore();
     return (
-        <li key={flight.fid} className={`p-4 border border-gray-300 rounded-lg flex flex-col items-center${flight.codeshare === 'Slave' ? ' bg-gray-100 border-t-0 -mt-4' : ''}`}>
+        <>
             <p>
                 {
                     scheduleDatetime === estimatedDatetime ? (
@@ -59,7 +59,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                     </div>
                 )
             }
-        </li>
+        </>
     );
 };
 
