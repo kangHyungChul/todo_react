@@ -25,7 +25,7 @@ const FlightTab = () => {
         <ul className="flex gap-4 text-center">
             {tabList.map((tab) => (
                 <li className="flex-1" key={tab.href}>
-                    <Link href={tab.href} className={`block p-2 rounded-md ${setTabStyle(pathname === tab.href)} ${tab.className}`}>{tab.label}</Link>
+                    <Link href={tab.href} className={`block p-2 rounded-md ${setTabStyle(pathname === tab.href)}`}>{tab.label}</Link>
                 </li>
             ))}
         </ul>
