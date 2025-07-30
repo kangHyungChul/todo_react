@@ -87,7 +87,7 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     };
 
     return (
-        <Button style="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading}>
+        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading}>
             {isLoading ? '조회중...' : '이후 한시간 조회'}
         </Button>
     );

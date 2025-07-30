@@ -87,7 +87,7 @@ const CardForm = ({onAdd, ref, cardAddDisabled, titleState, contentState}: CardF
                 <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
             </div>
 
-            <Button type="button" disabled={cardAddDisabled} style="primary" onClick={handleSubmit}>카드 만들기</Button>
+            <Button type="button" disabled={cardAddDisabled} variant="primary" onClick={handleSubmit}>카드 만들기</Button>
         </div>
     );
 };

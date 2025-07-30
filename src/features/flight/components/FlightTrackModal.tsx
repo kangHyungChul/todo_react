@@ -33,15 +33,15 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
             // fetchFlightTrack 호출 시 signal 값 로그 출력
             // console.log('fetchFlightTrack 호출 - signal:', controller.signal);
             const resFlightTrack = await fetchFlightTrack(flightReg);
-            if(!resFlightTrack || resFlightTrack.states[0][6] === null) {
+            if(!resFlightTrack || resFlightTrack.path[0][1] === null) {
                 alert('위치조회가 불가능한 항공기입니다');
                 closeModal();
                 return;
             }
             // console.log('resFlightTrack:', resFlightTrack.path.length);
             // 비행 추적 데이터를 가져온 후 지도 로드 상태를 true로 설정
-            // setFlightTrack({ lat: resFlightTrack.path[0][1], lng: resFlightTrack.path[0][2], rotation: Math.round(resFlightTrack.path[0][4] - 45) });
-            setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5], rotation: Math.round(resFlightTrack.states[0][10] - 45) });
+            setFlightTrack({ lat: resFlightTrack.path[0][1], lng: resFlightTrack.path[0][2], rotation: Math.round(resFlightTrack.path[0][4] - 45) });
+            // setFlightTrack({ lat: resFlightTrack.states[0][6], lng: resFlightTrack.states[0][5], rotation: Math.round(resFlightTrack.states[0][10] - 45) });
 
             // 각도값을 정수로 반올림하고 Tailwind 클래스로 변환
             // const degree = Math.round(resFlightTrack.states[0][10]);

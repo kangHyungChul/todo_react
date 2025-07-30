@@ -48,11 +48,11 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                 !isCodeshare && (
                     <div className="flex gap-4 mt-2">
                         {/* <Button style="secondary" onClick={() => openModalContext(<FlightDetailModal flight={flight} />)}>useContext</Button> */}
-                        <Button style="primary" onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button>
+                        <Button variant="primary" onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button>
                         {
                             (
                                 (flight.remark === null || flight.remark === '지연') && (
-                                    <Button style="secondary" disabled={flight.aircraftRegNo === ''} onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
+                                    <Button variant="secondary" disabled={flight.aircraftRegNo === ''} onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
                                 )
                             )
                         }

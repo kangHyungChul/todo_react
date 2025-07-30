@@ -28,11 +28,11 @@ export default function Home() {
     // };
 
     return (
-        <>
-            <Link href="/modal">Modal</Link>
+        <div className="flex flex-col items-center justify-center h-screen">
+            <Link href="/flight/arrival" className="text-2xl font-bold">Flight Tracker</Link>
             {/* <Link href="/flight">Flight</Link> */}
             {/* <CardSection /> */}
-        </>
+        </div>
         // <div className={styles.page}>
         //     <main className={styles.main}>
         //         <div className={styles.counter}>

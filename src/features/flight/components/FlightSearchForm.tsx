@@ -85,7 +85,7 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
                     <Select
                         id="searchNumOfRows"
                         value={searchNumOfRows}
-                        onChange={(e) => setSearchNumOfRows(e.target.value)}    
+                        onChange={(e) => setSearchNumOfRows(e.target.value)}
                         disabled={isLoading}
                     >
                         <option value="10">10</option>
@@ -96,7 +96,7 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
                     </Select>
                 </div>
                 <div className="mt-4">
-                    <Button type="submit" size="large" style="primary" className="w-full" disabled={isLoading}>검색</Button>
+                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={isLoading}>검색</Button>
                 </div>
             </form>
         </div>

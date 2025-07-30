@@ -47,7 +47,7 @@ const Card = ({ id, title, content, color, onDelete, onColorChange }: CardProps)
             <p>{content}</p>
             <div className={styles.controls}>
                 <input type="color" value={color} onChange={(e) => onColorChange(id, e.target.value)} />
-                <Button type="button" style="danger" size="small" onClick={() => onDelete(id)}>삭제</Button>
+                <Button type="button" variant="danger" sizes="small" onClick={() => onDelete(id)}>삭제</Button>
             </div>
         </li>
     );
