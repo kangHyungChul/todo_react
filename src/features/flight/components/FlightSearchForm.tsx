@@ -3,7 +3,7 @@
 import Button from '@/components/common/Button';
 import Select from '@/components/common/Select';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import { 
     FlightArrivalResponseType, 
@@ -21,10 +21,12 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
     const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
     const getSearchTo = resFlightData?.searchTo ? funcTimeToHHMMReverse(resFlightData.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
     const getSearchNumOfRows = resFlightData?.numOfRows ? resFlightData.numOfRows.toString() : '30';
+    const getFlightId = new URLSearchParams(window.location.search).get('flightId') || '';
 
     const [searchFrom, setSearchFrom] = useState(getSearchFrom);
     const [searchTo, setSearchTo] = useState(getSearchTo);
     const [searchNumOfRows, setSearchNumOfRows] = useState('30');
+    const searchFlightNoRef = useRef<HTMLInputElement>(null);
 
     // 서버 데이터가 변경될 때마다 폼 값 업데이트
     useEffect(() => {
@@ -41,32 +43,11 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
             searchDate: funcNowDate(),
             searchFrom: funcTimeToHHMM(searchFrom),
             searchTo: funcTimeToHHMM(searchTo),
+            flightId: searchFlightNoRef.current?.value !== '' ? searchFlightNoRef.current?.value : '',
             numOfRows: searchNumOfRows,
             pageNo: '1',
         });
 
-        // try {
-        //     const searchFromHHMM = funcTimeToHHMM(searchFrom);  
-        //     const searchToHHMM = funcTimeToHHMM(searchTo);
-
-        //     // 현재 시간 기준으로 새로운 데이터 요청
-        //     // const refreshSearchDate = funcNowDate();
-        //     const refreshSearchFrom = searchFromHHMM;
-        //     const refreshSearchTo = searchToHHMM;
-        //     const refreshPageNo = '1';
-
-        //     // URL 업데이트 후 서버 컴포넌트 재실행
-        //     // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-        //     router.push(`/flight?searchFrom=${refreshSearchFrom}&searchTo=${refreshSearchTo}&pageNo=${refreshPageNo}`);
-        //     // router.refresh();
-            
-        //     // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
-        //     // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
-
-        // } catch (error) {
-        //     console.error('비행기 데이터 새로고침 실패:', error);
-        //     // setIsLoading(false); // 에러 발생 시에만 로딩 상태 해제
-        // }
     };
 
     return (
@@ -83,6 +64,10 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchTo">조회범위(종료시간)</label>
                     <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={isLoading}/>
+                </div>
+                <div className="flex items-center gap-3 mt-1">
+                    <label htmlFor="searchFlightNo">편명</label>
+                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={isLoading}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchNumOfRows">표시수</label>

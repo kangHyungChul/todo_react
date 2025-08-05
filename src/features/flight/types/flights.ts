@@ -8,7 +8,7 @@ export interface FlightDepartureType {
     searchDate?: string; // 조회일자
     searchFrom?: string; // 스케줄 ~~부터
     searchTo?: string; //  스케줄 ~~까지
-    flightId?: string | undefined; // 항공편명
+    flightId?: string; // 항공편명
     passengerOrCargo?: string; // 여객화물구분 (P: 여객, C: 화물, default=P)
     airportCode?: string | undefined; // 도착하는 비행기 출발지 공항코드
 }
@@ -45,6 +45,7 @@ export interface FlightDepartureResponseType {
     searchDate: string;
     searchFrom: string;
     searchTo: string;
+    flightId: string | null;
     items: FlightDepartureItemType[];
 }
 
@@ -53,6 +54,7 @@ export interface FlightDepartureSearchParamsType {
     searchDate?: string;
     searchFrom?: string;
     searchTo?: string;
+    flightId?: string;
     pageNo?: string;
     numOfRows?: string;
 }
@@ -66,7 +68,7 @@ export interface FlightArrivalType {
     searchDate?: string; // 조회일자
     searchFrom?: string; // 스케줄 ~~부터
     searchTo?: string; //  스케줄 ~~까지
-    flightId?: string | undefined; // 항공편명
+    flightId?: string; // 항공편명
     passengerOrCargo?: string; // 여객화물구분 (P: 여객, C: 화물, default=P)
     airportCode?: string | undefined; // 도착하는 비행기 출발지 공항코드
 }
@@ -104,6 +106,7 @@ export interface FlightArrivalResponseType {
     searchDate: string;
     searchFrom: string;
     searchTo: string;
+    flightId: string | null;
     items: FlightArrivalItemType[];
 }
 
@@ -112,6 +115,7 @@ export interface FlightArrivalSearchParamsType {
     searchDate?: string;
     searchFrom?: string;
     searchTo?: string;
+    flightId?: string;
     pageNo?: string;
     numOfRows?: string;
 }

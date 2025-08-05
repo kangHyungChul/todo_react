@@ -23,6 +23,7 @@ const useFlightState = (resFlightData: FlightArrivalResponseType | FlightDepartu
         searchDate: resFlightData.searchDate, // 검색 날짜 (오늘)
         searchFrom: resFlightData.searchFrom, // 검색 시작 시간 (현재 시간)
         searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo, // 검색 종료 시간 (현재 시간 + 60분)
+        flightId: resFlightData.flightId,
     };
 
     // console.log('initialState:', initialState);
@@ -83,6 +84,7 @@ const useFlightSearch = () => {
         const searchFrom = arrivalSearchParams.searchFrom;
         const searchTo = arrivalSearchParams.searchTo;
         const pageNo = arrivalSearchParams.pageNo;
+        const flightId = arrivalSearchParams.flightId === '' ? '' : `&flightId=${arrivalSearchParams.flightId}`;
         const numOfRows = arrivalSearchParams.numOfRows;
 
         // const searchFromHHMM = funcTimeToHHMM(arrivalSearchParams.searchFrom);  
@@ -96,7 +98,7 @@ const useFlightSearch = () => {
 
         // // URL 업데이트 후 서버 컴포넌트 재실행
         // // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-        router.push(`?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}`);
+        router.push(`?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}${flightId}`);
         // // router.refresh();
         
         // // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨

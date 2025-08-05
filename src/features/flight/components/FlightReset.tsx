@@ -5,6 +5,7 @@ import {
     FlightArrivalResponseType, 
     FlightDepartureResponseType 
 } from '../types/flights';
+import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
@@ -12,7 +13,7 @@ import { useFlightSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
+const FlightReset = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
     
     // 라우터 인스턴스 생성
     // const router = useRouter();
@@ -20,33 +21,18 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
     const { FlightSearch } = useFlightSearch();
     const { isLoading } = useFlightStore();
-    const searchDate = resFlightData.searchDate;
-    const searchFrom = resFlightData.searchFrom;
-    const searchTo = resFlightData.searchTo;
-    const numOfRows = resFlightData.numOfRows.toString();
-    const pageNo = resFlightData.pageNo.toString();
-    const flightId = new URLSearchParams(window.location.search).get('flightId') || '';
-
-    // const { 
-    //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
-    //     setFlightData, setTotalCount, setPageNo, setNumOfRows, setSearchDate, setSearchFrom, setSearchTo 
-    // } = useFlightArrival();
-
-    // const [isLoading, setIsLoading] = useState(false);
-
-    // resFlightData가 변경될 때마다 상태 업데이트 (router.push + refresh 후 서버에서 새로운 데이터가 전달됨)
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
-    const handleRefresh = () => {
+    const handleReset = () => {
 
         // FlightArrivalSearch 함수를 올바르게 호출
         FlightSearch({
-            searchDate: searchDate,
-            searchFrom: searchFrom,
-            searchTo: searchTo,
-            flightId: flightId ?? '',
-            numOfRows: numOfRows,
-            pageNo: pageNo,
+            searchDate: funcNowDate(),
+            searchFrom: funcNowTime(),
+            searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),
+            flightId: resFlightData.flightId ?? '',
+            numOfRows: '30',
+            pageNo: '1',
         });
         // setIsLoading(true);
         // try {
@@ -72,10 +58,10 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     };
 
     return (
-        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading}>
-            {isLoading ? '조회중...' : '새로고침'}
+        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={isLoading}>
+            {isLoading ? '조회중...' : '초기화'}
         </Button>
     );
 };
 
-export default FlightRefresh;
+export default FlightReset;

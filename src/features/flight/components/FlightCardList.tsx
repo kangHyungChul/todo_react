@@ -6,15 +6,17 @@ import {
     FlightDepartureItemType, FlightDepartureResponseType, 
     FlightType
 } from '../types/flights';
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 // import { useRouter } from 'next/navigation';
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
+import { useFlightState } from '../hook/useFlightArrival';
 import FlightRefresh from './FlightRefresh';
-import FlightCardLayout from './FlightCardLayout';
+import FlightReset from './FlightReset';
 
+import FlightCardLayout from './FlightCardLayout';
 import FlightArrivalCard from './arrival/FlightCard';
 import FlightDepartureCard from './departure/FlightCard';
 
@@ -22,48 +24,30 @@ import FlightDepartureCard from './departure/FlightCard';
 const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType, type: FlightType }) => {
 
     const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = resFlightData;
+    const flightId = new URLSearchParams(window.location.search).get('flightId') || '';
 
     const title = type === 'arrival' ? '도착조회' : '출발조회';
     
-    console.log('flightData:', flightData);
-    
-    // 라우터 인스턴스 생성
-    // const router = useRouter();
 
-    // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    // const { FlightArrivalSearch } = useFlightArrivalSearch();
-    // const { isLoading, setLoadingState } = useFlightStore();
+    const { isLoading, setLoadingState } = useFlightStore();
+    const { 
+        setBulkState
+    } = useFlightState(resFlightData);
 
-    // const { 
-    //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
-    //     setFlightData, setTotalCount, setPageNo, setNumOfRows, setSearchDate, setSearchFrom, setSearchTo 
-    // } = useFlightArrival();
-    // const { 
-    //     flightData, totalCount, searchDate, searchFrom, searchTo, 
-    //     setBulkState
-    // } = useFlightArrival(resFlightData);
-
-    const { isLoading } = useFlightStore();
-
-    // resFlightData가 변경될 때마다 상태 업데이트 (router.push + refresh 후 서버에서 새로운 데이터가 전달됨)
-    // useEffect(() => {
-    //     // 새로운 데이터가 도착하면 로딩 상태 해제
-    //     if (resFlightData) {
-    //         // setFlightData(resFlightData.items);
-    //         // setTotalCount(resFlightData.totalCount);
-    //         // setSearchDate(resFlightData.searchDate);
-    //         // setSearchFrom(resFlightData.searchFrom); 
-    //         // setSearchTo(resFlightData.searchTo);
-    //         setBulkState({
-    //             flightData: resFlightData.items,
-    //             totalCount: resFlightData.totalCount,
-    //             searchDate: resFlightData.searchDate,
-    //             searchFrom: resFlightData.searchFrom,
-    //             searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo,
-    //         });
-    //         setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
-    //     }
-    // }, [resFlightData, setBulkState, setLoadingState]);
+    useEffect(() => {
+        // 새로운 데이터가 도착하면 로딩 상태 해제
+        if (resFlightData) {
+            setBulkState({
+                flightData: resFlightData.items,
+                totalCount: resFlightData.totalCount,
+                searchDate: resFlightData.searchDate,
+                searchFrom: resFlightData.searchFrom,
+                searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo,
+                flightId: flightId ?? '',
+            });
+            setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
+        }
+    }, [resFlightData, setBulkState, setLoadingState]);
 
     return (
         <>
@@ -72,7 +56,10 @@ const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalR
                 {funcDateTimeToType(searchDate, 'YYYYMMDD')} {funcTimeToHHMMReverse(searchFrom)} ~ {funcTimeToHHMMReverse(searchTo)}
             </p>
 
-            <FlightRefresh resFlightData={resFlightData} />
+            <div className="flex justify-between gap-4">
+                <FlightRefresh resFlightData={resFlightData} />
+                <FlightReset resFlightData={resFlightData} />
+            </div>
 
             {
                 isLoading ? (

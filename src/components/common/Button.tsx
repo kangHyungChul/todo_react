@@ -82,7 +82,7 @@ const setButtonClasses = (variant: string, sizes: string, outline: boolean) => {
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ({
-        className,
+        className = '',
         variant = 'primary',
         sizes = 'medium',
         outline = false,

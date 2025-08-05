@@ -24,6 +24,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     const getSearchTo = parsedParams.searchTo ?? setSearchTo;
     const getPageNo = parsedParams.pageNo ?? '1';
     const getNumOfRows = parsedParams.numOfRows ?? '20';
+    const getFlightId = parsedParams.flightId ?? '';
 
     const responseBody: FlightArrivalType | FlightDepartureType = {
         pageNo: getPageNo,
@@ -32,7 +33,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
         searchDate: getSearchDate,
         searchFrom: getSearchFrom,
         searchTo: getSearchTo,
-        flightId: '',
+        flightId: getFlightId,
         passengerOrCargo: '',
         airportCode: '',
     };
@@ -57,6 +58,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
             searchDate: getSearchDate ?? '',
             searchFrom: getSearchFrom ?? '',
             searchTo: getSearchTo ?? '',
+            flightId: getFlightId ?? '',
             items: []
         };
     }
