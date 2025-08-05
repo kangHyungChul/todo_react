@@ -25,7 +25,7 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     const searchTo = resFlightData.searchTo;
     const numOfRows = resFlightData.numOfRows.toString();
     const pageNo = resFlightData.pageNo.toString();
-    const flightId = new URLSearchParams(window.location.search).get('flightId') || '';
+    const flightId = resFlightData.flightId ? resFlightData.flightId : '';
 
     // const { 
     //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 

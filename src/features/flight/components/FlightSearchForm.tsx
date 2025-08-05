@@ -21,7 +21,7 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
     const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
     const getSearchTo = resFlightData?.searchTo ? funcTimeToHHMMReverse(resFlightData.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
     const getSearchNumOfRows = resFlightData?.numOfRows ? resFlightData.numOfRows.toString() : '30';
-    const getFlightId = new URLSearchParams(window.location.search).get('flightId') || '';
+    const getFlightId = resFlightData?.flightId ? resFlightData.flightId : '';
 
     const [searchFrom, setSearchFrom] = useState(getSearchFrom);
     const [searchTo, setSearchTo] = useState(getSearchTo);
@@ -33,7 +33,16 @@ const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalRespo
         setSearchFrom(getSearchFrom);
         setSearchTo(getSearchTo);
         setSearchNumOfRows(getSearchNumOfRows);
-    }, [getSearchFrom, getSearchTo, getSearchNumOfRows]);
+        searchFlightNoRef.current!.value = getFlightId ? getFlightId : '';
+        // url에 flightId 파라미터가 없을 경우 searchFlightNoRef의 값을 비움
+        // if (searchFlightNoRef.current) {
+        //     if (getFlightId) {
+        //         searchFlightNoRef.current.value = getFlightId; // flightId가 있으면 값 설정
+        //     } else {
+        //         searchFlightNoRef.current.value = ''; // flightId가 없으면 값 비움
+        //     }
+        // }
+    }, [getSearchFrom, getSearchTo, getSearchNumOfRows, getFlightId]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

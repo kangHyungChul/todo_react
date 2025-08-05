@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     description: 'Flight Arrival',
 };
 
-const FlightArrival = async({ searchParams } : { searchParams: Promise<{ searchDate?: string, searchFrom?: string, searchTo?: string, pageNo?: string, numOfRows?: string }> }) => {
+const FlightArrival = async({ searchParams } : { searchParams: Promise<{ searchDate?: string, searchFrom?: string, searchTo?: string, pageNo?: string, numOfRows?: string, flightId?: string }> }) => {
 
     const parsedParams = await searchParams;
 
@@ -14,9 +14,10 @@ const FlightArrival = async({ searchParams } : { searchParams: Promise<{ searchD
     const searchDate = funcDateTimeToType(parsedParams.searchDate ?? funcNowDate(), 'YYYYMMDD');
     const searchFrom = funcTimeToHHMMReverse(parsedParams.searchFrom ?? funcNowTime());
     const searchTo = funcTimeToHHMMReverse(parsedParams.searchTo ?? setSearchTo);
+    const flightId = parsedParams.flightId ?? '';
 
-    metadata.title = `항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
-    metadata.description = `항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+    metadata.title = `${flightId && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+    metadata.description = `${flightId && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
 
     return (
         <>

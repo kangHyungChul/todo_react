@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { cn } from '@/lib/utils/utils';
 import { forwardRef } from 'react';
 
 // Props 타입 정의 typescript
@@ -58,17 +59,17 @@ const setButtonStyle = (variant: string, outline: boolean) => {
 const setButtonSize = (sizes: string) => {
     switch (sizes) {
         case 'small':
-            return 'h-6 px-2 py-1 text-sm';
+            return 'h-6 px-2 text-sm';
         case 'large':                               
-            return 'h-12 px-4 py-2 text-lg';
+            return 'h-12 px-4 text-lg';
         default:
-            return 'h-8 px-2 py-2 text-base';
+            return 'h-8 px-2 text-base';
     }
 };
 
 const setButtonClasses = (variant: string, sizes: string, outline: boolean) => {
 
-    const baseClasses = 'border rounded-md leading-1 transition-all duration-200 outline-none';
+    const baseClasses = 'border rounded-md transition-all duration-200 outline-none';
 
     const disabledClasses = outline ? 'disabled:border-gray-400 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed' : 'disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed';
 
@@ -76,7 +77,7 @@ const setButtonClasses = (variant: string, sizes: string, outline: boolean) => {
     //     return `${baseClasses} ${disabledClasses} ${setButtonSize(size)} cursor-not-allowed`;
     // }
     
-    return `${baseClasses} ${setButtonStyle(variant, outline)} ${setButtonSize(sizes)} cursor-pointer ${disabledClasses}`;
+    return cn(baseClasses, setButtonStyle(variant, outline), setButtonSize(sizes), disabledClasses);
     
 };
 
@@ -89,7 +90,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ...props
     }, ref: React.Ref<HTMLButtonElement>
     ) => {
-        const buttonClasses = `${setButtonClasses(variant, sizes, outline)} ${className}`;
+        const buttonClasses = cn(setButtonClasses(variant, sizes, outline), className);
         // const buttonClasses = [
         //     `border rounded-md leading-1 font-medium cursor-pointer transition-all duration-200 outline-none`,
         //     setButtonStyle(style, outline),

@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef } from 'react';
+import { cn } from '@/lib/utils/utils';
 
 // Props 타입 정의 typescript
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement>{
@@ -58,7 +59,7 @@ const setSelectClasses = (variant: string, sizes: string) => {
     //     return `${baseClasses} ${disabledClasses} ${setSelectSize(sizes)} cursor-not-allowed`;
     // }
     
-    return `${baseClasses} ${setSelectStyle(variant)} ${setSelectSize(sizes)} cursor-pointer`;
+    return cn(baseClasses, setSelectStyle(variant), setSelectSize(sizes), 'cursor-pointer');
     
 };
 
@@ -70,7 +71,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         ...props
     }, ref: React.Ref<HTMLSelectElement>
     ) => {
-        const selectClasses = `${setSelectClasses(variant, sizes)} ${className}`;
+        const selectClasses = cn(setSelectClasses(variant, sizes), className);
 
         return (
             <select

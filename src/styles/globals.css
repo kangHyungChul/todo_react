@@ -106,14 +106,21 @@
 
 } */
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+@layer base {
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    
+    main {
+        padding: 0;
+        margin: 0;
+        flex: 1;
+    }
+
+    button {
+        cursor: pointer;
+    }
 }
 
-main {
-    padding: 0;
-    margin: 0;
-    flex: 1;
-}

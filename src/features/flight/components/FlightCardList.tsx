@@ -24,7 +24,7 @@ import FlightDepartureCard from './departure/FlightCard';
 const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType, type: FlightType }) => {
 
     const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = resFlightData;
-    const flightId = new URLSearchParams(window.location.search).get('flightId') || '';
+    const flightId = resFlightData.flightId ? resFlightData.flightId : '';
 
     const title = type === 'arrival' ? '도착조회' : '출발조회';
     

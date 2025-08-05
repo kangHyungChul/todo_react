@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { FlightArrivalType } from '../types/flights';
 
 const path = () => {
@@ -26,25 +27,45 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
         // const path = process.env.NODE_ENV === 'development' ? `${process.env.BASE_URL}/api/flight/arrival` : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/flight/arrival`;
 
         // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
-        const params = new URLSearchParams(responseBody as Record<string, string>).toString();
-
-        const res = await fetch(`${path()}/api/flight/arrival?${params}`, {
-            method: 'GET',
-            cache: 'no-store',
+        
+        const axiosInstance = axios.create({
+            baseURL: path(),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
-
-        if (!res.ok) {
+        
+        const res = await axiosInstance.get(`/api/flight/arrival`, {
+            params: responseBody,
+        });
+        
+        if (res.status !== 200) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }
 
-        try {
-            const data = await res.json();
-            return data;
-        } catch (error) {
-            const data = await res.text();
-            console.error('JSON Parse Error:', error);
-            throw new Error(`Failed to parse API response: ${data}`);
-        }
+        // console.log('res:', res);
+        
+        return res.data;
+        
+        // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
+
+        // const res = await fetch(`${path()}/api/flight/arrival?${params}`, {
+        //     method: 'GET',
+        //     cache: 'no-store',
+        // });
+
+        // if (!res.ok) {
+        //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
+        // }
+
+        // try {
+        //     const data = await res.json();
+        //     return data;
+        // } catch (error) {
+        //     const data = await res.text();
+        //     console.error('JSON Parse Error:', error);
+        //     throw new Error(`Failed to parse API response: ${data}`);
+        // }
 
     } catch (error) {
         console.error('Error fetching flights:', error);

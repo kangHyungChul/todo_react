@@ -2,6 +2,7 @@
 
 // import { useModal } from '@/contexts/ModalContext';
 import useModalStore from '@/store/ModalStore';
+import { cn } from '@/lib/utils/utils';
 // import { useShallow } from 'zustand/react/shallow';
 
 const Modal = () => {
@@ -42,7 +43,7 @@ const Modal = () => {
 
     return (
         <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center" onClick={closeModal}>
-            <div className={`bg-white p-6 rounded shadow-lg w-full ${sizeClass} relative`} onClick={(e) => e.stopPropagation()}>
+            <div className={cn('bg-white p-6 rounded shadow-lg w-full relative', sizeClass)} onClick={(e) => e.stopPropagation()}>
                 <div className="overflow-y-auto">
                     {content}
                 </div>
