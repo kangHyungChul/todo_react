@@ -4,9 +4,9 @@ import '../styles/globals.css';
 // import styles from './page.module.scss';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import { ModalProvider } from '@/contexts/ModalContext';
+// import { ModalProvider } from '@/contexts/ModalContext';
 import Modal from '@/components/common/Modal';
-import ModalContext from '@/components/common/ModalContext';
+// import ModalContext from '@/components/common/ModalContext';
 // const nanumGothic = Nanum_Gothic({
 //     weight: ['400', '700', '800'],
 //     subsets: ['latin'],
@@ -28,11 +28,8 @@ export default function RootLayout({
             <body>
                 <Header />
                 <main>
-                    <ModalProvider>
-                        {children}
-                        <Modal />
-                        <ModalContext />
-                    </ModalProvider>
+                    {children}
+                    <Modal />
                     {/* {children}
                     <Modal /> */}
                 </main>
