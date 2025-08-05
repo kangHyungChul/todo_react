@@ -30,12 +30,13 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
         
         const axiosInstance = axios.create({
             baseURL: path(),
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         
-        const res = await axiosInstance.get(`/api/flight/arrival`, {
+        const res = await axiosInstance(`/api/flight/arrival`, {
             params: responseBody,
         });
         

@@ -58,7 +58,7 @@ const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalR
 
             <div className="flex justify-between gap-4">
                 <FlightRefresh resFlightData={resFlightData} />
-                <FlightReset resFlightData={resFlightData} />
+                <FlightReset />
             </div>
 
             {
