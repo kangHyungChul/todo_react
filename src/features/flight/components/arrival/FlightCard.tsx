@@ -30,14 +30,14 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                     )   
                 }
             </p>
-            <p>{flight.airport}({flight.airportCode}) - 인천(ICN)</p>
+            <p>{`${flight.airport}(${flight.airportCode}) - 인천(ICN)`}</p>
             <p className="flex items-center gap-1">
-                {flight.airline}({flight.flightId})
+                {`${flight.airline}(${flight.flightId})`}
                 {
                     (
                         isCodeshare && (
                             <>
-                                <span className="text-xs text-gray-500">&lt;-&gt;</span>{flight.masterFlightId}
+                                <span className="text-xs text-gray-500">&lt;-&gt;</span>{`${flight.masterFlightId}`}
                             </>
                         )
                     )

@@ -49,7 +49,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
         }
         // console.log('서버에서 가져온 비행기 데이터:', resFlightData);
     } catch (error) {
-        // console.error('서버에서 비행기 데이터 가져오기 실패:', error);
+        console.error('서버에서 비행기 데이터 가져오기 실패:', error);
         // 에러 발생 시 기본 데이터 구조 제공
         resFlightData = {
             numOfRows: 0,
