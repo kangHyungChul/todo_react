@@ -30,16 +30,17 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
         
         const axiosInstance = axios.create({
             baseURL: path(),
-            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         
-        const res = await axiosInstance(`/api/flight/arrival`, {
+        const res = await axiosInstance.get('/api/flight/arrival', {
             params: responseBody,
         });
         
+        // 200 이 아니면 에러처리
+        // catch는 2xx범위 아닐때만 애러로 블록 이외에는 try블록
         if (res.status !== 200) {
             throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
         }

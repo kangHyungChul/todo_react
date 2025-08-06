@@ -18,11 +18,18 @@ const GET = async (request: NextRequest) => {
                 'Content-Type': 'application/json',
             },
             params: {
+                // request.nextUrl.searchParams는 URLSearchParams 객체로, axios의 params에 바로 넣으면 자동으로 쿼리스트링으로 변환됨
+                // ...Object.fromEntries(request.nextUrl.searchParams.entries())는 searchParams를 일반 객체로 변환해서 params에 넣는 방식임
+                // 둘 다 axios에서 params로 사용 가능하지만, 일반적으로 URLSearchParams 객체를 직접 넣는 것보다 객체로 변환해서 넣는 것이 더 명확하고, axios가 내부적으로 처리하기 쉬움
+                // 따라서 ...Object.fromEntries(request.nextUrl.searchParams.entries()) 방식을 사용하는 것이 더 안전함
                 ...Object.fromEntries(request.nextUrl.searchParams.entries()),
-                serviceKey: apiKey,
-                type: 'json',
+                // ...request.nextUrl.searchParams,
+                // 추가 파라미터
+                // api키는 숨기고 나머지는 고정값
                 passengerOrCargo: request.nextUrl.searchParams.get('passengerOrCargo') || 'P',
                 airportCode: request.nextUrl.searchParams.get('airportCode') || '',
+                serviceKey: apiKey,
+                type: 'json',
             },
         });
         
@@ -37,10 +44,14 @@ const GET = async (request: NextRequest) => {
             flightId: request.nextUrl.searchParams.get('flightId'),
         };
 
-        return NextResponse.json({ 
+        const resData = {
             ...dateInfo,
             ...res.data.response.body,
-        });
+        };
+
+        console.log('route API - Arrival response Data:', resData);
+
+        return NextResponse.json(resData);
         
 
         // const searchParams = new URLSearchParams(request.nextUrl.searchParams);
@@ -97,8 +108,12 @@ const GET = async (request: NextRequest) => {
         // }
 
     } catch (error) {
-        console.error('Error fetching flights:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        if (axios.isAxiosError(error)) {
+            console.log('error:', error.response?.data);
+            return NextResponse.json({ error: error.message }, { status: error.response?.status || 500 });
+        }
+        console.log('error:', error);
+        return NextResponse.json({ error: 'Internal Server Error', message: `서버 오류가 발생했습니다.: ${error}` }, { status: 500 });
     }
 };
 
