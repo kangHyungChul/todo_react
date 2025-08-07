@@ -30,14 +30,14 @@ const FlightCard = ({ flight }: { flight: FlightDepartureItemType }) => {
                     )   
                 }
             </p>
-            <p>인천(ICN) - {flight.airport}({flight.airportCode})</p>
+            <p>{`인천(ICN) - ${flight.airport}(${flight.airportCode})`}</p>
             <p className="flex items-center gap-1">
-                {flight.airline}({flight.flightId})
+                {`${flight.airline}(${flight.flightId})`}
                 {
                     (
                         isCodeshare && (
                             <>
-                                <span className="text-xs text-gray-500">&lt;-&gt;</span>{flight.masterFlightId}
+                                <span className="text-xs text-gray-500">&lt;-&gt;</span>{`${flight.masterFlightId}`}
                             </>
                         )
                     )
@@ -51,7 +51,7 @@ const FlightCard = ({ flight }: { flight: FlightDepartureItemType }) => {
                         <Button variant="primary" onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button>
                         {
                             (
-                                (flight.remark === null || flight.remark === '지연') && (
+                                (flight.remark === null || flight.remark === '출발') && (
                                     <Button variant="secondary" disabled={flight.aircraftRegNo === ''} onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
                                 )
                             )

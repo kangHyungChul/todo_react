@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
 // import { FlightArrivalType } from '@/features/flight/types/flights';
 
 const GET = async (request: NextRequest) => {
@@ -114,6 +114,8 @@ const GET = async (request: NextRequest) => {
         }
         console.log('error:', error);
         return NextResponse.json({ error: 'Internal Server Error', message: `서버 오류가 발생했습니다.: ${error}` }, { status: 500 });
+        // console.error('Error fetching flights:', error);
+        // return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 };
 

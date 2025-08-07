@@ -24,11 +24,17 @@ const GET = async (request: NextRequest) => {
         // console.log('flightReg:', request.nextUrl.search, `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
 
         const [icao24Response, tokenResponse] = await Promise.all([
-            fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
+            // fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}`, {
+            //     method: 'GET',
+            //     headers: {
+            //         'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
+            //         'x-rapidapi-host': 'aerodatabox.p.rapidapi.com'
+            //     }
+            // }),
+            fetch(`https://prod.api.market/api/v1/aedbx/aerodatabox/aircrafts/Reg/${flightReg}/registrations`, {
                 method: 'GET',
                 headers: {
-                    'x-rapidapi-key': `${process.env.FLIGHT_X_RAPIDAPI_KEY}`,
-                    'x-rapidapi-host': 'aerodatabox.p.rapidapi.com'
+                    'x-api-market-key': `${process.env.FLIGHT_X_MARKET_KEY}`,
                 }
             }),
             fetch('https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token', {
