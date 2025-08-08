@@ -8,8 +8,8 @@ import {
 // import Button from '@/components/common/Button';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 import FlightCardList from './components/FlightCardList';
-import FlightSearchForm from './components/FlightSearchForm';
 import FlightTab from './components/FlightTab';
+import FlightSearchForm from './components/FlightSearchForm';
 
 // 서버 컴포넌트 - 서버 사이드에서 데이터를 가져와서 클라이언트 컴포넌트에 전달
 const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
@@ -23,7 +23,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     const getSearchFrom = parsedParams.searchFrom ?? funcNowTime();
     const getSearchTo = parsedParams.searchTo ?? setSearchTo;
     const getPageNo = parsedParams.pageNo ?? '1';
-    const getNumOfRows = parsedParams.numOfRows ?? '20';
+    const getNumOfRows = parsedParams.numOfRows ?? '30';
     const getFlightId = parsedParams.flightId ?? '';
 
     const responseBody: FlightArrivalType | FlightDepartureType = {
@@ -64,7 +64,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     }
 
     return (
-        <div className="max-w-[600px] mx-auto my-6">
+        <div className="mx-auto my-6 max-w-[600px]">
             <FlightTab />
             {resFlightData && <FlightSearchForm resFlightData={resFlightData} />}
             {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}

@@ -46,7 +46,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
             <p>{flight.remark}</p>
             {
                 !isCodeshare && (
-                    <div className="flex gap-4 mt-2">
+                    <div className="mt-2 flex gap-4">
                         {/* <Button style="secondary" onClick={() => openModalContext(<FlightDetailModal flight={flight} />)}>useContext</Button> */}
                         <Button variant="primary" onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button>
                         {

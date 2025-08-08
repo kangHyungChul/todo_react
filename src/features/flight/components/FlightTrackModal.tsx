@@ -33,6 +33,7 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
             // fetchFlightTrack 호출 시 signal 값 로그 출력
             // console.log('fetchFlightTrack 호출 - signal:', controller.signal);
             const resFlightTrack = await fetchFlightTrack(flightReg);
+            console.log('resFlightTrack:', resFlightTrack);
             // if(!resFlightTrack || resFlightTrack.path[0][1] === null) {
             if(!resFlightTrack || resFlightTrack.states === null) {
                 alert('위치조회가 불가능한 항공기입니다');

@@ -9,6 +9,7 @@ import {
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFlightStore } from '../store/FlightStore';
+import { parseSearchParams } from '@/lib/utils/utils';
 
 const useFlightState = (resFlightData: FlightArrivalResponseType | FlightDepartureResponseType) => {
     // 상태값들을 하나의 객체(state)로 묶어서 관리
@@ -78,34 +79,47 @@ const useFlightSearch = () => {
     // }, []);
     
     const FlightSearch = (arrivalSearchParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => {
+
         setLoadingState(true);
+
+        const searchParamsString = parseSearchParams(arrivalSearchParams);
         // console.log(arrivalSearchParams);
-        const searchDate = arrivalSearchParams.searchDate;
-        const searchFrom = arrivalSearchParams.searchFrom;
-        const searchTo = arrivalSearchParams.searchTo;
-        const pageNo = arrivalSearchParams.pageNo;
-        const flightId = arrivalSearchParams.flightId === '' ? '' : `&flightId=${arrivalSearchParams.flightId}`;
-        const numOfRows = arrivalSearchParams.numOfRows;
+        // const searchDate = arrivalSearchParams.searchDate;
+        // const searchFrom = arrivalSearchParams.searchFrom;
+        // const searchTo = arrivalSearchParams.searchTo;
+        // const pageNo = arrivalSearchParams.pageNo;
+        // const flightId = arrivalSearchParams.flightId === '' ? '' : `&flightId=${arrivalSearchParams.flightId}`;
+        // const numOfRows = arrivalSearchParams.numOfRows;
 
-        // const searchFromHHMM = funcTimeToHHMM(arrivalSearchParams.searchFrom);  
-        // const searchToHHMM = funcTimeToHHMM(arrivalSearchParams.searchTo);
-
-        // // 현재 시간 기준으로 새로운 데이터 요청
-        // // const refreshSearchDate = funcNowDate();
-        // const refreshSearchFrom = searchFromHHMM;
-        // const refreshSearchTo = searchToHHMM;
-        // const refreshPageNo = '1';
-
-        // // URL 업데이트 후 서버 컴포넌트 재실행
-        // // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-        router.push(`?searchDate=${searchDate}&searchFrom=${searchFrom}&searchTo=${searchTo}&pageNo=${pageNo}&numOfRows=${numOfRows}${flightId}`);
-        // // router.refresh();
-        
-        // // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
-        // // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
+        // URL 업데이트 후 서버 컴포넌트 재실행
+        // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
+        router.push(`?${searchParamsString}`);
     };
 
     return { FlightSearch };
 };
+
+// const useFlightSearch = () => {
+//     // const router = useRouter();
+//     // const [isLoading, setIsLoading] = useState(false);
+//     const { setLoadingState } = useFlightStore();
+//     // const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>();
+
+//     const FlightSearch = (searchParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => {
+
+//         const searchParamsString = Object.entries(searchParams)
+//             .filter(([, value]) => value !== undefined && value !== '')
+//             .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
+//             .join('&');
+
+//         history.pushState(searchParams, '', `?${searchParamsString}`);
+
+//         // setParams(searchParams);
+        
+//     };
+
+//     return { FlightSearch };
+// };
+
 
 export { useFlightState, useFlightSearch };

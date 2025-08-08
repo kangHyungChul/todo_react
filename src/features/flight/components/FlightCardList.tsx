@@ -6,7 +6,7 @@ import {
     FlightDepartureItemType, FlightDepartureResponseType, 
     FlightType
 } from '../types/flights';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 // import { useRouter } from 'next/navigation';
@@ -101,4 +101,4 @@ const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalR
     );
 };
 
-export default FlightCardList;
+export default memo(FlightCardList);

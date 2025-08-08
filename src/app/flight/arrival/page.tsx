@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcDateTimeToType, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
 import FlightSection from '@/features/flight/FlightSection';
+import { FlightArrivalSearchParamsType } from '@/features/flight/types/flights';
 export const metadata: Metadata = {
     title: 'Flight Arrival',
     description: 'Flight Arrival',
 };
 
-const FlightArrival = async({ searchParams } : { searchParams: Promise<{ searchDate?: string, searchFrom?: string, searchTo?: string, pageNo?: string, numOfRows?: string, flightId?: string }> }) => {
+const FlightArrival = async({ searchParams } : { searchParams: Promise<FlightArrivalSearchParamsType> }) => {
 
     const parsedParams = await searchParams;
 

@@ -20,6 +20,7 @@ const FlightTab = () => {
     const setTabStyle = (isActive: boolean) => {
         return isActive ? 'bg-primary-100 text-primary-700 hover:bg-primary-200 border border-primary-200' : 'bg-white hover:bg-gray-100 border border-gray-200';
     };
+    console.log('pathname:', pathname);
 
     return (
         <ul className="flex gap-4 text-center">
