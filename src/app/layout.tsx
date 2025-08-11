@@ -6,6 +6,7 @@ import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 // import { ModalProvider } from '@/contexts/ModalContext';
 import Modal from '@/components/common/Modal';
+import Providers from './provider';
 // import ModalContext from '@/components/common/ModalContext';
 // const nanumGothic = Nanum_Gothic({
 //     weight: ['400', '700', '800'],
@@ -28,10 +29,10 @@ export default function RootLayout({
             <body>
                 <Header />
                 <main>
-                    {children}
-                    <Modal />
-                    {/* {children}
-                    <Modal /> */}
+                    <Providers>
+                        {children}
+                        <Modal />
+                    </Providers>
                 </main>
                 <Footer />
             </body>
