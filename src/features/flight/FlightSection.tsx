@@ -1,5 +1,4 @@
-import { fetchArrivalFlights } from './services/flightArrivalApi';
-import { fetchDepartureFlights } from './services/flightDepartureApi';
+import { fetchArrivalFlights, fetchDepartureFlights } from './services/flightApi';
 import { 
     FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType, 
     FlightDepartureResponseType, FlightDepartureType, FlightDepartureSearchParamsType, 

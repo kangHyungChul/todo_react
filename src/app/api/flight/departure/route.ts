@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 // import { FlightArrivalType } from '@/features/flight/types/flights';
 
@@ -53,18 +52,19 @@ const GET = async (request: NextRequest) => {
 
         // return NextResponse.json(resData);
 
-        const requestBody: FlightArrivalType = await request.json();
+        // const requestBody: FlightArrivalType = await request.json();
 
-        console.log('request:', request.nextUrl.searchParams);
-        const searchParams = new URLSearchParams(request.nextUrl.searchParams);
-
+        // console.log('request:', request.nextUrl.searchParams);
+        
         const url = process.env.FLIGHT_DEPARTURE_API_URL;
         const apiKey = process.env.FLIGHT_API_KEY;
-
+        
         // 환경변수 체크
         if (!apiKey || !url) {
             return NextResponse.json({ error: 'Missing required environment variables' }, { status: 500 });
         }
+
+        const searchParams = new URLSearchParams(request.nextUrl.searchParams);
 
         const body = new URLSearchParams({
             serviceKey: apiKey,
@@ -82,6 +82,9 @@ const GET = async (request: NextRequest) => {
 
         const res = await fetch(`${url}?${body.toString()}`, {
             method: 'GET',
+            next: {
+                revalidate: 10,
+            }
         });
 
         if (!res.ok) {
