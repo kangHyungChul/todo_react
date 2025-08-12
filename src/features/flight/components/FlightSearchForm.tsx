@@ -6,22 +6,22 @@ import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHM
 import { useEffect, useRef, useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import { 
-    FlightArrivalResponseType, 
-    FlightDepartureResponseType 
+    FlightArrivalType, 
+    FlightDepartureType 
 } from '../types/flights';
 import { useFlightSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
 
-const FlightSearchForm = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
+const FlightSearchForm = ({ queryParams }: { queryParams: FlightArrivalType | FlightDepartureType }) => {
     // const router = useRouter();
     const { FlightSearch } = useFlightSearch();
     const { isLoading } = useFlightStore();
 
     // 서버에서 받은 데이터를 기반으로 초기값 설정
-    const getSearchFrom = resFlightData?.searchFrom ? funcTimeToHHMMReverse(resFlightData.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
-    const getSearchTo = resFlightData?.searchTo ? funcTimeToHHMMReverse(resFlightData.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
-    const getSearchNumOfRows = resFlightData?.numOfRows ? resFlightData.numOfRows.toString() : '30';
-    const getFlightId = resFlightData?.flightId ? resFlightData.flightId : '';
+    const getSearchFrom = queryParams?.searchFrom ? funcTimeToHHMMReverse(queryParams.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
+    const getSearchTo = queryParams?.searchTo ? funcTimeToHHMMReverse(queryParams.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
+    const getSearchNumOfRows = queryParams?.numOfRows ? queryParams.numOfRows.toString() : '30';
+    const getFlightId = queryParams?.flightId ? queryParams.flightId : '';
 
     const [searchFrom, setSearchFrom] = useState(getSearchFrom);
     const [searchTo, setSearchTo] = useState(getSearchTo);

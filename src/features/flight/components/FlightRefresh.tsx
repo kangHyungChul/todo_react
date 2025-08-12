@@ -9,17 +9,17 @@ import {
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
 import { useFlightSearch } from '../hook/useFlightArrival';
-import { useFlightStore } from '../store/FlightStore';
+// import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType }) => {
+const FlightRefresh = ({ resFlightData, isFetching, isLoading }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType, isFetching: boolean, isLoading: boolean }) => {
     
     // 라우터 인스턴스 생성
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
     const { FlightSearch } = useFlightSearch();
-    const { isLoading } = useFlightStore();
+    // const { isLoading } = useFlightStore();
     const searchDate = resFlightData.searchDate;
     const searchFrom = resFlightData.searchFrom;
     const searchTo = resFlightData.searchTo;
@@ -72,8 +72,8 @@ const FlightRefresh = ({ resFlightData }: { resFlightData: FlightArrivalResponse
     };
 
     return (
-        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading}>
-            {isLoading ? '조회중...' : '새로고침'}
+        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading || isFetching}>
+            {isLoading || isFetching ? '조회중...' : '새로고침'}
         </Button>
     );
 };

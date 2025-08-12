@@ -1,9 +1,10 @@
 'use client';
 
-// import { fetchArrivalFlights } from '../services/flightApi';
+import { useQuery } from '@tanstack/react-query';
 import { 
-    FlightArrivalItemType, FlightArrivalResponseType, 
-    FlightDepartureItemType, FlightDepartureResponseType, 
+    // import { fetchArrivalFlights } from '../services/flightApi';
+    FlightArrivalItemType, FlightArrivalSearchParamsType, 
+    FlightDepartureItemType, FlightDepartureSearchParamsType, 
     FlightType
 } from '../types/flights';
 import { useEffect, memo } from 'react';
@@ -11,43 +12,60 @@ import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime'
 // import FlightCard from './FlightCard';
 // import { useRouter } from 'next/navigation';
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
-import { useFlightStore } from '../store/FlightStore';
+// import { useFlightStore } from '../store/FlightStore';
 // import { useFlightState } from '../hook/useFlightArrival';
 import FlightRefresh from './FlightRefresh';
 import FlightReset from './FlightReset';
+import { fetchArrivalFlights, fetchDepartureFlights } from '../services/flightApi';
 
 import FlightCardLayout from './FlightCardLayout';
 import FlightArrivalCard from './arrival/FlightCard';
 import FlightDepartureCard from './departure/FlightCard';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType, type: FlightType }) => {
+const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
 
-    const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = resFlightData;
+    // console.log(queryParams);
+
     // const flightId = resFlightData.flightId ? resFlightData.flightId : '';
-
+    
+    const { data, isLoading, isFetching, dataUpdatedAt, error } = useQuery({
+        queryKey: [type, queryParams],
+        queryFn: () => {
+            if(type === 'arrival') {
+                return fetchArrivalFlights(queryParams);
+            } else {
+                return fetchDepartureFlights(queryParams);
+            }
+        },
+        placeholderData: (prev) => prev,
+    });
+    
     const title = type === 'arrival' ? '도착조회' : '출발조회';
     
-
-    const { isLoading, setLoadingState } = useFlightStore();
+    console.log(data, isLoading, isFetching, dataUpdatedAt, error);
+    const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = data;
+    
+    
     // const { 
-    //     setBulkState
-    // } = useFlightState(resFlightData);
-
-    useEffect(() => {
-        // // 새로운 데이터가 도착하면 로딩 상태 해제
-        // if (resFlightData) {
-        //     setBulkState({
-        //         flightData: resFlightData.items,
-        //         totalCount: resFlightData.totalCount,
-        //         searchDate: resFlightData.searchDate,
-        //         searchFrom: resFlightData.searchFrom,
-        //         searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo,
-        //         flightId: flightId ?? '',
-        //     });
-        // }
-        setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
-    }, [resFlightData, setLoadingState]);
+        //     setBulkState
+        // } = useFlightState(resFlightData);
+        
+    // const { isLoading, setLoadingState } = useFlightStore();
+    // useEffect(() => {
+    //     // // 새로운 데이터가 도착하면 로딩 상태 해제
+    //     // if (resFlightData) {
+    //     //     setBulkState({
+    //     //         flightData: resFlightData.items,
+    //     //         totalCount: resFlightData.totalCount,
+    //     //         searchDate: resFlightData.searchDate,
+    //     //         searchFrom: resFlightData.searchFrom,
+    //     //         searchTo: Number(resFlightData.searchTo) >= 2400 ? '2359' : resFlightData.searchTo,
+    //     //         flightId: flightId ?? '',
+    //     //     });
+    //     // }
+    //     setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
+    // }, [resFlightData, setLoadingState]);
 
     return (
         <>
@@ -57,12 +75,12 @@ const FlightCardList = ({ resFlightData, type }: { resFlightData: FlightArrivalR
             </p>
 
             <div className="flex justify-between gap-4">
-                <FlightRefresh resFlightData={resFlightData} />
+                <FlightRefresh resFlightData={data} isFetching={isFetching} isLoading={isLoading} />
                 <FlightReset />
             </div>
 
             {
-                isLoading ? (
+                isFetching ? (
                     <ul className="flex flex-col gap-4">
                         <FlightCardLayout>
                             <div className="w-full flex flex-col justify-center items-center gap-2">

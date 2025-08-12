@@ -10,17 +10,17 @@ import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
 import { useFlightSearch } from '../hook/useFlightArrival';
-import { useFlightStore } from '../store/FlightStore';
+// import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightReset = () => {
+const FlightReset = ({ isFetching, isLoading }: { isFetching: boolean, isLoading: boolean }) => {
     
     // 라우터 인스턴스 생성
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
     const { FlightSearch } = useFlightSearch();
-    const { isLoading } = useFlightStore();
+    // const { isLoading } = useFlightStore();
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
     const handleReset = () => {
@@ -58,8 +58,8 @@ const FlightReset = () => {
     };
 
     return (
-        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={isLoading}>
-            {isLoading ? '조회중...' : '초기화'}
+        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={isLoading || isFetching}>
+            {isLoading || isFetching ? '조회중...' : '초기화'}
         </Button>
     );
 };

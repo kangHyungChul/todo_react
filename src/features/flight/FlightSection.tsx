@@ -28,7 +28,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     const getNumOfRows = parsedParams.numOfRows ?? '30';
     const getFlightId = parsedParams.flightId ?? '';
 
-    const responseBody: FlightArrivalType | FlightDepartureType = {
+    const queryParams: FlightArrivalType | FlightDepartureType = {
         pageNo: getPageNo,
         numOfRows: getNumOfRows,
         searchdtCode: 'E',
@@ -41,23 +41,25 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     };
     
     // 서버에서 데이터 가져오기 - 에러 핸들링 추가
-    let resFlightData: FlightArrivalResponseType | FlightDepartureResponseType | null = null;
+    // let queryParams: FlightArrivalResponseType | FlightDepartureResponseType | null = null;
 
     // react-query 마이그레이션 적용용
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
-        queryKey: ['flight', responseBody], // responseBody의 값이 바뀌면 쿼리키가 달라져서 새로운 데이터를 요청함
+        queryKey: [type, queryParams], // queryParams 값이 바뀌면 쿼리키가 달라져서 새로운 데이터를 요청함
         queryFn: () => {
             // type이 'arrival'이면 도착편 API, 아니면 출발편 API를 호출
             if(type === 'arrival') {
-                return fetchArrivalFlights(responseBody);
+                return fetchArrivalFlights(queryParams);
             } else {
-                return fetchDepartureFlights(responseBody);
+                return fetchDepartureFlights(queryParams);
             }
         }
     });
-    
+
+    // console.log(type, parsedParams, queryParams, queryClient);
+
     // try {
     //     if(type === 'arrival') {
     //         resFlightData = await fetchArrivalFlights(responseBody);
@@ -84,9 +86,10 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
         <div className="mx-auto my-6 max-w-[600px]">
             <FlightTab />
             <HydrationBoundary state={dehydrate(queryClient)}>
-                {resFlightData && <FlightSearchForm resFlightData={resFlightData} />}
+                <FlightSearchForm queryParams={queryParams} />
                 {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}
-                {resFlightData && <FlightCardList resFlightData={resFlightData} type={type} />}
+                <FlightCardList queryParams={queryParams} type={type} />
+                {/* {resFlightData && <FlightCardList resFlightData={resFlightData} type={type} />} */}
             </HydrationBoundary>
         </div>
     );
