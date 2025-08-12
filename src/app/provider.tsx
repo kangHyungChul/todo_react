@@ -14,7 +14,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                 refetchOnReconnect: true, // 네트워크 복구 시 최신화
                 staleTime: 1000 * 30, // 캐싱시간 30초 간 fresh상태 / 이 시간 동안은 캐시된 데이터를 사용
                 gcTime: 1000 * 60, // 3분 캐시 후 메모리 제거
-                networkMode: 'online'
+                networkMode: 'online',
             },
             mutations: {
                 retry: 0 // POST/PUT/DELETE 중복 요청 방지

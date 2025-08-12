@@ -1,39 +1,57 @@
 'use client';
 
 // import { fetchArrivalFlights } from '../services/flightApi';
-// import { 
-//     FlightArrivalResponseType, 
-//     FlightDepartureResponseType 
-// } from '../types/flights';
+import { 
+    FlightArrivalSearchParamsType,
+    FlightDepartureSearchParamsType
+} from '../types/flights';
 import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
-import { useFlightSearch } from '../hook/useFlightArrival';
+// import { useFlightSearch } from '../hook/useFlightArrival';
 // import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightReset = ({ isFetching, isLoading }: { isFetching: boolean, isLoading: boolean }) => {
+const FlightReset = ({ 
+    isFetching, 
+    isLoading, 
+    updateParams 
+}: { 
+    isFetching: boolean, 
+    isLoading: boolean, 
+    updateParams: (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => void 
+}) => {
     
     // 라우터 인스턴스 생성
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    const { FlightSearch } = useFlightSearch();
+    // const { FlightSearch } = useFlightSearch();
     // const { isLoading } = useFlightStore();
 
     // 새로고침 함수 - router.push와 router.refresh만 사용
     const handleReset = () => {
 
         // FlightArrivalSearch 함수를 올바르게 호출
-        FlightSearch({
+        // FlightSearch({
+        //     searchDate: funcNowDate(),
+        //     searchFrom: funcNowTime(),
+        //     searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),
+        //     flightId: '',
+        //     numOfRows: '30',
+        //     pageNo: '1',
+        // });
+
+        const newParams = {
             searchDate: funcNowDate(),
             searchFrom: funcNowTime(),
             searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),
             flightId: '',
             numOfRows: '30',
             pageNo: '1',
-        });
+        };
+        updateParams(newParams);
         // setIsLoading(true);
         // try {
 

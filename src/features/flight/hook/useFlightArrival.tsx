@@ -93,7 +93,8 @@ const useFlightSearch = () => {
 
         // URL 업데이트 후 서버 컴포넌트 재실행
         // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
-        router.push(`?${searchParamsString}`);
+        // router.replace(`?${searchParamsString}`);
+        router.replace(`?${searchParamsString}`);
     };
 
     return { FlightSearch };

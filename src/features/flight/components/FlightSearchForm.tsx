@@ -12,10 +12,20 @@ import {
 import { useFlightSearch } from '../hook/useFlightArrival';
 import { useFlightStore } from '../store/FlightStore';
 
-const FlightSearchForm = ({ queryParams }: { queryParams: FlightArrivalType | FlightDepartureType }) => {
+const FlightSearchForm = ({ 
+    queryParams, 
+    isLoading, 
+    isFetching, 
+    updateParams 
+}: { 
+    queryParams: FlightArrivalType | FlightDepartureType, 
+    isLoading: boolean, 
+    isFetching: boolean, 
+    updateParams: (newParams: FlightArrivalType | FlightDepartureType) => void 
+}) => {
     // const router = useRouter();
-    const { FlightSearch } = useFlightSearch();
-    const { isLoading } = useFlightStore();
+    // const { FlightSearch } = useFlightSearch();
+    // const { isLoading } = useFlightStore();
 
     // 서버에서 받은 데이터를 기반으로 초기값 설정
     const getSearchFrom = queryParams?.searchFrom ? funcTimeToHHMMReverse(queryParams.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
@@ -47,15 +57,24 @@ const FlightSearchForm = ({ queryParams }: { queryParams: FlightArrivalType | Fl
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        // 검색 실행
-        FlightSearch({
+        const newParams = {
             searchDate: funcNowDate(),
             searchFrom: funcTimeToHHMM(searchFrom),
             searchTo: funcTimeToHHMM(searchTo),
             flightId: searchFlightNoRef.current?.value !== '' ? searchFlightNoRef.current?.value : '',
             numOfRows: searchNumOfRows,
             pageNo: '1',
-        });
+        };
+        updateParams(newParams);
+        // 검색 실행
+        // FlightSearch({
+        //     searchDate: funcNowDate(),
+        //     searchFrom: funcTimeToHHMM(searchFrom),
+        //     searchTo: funcTimeToHHMM(searchTo),
+        //     flightId: searchFlightNoRef.current?.value !== '' ? searchFlightNoRef.current?.value : '',
+        //     numOfRows: searchNumOfRows,
+        //     pageNo: '1',
+        // });
 
     };
 
@@ -68,15 +87,15 @@ const FlightSearchForm = ({ queryParams }: { queryParams: FlightArrivalType | Fl
                 </div> */}
                 <div className="flex items-center gap-3">
                     <label htmlFor="searchFrom">조회범위(시작시간)</label>
-                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={isLoading}/>
+                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={isLoading || isFetching}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchTo">조회범위(종료시간)</label>
-                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={isLoading}/>
+                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={isLoading || isFetching}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchFlightNo">편명</label>
-                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={isLoading}/>
+                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={isLoading || isFetching}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchNumOfRows">표시수</label>
@@ -84,7 +103,7 @@ const FlightSearchForm = ({ queryParams }: { queryParams: FlightArrivalType | Fl
                         id="searchNumOfRows"
                         value={searchNumOfRows}
                         onChange={(e) => setSearchNumOfRows(e.target.value)}
-                        disabled={isLoading}
+                        disabled={isLoading || isFetching}
                     >
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -94,7 +113,7 @@ const FlightSearchForm = ({ queryParams }: { queryParams: FlightArrivalType | Fl
                     </Select>
                 </div>
                 <div className="mt-4">
-                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={isLoading}>검색</Button>
+                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={isLoading || isFetching}>검색</Button>
                 </div>
             </form>
         </div>

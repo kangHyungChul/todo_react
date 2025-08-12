@@ -2,30 +2,40 @@
 
 // import { fetchArrivalFlights } from '../services/flightApi';
 import { 
-    FlightArrivalResponseType, 
-    FlightDepartureResponseType 
+    FlightArrivalSearchParamsType,
+    FlightDepartureSearchParamsType
 } from '../types/flights';
 // import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
-import { useFlightSearch } from '../hook/useFlightArrival';
+// import { useFlightSearch } from '../hook/useFlightArrival';
 // import { useFlightStore } from '../store/FlightStore';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
-const FlightRefresh = ({ resFlightData, isFetching, isLoading }: { resFlightData: FlightArrivalResponseType | FlightDepartureResponseType, isFetching: boolean, isLoading: boolean }) => {
+const FlightRefresh = ({ 
+    queryParams, 
+    isFetching, 
+    isLoading, 
+    updateParams 
+}: { 
+    queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, 
+    isFetching: boolean,
+    isLoading: boolean, 
+    updateParams: (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => void 
+}) => {
     
     // 라우터 인스턴스 생성
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    const { FlightSearch } = useFlightSearch();
+    // const { FlightSearch } = useFlightSearch();
     // const { isLoading } = useFlightStore();
-    const searchDate = resFlightData.searchDate;
-    const searchFrom = resFlightData.searchFrom;
-    const searchTo = resFlightData.searchTo;
-    const numOfRows = resFlightData.numOfRows.toString();
-    const pageNo = resFlightData.pageNo.toString();
-    const flightId = resFlightData.flightId ? resFlightData.flightId : '';
+    const searchDate = queryParams.searchDate;
+    const searchFrom = queryParams.searchFrom;
+    const searchTo = queryParams.searchTo;
+    const numOfRows = queryParams.numOfRows ? queryParams.numOfRows.toString() : '30';
+    const pageNo = queryParams.pageNo ? queryParams.pageNo.toString() : '1';
+    const flightId = queryParams.flightId ? queryParams.flightId : '';
 
     // const { 
     //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
@@ -40,14 +50,23 @@ const FlightRefresh = ({ resFlightData, isFetching, isLoading }: { resFlightData
     const handleRefresh = () => {
 
         // FlightArrivalSearch 함수를 올바르게 호출
-        FlightSearch({
+        const newParams = {
             searchDate: searchDate,
             searchFrom: searchFrom,
             searchTo: searchTo,
             flightId: flightId ?? '',
             numOfRows: numOfRows,
             pageNo: pageNo,
-        });
+        };
+        updateParams(newParams);
+        // FlightSearch({
+        //     searchDate: searchDate,
+        //     searchFrom: searchFrom,
+        //     searchTo: searchTo,
+        //     flightId: flightId ?? '',
+        //     numOfRows: numOfRows,
+        //     pageNo: pageNo,
+        // });
         // setIsLoading(true);
         // try {
 

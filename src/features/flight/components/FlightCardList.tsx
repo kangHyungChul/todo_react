@@ -1,13 +1,13 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
     // import { fetchArrivalFlights } from '../services/flightApi';
     FlightArrivalItemType, FlightArrivalSearchParamsType, 
     FlightDepartureItemType, FlightDepartureSearchParamsType, 
     FlightType
 } from '../types/flights';
-import { useEffect, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 // import { useRouter } from 'next/navigation';
@@ -17,10 +17,13 @@ import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime'
 import FlightRefresh from './FlightRefresh';
 import FlightReset from './FlightReset';
 import { fetchArrivalFlights, fetchDepartureFlights } from '../services/flightApi';
+import { parseSearchParams } from '@/lib/utils/utils';
 
 import FlightCardLayout from './FlightCardLayout';
 import FlightArrivalCard from './arrival/FlightCard';
 import FlightDepartureCard from './departure/FlightCard';
+import FlightSearchForm from './FlightSearchForm';
+import FlightTab from './FlightTab';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
@@ -28,22 +31,35 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     // console.log(queryParams);
 
     // const flightId = resFlightData.flightId ? resFlightData.flightId : '';
+
+    const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
     
+    const queryClient = useQueryClient();
     const { data, isLoading, isFetching, dataUpdatedAt, error } = useQuery({
-        queryKey: [type, queryParams],
+        queryKey: ['flight', type, params],
         queryFn: () => {
             if(type === 'arrival') {
-                return fetchArrivalFlights(queryParams);
+                return fetchArrivalFlights(params);
             } else {
-                return fetchDepartureFlights(queryParams);
+                return fetchDepartureFlights(params);
             }
         },
-        placeholderData: (prev) => prev,
+        placeholderData: (prev) => prev
     });
-    
+
+    useEffect(() => {
+        history.replaceState(null, '', `?${parseSearchParams(params)}`);
+    }, [params]);
+
+    const updateParams = (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => {
+        console.log('updateParams:', newParams);
+        setParams(newParams);
+        queryClient.invalidateQueries({ queryKey: ['flight'], refetchType: 'active' });
+    };
+
     const title = type === 'arrival' ? '도착조회' : '출발조회';
     
-    console.log(data, isLoading, isFetching, dataUpdatedAt, error);
+    // console.log(data, isLoading, isFetching, dataUpdatedAt, error);
     const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = data;
     
     
@@ -69,14 +85,18 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     return (
         <>
+            <FlightTab />
+
+            <FlightSearchForm queryParams={params} updateParams={updateParams} isLoading={isLoading} isFetching={isFetching} />
+
             <h2 className="text-2xl font-bold mb-4 text-center">{`${title} - ${totalCount}건`}</h2>
             <p className="text-center mb-4">
                 {`${funcDateTimeToType(searchDate, 'YYYYMMDD')} ${funcTimeToHHMMReverse(searchFrom)} ~ ${funcTimeToHHMMReverse(searchTo)}`}
             </p>
 
             <div className="flex justify-between gap-4">
-                <FlightRefresh resFlightData={data} isFetching={isFetching} isLoading={isLoading} />
-                <FlightReset />
+                <FlightRefresh queryParams={params} isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
+                <FlightReset isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
             </div>
 
             {
