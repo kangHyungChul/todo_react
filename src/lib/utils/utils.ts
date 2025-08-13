@@ -14,3 +14,12 @@ export const parseSearchParams = (searchParams: object) => {
 
     return searchParamsString;
 };
+
+export const parseSearchParamsToObject = (searchParams: string) => {
+    const searchParamsObject = searchParams.split('&').reduce((acc, curr) => {
+        const [key, value] = curr.split('=');
+        acc[key] = value;
+        return acc;
+    }, {} as Record<string, string>);
+    return searchParamsObject;
+};

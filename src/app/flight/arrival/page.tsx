@@ -9,7 +9,9 @@ export const metadata: Metadata = {
 
 const FlightArrival = async({ searchParams } : { searchParams: Promise<FlightArrivalSearchParamsType> }) => {
 
+    
     const parsedParams = await searchParams;
+    console.log('pagesearchParams:', parsedParams);
 
     const setSearchTo = Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60);
     const searchDate = funcDateTimeToType(parsedParams.searchDate ?? funcNowDate(), 'YYYYMMDD');

@@ -7,17 +7,17 @@ import {
     FlightDepartureItemType, FlightDepartureSearchParamsType, 
     FlightType
 } from '../types/flights';
-import { useState, useEffect, memo } from 'react';
+import { useState, useLayoutEffect, useMemo, memo, useCallback, useRef } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
-// import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
 // import { useFlightStore } from '../store/FlightStore';
 // import { useFlightState } from '../hook/useFlightArrival';
 import FlightRefresh from './FlightRefresh';
 import FlightReset from './FlightReset';
 import { fetchArrivalFlights, fetchDepartureFlights } from '../services/flightApi';
-import { parseSearchParams } from '@/lib/utils/utils';
+import { parseSearchParams, parseSearchParamsToObject } from '@/lib/utils/utils';
 
 import FlightCardLayout from './FlightCardLayout';
 import FlightArrivalCard from './arrival/FlightCard';
@@ -32,10 +32,42 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     // const flightId = resFlightData.flightId ? resFlightData.flightId : '';
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    console.log('FlightCardList queryParams:', queryParams);
+
     const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
+
+    // 변경/확인: 최초 1회만 URL 채우기 (문자열 비교만 사용)
+    // const bootedRef = useRef(false);
+    // useEffect(() => {
+    //     // console.log('bootedRef:', bootedRef.current, 'searchParams:', searchParams, 'searchParams.toString():', searchParams.toString(), 'queryParams:', queryParams);
+    //     if (bootedRef.current) return;
+
+    //     const currStr = searchParams.toString(); // ← 현재 URL 쿼리를 "그대로" 문자열로 사용
+    //     if (currStr.length === 0) {
+    //         const nextStr = parseSearchParams(queryParams as unknown as Record<string, unknown>);
+    //         if (nextStr) {
+    //             history.pushState(null, '', `?${nextStr}`);
+    //         }
+    //     }
+    //     bootedRef.current = true;
+    // }, [searchParams, queryParams, router]);
     
+
+    // 최소 변환: URL → 객체 (fetch 호출용)
+    // - 비교 로직에는 관여하지 않음
+    // const params = useMemo(() => {
+    //     const currStr = searchParams.toString();
+    //     if (currStr.length === 0) {
+    //         return queryParams;
+    //     }
+    //     return parseSearchParamsToObject(currStr) as FlightArrivalSearchParamsType | FlightDepartureSearchParamsType;
+    // }, [searchParams, queryParams]);
+
     const queryClient = useQueryClient();
-    const { data, isLoading, isFetching, dataUpdatedAt, error } = useQuery({
+    const { data, isLoading, isFetching, dataUpdatedAt, error, refetch } = useQuery({
         queryKey: ['flight', type, params],
         queryFn: () => {
             if(type === 'arrival') {
@@ -44,25 +76,37 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
                 return fetchDepartureFlights(params);
             }
         },
-        placeholderData: (prev) => prev
+        placeholderData: (prev) => prev,
     });
 
-    useEffect(() => {
-        history.replaceState(null, '', `?${parseSearchParams(params)}`);
-    }, [params]);
+    // useEffect(() => {
+    //     router.replace(`?${parseSearchParams(params)}`, { scroll: false });
+    // }, [params, router]);
 
-    const updateParams = (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => {
-        console.log('updateParams:', newParams);
+    const updateParams = useCallback((
+        newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType
+    ) => {
+        const currStr = searchParams.toString();
+        const nextStr = parseSearchParams(newParams);
+        
+        if (currStr === nextStr) {
+            console.log('refetch');
+            refetch();
+            return;
+        }
+
         setParams(newParams);
-        queryClient.invalidateQueries({ queryKey: ['flight'], refetchType: 'active' });
-    };
+        router.push(`?${nextStr}`, { scroll: false });
+        // console.log('params:', params);
+        // queryClient.invalidateQueries({ queryKey: ['flight'], refetchType: 'active' });
+    }, [router, refetch, searchParams, queryClient]);
 
-    const title = type === 'arrival' ? '도착조회' : '출발조회';
     
-    // console.log(data, isLoading, isFetching, dataUpdatedAt, error);
+    if (!data) return null;
     const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = data;
     
-    
+    const title = type === 'arrival' ? '도착조회' : '출발조회';
+
     // const { 
         //     setBulkState
         // } = useFlightState(resFlightData);
@@ -100,7 +144,7 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             </div>
 
             {
-                isFetching ? (
+                isFetching || isLoading ? (
                     <ul className="flex flex-col gap-4">
                         <FlightCardLayout>
                             <div className="w-full flex flex-col justify-center items-center gap-2">

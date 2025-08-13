@@ -53,6 +53,8 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
         }
     });
 
+    console.log('FlightSection queryParams:', queryParams);
+
     // console.log(type, parsedParams, queryParams, queryClient);
 
     // try {
