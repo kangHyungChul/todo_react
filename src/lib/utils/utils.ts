@@ -9,7 +9,7 @@ export const parseSearchParams = (searchParams: object) => {
     const searchParamsString = Object.entries(searchParams)
         .filter(([, value]) => value !== undefined && value !== '')
         .sort(([keyA], [keyB]) => keyA.localeCompare(keyB)) // key를 알파벳 순으로 정렬
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
+        .map(([key, value]) => `${key}=${value}`)
         .join('&');
 
     return searchParamsString;
@@ -18,7 +18,7 @@ export const parseSearchParams = (searchParams: object) => {
 export const parseSearchParamsToObject = (searchParams: string) => {
     const searchParamsObject = searchParams.split('&').reduce((acc, curr) => {
         const [key, value] = curr.split('=');
-        acc[key] = value;
+        acc[decodeURIComponent(key)] = decodeURIComponent(value);
         return acc;
     }, {} as Record<string, string>);
     return searchParamsObject;

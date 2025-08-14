@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils/utils';
+import { memo } from 'react';
 
 // import { FlightArrivalItemType } from '../types/flights';
 
@@ -13,4 +14,4 @@ const FlightCardLayout = ({ codeshare = 'Master', children }: { codeshare?: stri
     );
 };
 
-export default FlightCardLayout;
+export default memo(FlightCardLayout);

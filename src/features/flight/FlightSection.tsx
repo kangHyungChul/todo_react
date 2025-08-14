@@ -2,8 +2,8 @@ import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query
 
 import { fetchArrivalFlights, fetchDepartureFlights } from './services/flightApi';
 import { 
-    FlightArrivalType, FlightArrivalResponseType, FlightArrivalSearchParamsType, 
-    FlightDepartureResponseType, FlightDepartureType, FlightDepartureSearchParamsType, 
+    FlightArrivalType, FlightArrivalSearchParamsType, 
+    FlightDepartureType, FlightDepartureSearchParamsType, 
     FlightType
 } from './types/flights';
 // import Button from '@/components/common/Button';
@@ -27,20 +27,25 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     const getFlightId = parsedParams.flightId ?? '';
 
     const queryParams: FlightArrivalType | FlightDepartureType = {
+        // pageNo, numOfRows, searchDate, searchFrom, searchTo는 항상 포함
+        ...(getFlightId ? { flightId: getFlightId } : {}),
         pageNo: getPageNo,
         numOfRows: getNumOfRows,
         searchDate: getSearchDate,
         searchFrom: getSearchFrom,
         searchTo: getSearchTo,
-        flightId: getFlightId,
+        // flightId는 값이 있을 때만 포함해야 함
+        // 아래와 같이 스프레드 연산자를 사용하여 조건부로 flightId를 추가
     };
+
+    // console.log(queryParams);
     
     // 서버에서 데이터 가져오기 - 에러 핸들링 추가
     // let queryParams: FlightArrivalResponseType | FlightDepartureResponseType | null = null;
-
+    
     // react-query 마이그레이션 적용용
     const queryClient = new QueryClient();
-
+    
     await queryClient.prefetchQuery({
         queryKey: ['flight', type, queryParams], // queryParams 값이 바뀌면 쿼리키가 달라져서 새로운 데이터를 요청함
         queryFn: () => {
@@ -52,8 +57,8 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
             }
         }
     });
-
-    console.log('FlightSection queryParams:', queryParams);
+    
+    // console.log('FlightSection queryParams:', queryParams);
 
     // console.log(type, parsedParams, queryParams, queryClient);
 

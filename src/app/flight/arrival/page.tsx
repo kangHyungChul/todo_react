@@ -11,7 +11,7 @@ const FlightArrival = async({ searchParams } : { searchParams: Promise<FlightArr
 
     
     const parsedParams = await searchParams;
-    console.log('pagesearchParams:', parsedParams);
+    // console.log('page searchParams:', parsedParams);
 
     const setSearchTo = Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60);
     const searchDate = funcDateTimeToType(parsedParams.searchDate ?? funcNowDate(), 'YYYYMMDD');

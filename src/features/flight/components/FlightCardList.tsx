@@ -1,18 +1,17 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { 
     // import { fetchArrivalFlights } from '../services/flightApi';
     FlightArrivalItemType, FlightArrivalSearchParamsType, 
     FlightDepartureItemType, FlightDepartureSearchParamsType, 
     FlightType
 } from '../types/flights';
-import { useState, useLayoutEffect, useMemo, memo, useCallback, useRef } from 'react';
+import { useMemo, memo, useCallback, useEffect } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import { useRouter, useSearchParams } from 'next/navigation';
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
-// import { useFlightStore } from '../store/FlightStore';
 // import { useFlightState } from '../hook/useFlightArrival';
 import FlightRefresh from './FlightRefresh';
 import FlightReset from './FlightReset';
@@ -28,16 +27,19 @@ import FlightTab from './FlightTab';
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
 
-    // console.log(queryParams);
-
-    // const flightId = resFlightData.flightId ? resFlightData.flightId : '';
-
+    console.log('queryParams:', queryParams);
+    
+    // const flightId = resFlightData.flightId ? resFlightData.flightId : '';    
     const router = useRouter();
     const searchParams = useSearchParams();
+    
+    const currentParams = useMemo(() => {
+        const params = searchParams;
+        return params.size > 0 ? parseSearchParamsToObject(searchParams.toString()) : queryParams; // 초기 로드 시 URL에 파라미터가 없으면 서버에서 받은 props를 사용합니다.
+    }, [searchParams, queryParams]);
 
-    console.log('FlightCardList queryParams:', queryParams);
 
-    const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
+    // const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
 
     // 변경/확인: 최초 1회만 URL 채우기 (문자열 비교만 사용)
     // const bootedRef = useRef(false);
@@ -66,14 +68,13 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     //     return parseSearchParamsToObject(currStr) as FlightArrivalSearchParamsType | FlightDepartureSearchParamsType;
     // }, [searchParams, queryParams]);
 
-    const queryClient = useQueryClient();
-    const { data, isLoading, isFetching, dataUpdatedAt, error, refetch } = useQuery({
-        queryKey: ['flight', type, params],
+    const { data, isFetching, isLoading } = useQuery({
+        queryKey: ['flight', type, currentParams],
         queryFn: () => {
             if(type === 'arrival') {
-                return fetchArrivalFlights(params);
+                return fetchArrivalFlights(currentParams);
             } else {
-                return fetchDepartureFlights(params);
+                return fetchDepartureFlights(currentParams);
             }
         },
         placeholderData: (prev) => prev,
@@ -86,20 +87,34 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     const updateParams = useCallback((
         newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType
     ) => {
-        const currStr = searchParams.toString();
+        // const prevStr = parseSearchParams(currentParams);
         const nextStr = parseSearchParams(newParams);
-        
-        if (currStr === nextStr) {
-            console.log('refetch');
-            refetch();
-            return;
-        }
 
-        setParams(newParams);
-        router.push(`?${nextStr}`, { scroll: false });
+        // console.log('prevStr:', prevStr);
+        // console.log('nextStr:', nextStr);
+        // console.log('prevStr === nextStr:', prevStr === nextStr);
+
+        // if (prevStr === nextStr) {
+        //     console.log('refetch');
+        //     refetch();
+        //     return;
+        // }
+
+        history.pushState(null, '', `?${nextStr}`);
         // console.log('params:', params);
-        // queryClient.invalidateQueries({ queryKey: ['flight'], refetchType: 'active' });
-    }, [router, refetch, searchParams, queryClient]);
+    }, [router]);
+
+    useEffect(() => {
+        if (data) {
+            const searchDate = currentParams.searchDate;
+            const searchFrom = currentParams.searchFrom;
+            const searchTo = currentParams.searchTo;
+            const flightId = currentParams.flightId;
+
+            document.title = `${flightId !== undefined && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+            document.querySelector('meta[name="description"]')?.setAttribute('content', `${flightId && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`);
+        }
+    }, [data]);
 
     
     if (!data) return null;
@@ -129,9 +144,10 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     return (
         <>
+            { `isLoading: ${isLoading}` }, { `isFetching: ${isFetching}` }
             <FlightTab />
 
-            <FlightSearchForm queryParams={params} updateParams={updateParams} isLoading={isLoading} isFetching={isFetching} />
+            <FlightSearchForm queryParams={currentParams} updateParams={updateParams} isLoading={isLoading} isFetching={isFetching} />
 
             <h2 className="text-2xl font-bold mb-4 text-center">{`${title} - ${totalCount}건`}</h2>
             <p className="text-center mb-4">
@@ -139,7 +155,7 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             </p>
 
             <div className="flex justify-between gap-4">
-                <FlightRefresh queryParams={params} isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
+                <FlightRefresh queryParams={currentParams} isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
                 <FlightReset isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
             </div>
 
