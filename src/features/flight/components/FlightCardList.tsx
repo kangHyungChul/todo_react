@@ -10,7 +10,7 @@ import {
 import { useMemo, memo, useCallback, useEffect } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 // import { useFlightArrival, useFlightArrivalSearch } from '../hook/useFlightArrival';
 // import { useFlightState } from '../hook/useFlightArrival';
 import FlightRefresh from './FlightRefresh';
@@ -30,12 +30,12 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     console.log('queryParams:', queryParams);
     
     // const flightId = resFlightData.flightId ? resFlightData.flightId : '';    
-    const router = useRouter();
+    // const router = useRouter();
     const searchParams = useSearchParams();
     
     const currentParams = useMemo(() => {
         const params = searchParams;
-        return params.size > 0 ? parseSearchParamsToObject(searchParams.toString()) : queryParams; // 초기 로드 시 URL에 파라미터가 없으면 서버에서 받은 props를 사용합니다.
+        return params.size > 0 ? parseSearchParamsToObject(searchParams.toString()) : queryParams; // 초기 로드 시 URL에 파라미터가 없으면 서버에서 받은 props를 사용
     }, [searchParams, queryParams]);
 
 
@@ -102,7 +102,7 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
         history.pushState(null, '', `?${nextStr}`);
         // console.log('params:', params);
-    }, [router]);
+    }, []);
 
     useEffect(() => {
         if (data) {
@@ -111,10 +111,10 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             const searchTo = currentParams.searchTo;
             const flightId = currentParams.flightId;
 
-            document.title = `${flightId !== undefined && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+            document.title = `${flightId !== undefined ? `${flightId} - ` : ''}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
             document.querySelector('meta[name="description"]')?.setAttribute('content', `${flightId && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`);
         }
-    }, [data]);
+    }, [data, currentParams]);
 
     
     if (!data) return null;
