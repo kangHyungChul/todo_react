@@ -1,13 +1,13 @@
 // app/api/auth/signup/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
-// import { supabaseAdmin } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/server';
 
 export const POST = async (req: NextRequest) => {
     try {
         // 1) 요청 바디 파싱
-        const { email, password, name, nickname, phone, birthday, profileImage } = await req.json();
-        console.log('email', email, 'password', password);
+        const { email, password, name, nickname, phone, birthday } = await req.json();
+        // console.log('email', email, 'password', password);
 
         // 2) 최소한의 서버단 유효성 검사
         if (typeof email !== 'string' || !email.includes('@')) {
@@ -23,6 +23,46 @@ export const POST = async (req: NextRequest) => {
             );
         }
 
+        // 2-1) 이미 가입된 이메일인지 확인
+        try {
+
+            const { data: { users }, error: userCheckError } = await supabaseAdmin.auth.admin.listUsers();
+            console.log('users', users);
+
+            if (userCheckError) {
+                console.error('사용자 목록 조회 실패:', userCheckError);
+                return NextResponse.json(
+                    { ok: false, message: '사용자 목록 조회 실패' },
+                    { status: 500 }
+                );
+            }
+
+            const existingUser = users?.find((user) => user.email === email);
+            console.log('existingUser', existingUser);
+
+            if (existingUser) {
+                if (existingUser?.email_confirmed_at) {
+                    return NextResponse.json(
+                        { ok: false, message: '이미 가입된 이메일입니다. 로그인해 주세요.' },
+                        { status: 400 }
+                    );
+                } else {
+                    return NextResponse.json(
+                        { ok: false, message: '이미 가입 신청된 이메일입니다. 이메일 인증 후 로그인해 주세요.' },
+                        { status: 400 }
+                    );
+                }
+            }
+
+        } catch (error) {
+            console.error('사용자 목록 조회 실패:', error);
+            return NextResponse.json(
+                { ok: false, message: '사용자 목록 조회 실패' },
+                { status: 500 }
+            );
+        }
+        
+
         // 3) Supabase 클라이언트 생성
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 
@@ -37,6 +77,7 @@ export const POST = async (req: NextRequest) => {
             password,
             options: { 
                 emailRedirectTo,
+                // 추가회원데이터를 메타데이터로 저장
                 data: {
                     name,
                     nickname,
@@ -47,45 +88,47 @@ export const POST = async (req: NextRequest) => {
             }
         });
 
+        if (signError) {
+            console.error('Signup error:', signError);
+            return NextResponse.json({ 
+                ok: false, 
+                message: `회원가입에 실패했습니다: ${signError.message}`
+            }, { status: 400 });
+        }
+
         // console.log('[SIGNUP]', { hasError: !!signError, userId: signData?.user?.id, msg: signError?.message });
 
-        // if (signError || !signData.user) {
-        //     // 예: 이미 가입된 이메일, 정책 위반 등
-        //     return NextResponse.json(
-        //         { ok: false, message: signError?.message },
-        //         { status: 400 }
-        //     );
-        // }
-
         // const userId = signData.user?.id;
+        const userId = signData.user?.id;
 
-        // const { data: profileData, error: profileError } = await supabaseAdmin
-        //     .from('profiles')
-        //     .upsert(
-        //         {
-        //             id: userId,
-        //             email: email || null,          // profiles.email을 유지한다면
-        //             name: name || null,
-        //             nickname: nickname || null,
-        //             phone: phone || null,
-        //             birthday: birthday || null,
-        //             // profile_image: ... (스토리지 업로드 후 URL)
-        //         },
-        //         { onConflict: 'id' }
-        //     )
-        //     .select()
-        //     .single();
+        const { data: profileData, error: profileError } = await supabaseAdmin
+            .from('profiles')
+            .upsert(
+                {
+                    id: userId,
+                    email: email || null,          // profiles.email을 유지한다면
+                    name: name || null,
+                    nickname: nickname || null,
+                    phone: phone || null,
+                    birthday: birthday || null,
+                    // profile_image: ... (스토리지 업로드 후 URL)
+                },
+                { onConflict: 'id' }
+            )
+            .select()
+            .single();
 
-        // if (profileError) {
-        //     console.error('Profile creation error:', profileError);
-        //     return NextResponse.json({ 
-        //         ok: false, 
-        //         message: `프로필 생성에 실패했습니다: ${profileError.message}`
-        //     }, { status: 400 });
-        // }
+        console.log('profileData', profileData);
+
+        if (profileError) {
+            console.error('Profile creation error:', profileError);
+            return NextResponse.json({ 
+                ok: false, 
+                message: `프로필 생성에 실패했습니다: ${profileError.message}`
+            }, { status: 400 });
+        }
         
         // 7) 성공 응답: 확인 메일 안내
-        const userId = signData.user?.id;
         return NextResponse.json(
             {
                 ok: true,

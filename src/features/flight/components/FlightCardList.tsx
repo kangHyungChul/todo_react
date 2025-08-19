@@ -7,7 +7,7 @@ import {
     FlightDepartureItemType, FlightDepartureSearchParamsType, 
     FlightType
 } from '../types/flights';
-import { useMemo, memo, useCallback, useEffect, useState } from 'react';
+import { useMemo, memo, useCallback, useEffect, useTransition } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import { useSearchParams } from 'next/navigation';
@@ -31,15 +31,17 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     
     // const flightId = resFlightData.flightId ? resFlightData.flightId : '';    
     // const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
     const searchParams = useSearchParams();
-    
+    // const queryClient = useQueryClient();
     const currentParams = useMemo(() => {
         const params = searchParams;
         return params.size > 0 ? parseSearchParamsToObject(searchParams.toString()) : queryParams; // 초기 로드 시 URL에 파라미터가 없으면 서버에서 받은 props를 사용합니다.
     }, [searchParams, queryParams]);
 
 
-    const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
+    // const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
 
     // 변경/확인: 최초 1회만 URL 채우기 (문자열 비교만 사용)
     // const bootedRef = useRef(false);
@@ -78,6 +80,8 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             }
         },
         placeholderData: (prev) => prev,
+        staleTime: 1000 * 10, // 10초
+        gcTime: 1000 * 20, // 20초
     });
 
     // useEffect(() => {
@@ -87,19 +91,26 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     const updateParams = useCallback((
         newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType
     ) => {
-        const prevStr = parseSearchParams(params);
+        // const prevStr = parseSearchParams(params);
         const nextStr = parseSearchParams(newParams);
 
-        if (prevStr === nextStr) {
-            refetch();
-            return;
-        }
+        // if (prevStr === nextStr) {
+        //     console.log('refetching...');
+        //     refetch();
+        //     return;
+        // }
 
-        history.pushState(null, '', `?${nextStr}`);
-        setParams(newParams);
-    }, [params]);
+        startTransition(() => {
+            history.pushState(null, '', `?${nextStr}`);
+        });
+
+        // history.pushState(null, '', `?${nextStr}`);
+        // setParams(newParams);
+        // queryClient.invalidateQueries({ queryKey: ['flight', type] });
+    }, []);
 
     const refetchParams = useCallback(() => {
+        console.log('refetching...');
         refetch();
     }, [refetch]);
 
@@ -141,12 +152,14 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     //     setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
     // }, [resFlightData, setLoadingState]);
 
+    const displayIsLoading = isLoading || isFetching || isPending;
+
     return (
         <>
-            { `isLoading: ${isLoading}` }, { `isFetching: ${isFetching}` }
+            {/* { `isLoading: ${isLoading}` }, { `isFetching: ${isFetching}` }, { `isPending: ${isPending}` } */}
             <FlightTab />
 
-            <FlightSearchForm queryParams={currentParams} updateParams={updateParams} isLoading={isLoading} isFetching={isFetching} />
+            <FlightSearchForm queryParams={currentParams} updateParams={updateParams} displayIsLoading={displayIsLoading} />
 
             <h2 className="text-2xl font-bold mb-4 text-center">{`${title} - ${totalCount}건`}</h2>
             <p className="text-center mb-4">
@@ -154,12 +167,12 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             </p>
 
             <div className="flex justify-between gap-4">
-                <FlightRefresh queryParams={currentParams} isFetching={isFetching} isLoading={isLoading} refetchParams={refetchParams} />
-                <FlightReset isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
+                <FlightRefresh displayIsLoading={displayIsLoading} refetchParams={refetchParams} />
+                <FlightReset displayIsLoading={displayIsLoading} updateParams={updateParams} />
             </div>
 
             {
-                isFetching || isLoading ? (
+                displayIsLoading ? (
                     <ul className="flex flex-col gap-4">
                         <FlightCardLayout>
                             <div className="w-full flex flex-col justify-center items-center gap-2">

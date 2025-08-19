@@ -14,12 +14,10 @@ import Button from '@/components/common/Button';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightReset = ({ 
-    isFetching, 
-    isLoading, 
+    displayIsLoading, 
     updateParams 
 }: { 
-    isFetching: boolean, 
-    isLoading: boolean, 
+    displayIsLoading: boolean, 
     updateParams: (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => void 
 }) => {
     
@@ -65,7 +63,7 @@ const FlightReset = ({
         //     // router.push는 비동기적으로 작동하므로 로딩 상태를 유지
         //     router.push(`/flight?searchDate=${refreshSearchDate}&searchFrom=${refreshSearchFrom}&searchTo=${refreshSearchTo}&pageNo=${refreshPageNo}`);
         //     // router.refresh();
-            
+
         //     // 로딩 상태는 useEffect에서 새로운 데이터가 도착할 때 해제됨
         //     // 여기서 setIsLoading(false)를 제거하여 로딩 상태 유지
 
@@ -76,8 +74,8 @@ const FlightReset = ({
     };
 
     return (
-        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={isLoading || isFetching}>
-            {isLoading || isFetching ? '조회중...' : '초기화'}
+        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={displayIsLoading}>
+            {displayIsLoading ? '조회중...' : '초기화'}
         </Button>
     );
 };

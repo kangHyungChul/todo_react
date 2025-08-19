@@ -1,10 +1,10 @@
 'use client';
 
 // import { fetchArrivalFlights } from '../services/flightApi';
-import { 
-    FlightArrivalSearchParamsType,
-    FlightDepartureSearchParamsType
-} from '../types/flights';
+// import { 
+//     FlightArrivalSearchParamsType,
+//     FlightDepartureSearchParamsType
+// } from '../types/flights';
 // import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
@@ -13,14 +13,12 @@ import Button from '@/components/common/Button';
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightRefresh = ({ 
-    queryParams, 
-    isFetching, 
-    isLoading,
-    refetchParams
+    // queryParams, 
+    displayIsLoading,
+    refetchParams,
 }: { 
-    queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, 
-    isFetching: boolean,
-    isLoading: boolean, 
+    // queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, 
+    displayIsLoading: boolean, 
     refetchParams: () => void 
 }) => {
     
@@ -28,7 +26,7 @@ const FlightRefresh = ({
     // const router = useRouter();
 
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
-    // const { FlightSearch } = useFlightSearch();
+    // const { FlightSearch } = useFlightSearch();  
     // const { isLoading } = useFlightStore();
     // const searchDate = queryParams.searchDate;
     // const searchFrom = queryParams.searchFrom;
@@ -91,8 +89,8 @@ const FlightRefresh = ({
     };
 
     return (
-        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={isLoading || isFetching}>
-            {isLoading || isFetching ? '조회중...' : '새로고침'}
+        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={displayIsLoading}>
+            {displayIsLoading ? '조회중...' : '새로고침'}
         </Button>
     );
 };

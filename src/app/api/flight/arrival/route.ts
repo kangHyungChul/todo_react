@@ -78,9 +78,9 @@ const GET = async (request: NextRequest) => {
 
         const res = await fetch(`${url}?${body.toString()}`, {
             method: 'GET',
-            next: {
-                revalidate: 10,
-            }
+            // next: {
+            //     revalidate: 10,
+            // }
         });
 
         if (!res.ok) {

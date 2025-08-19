@@ -14,13 +14,11 @@ import {
 
 const FlightSearchForm = ({ 
     queryParams, 
-    isLoading, 
-    isFetching, 
+    displayIsLoading, 
     updateParams 
 }: { 
     queryParams: FlightArrivalType | FlightDepartureType, 
-    isLoading: boolean, 
-    isFetching: boolean, 
+    displayIsLoading: boolean, 
     updateParams: (newParams: FlightArrivalType | FlightDepartureType) => void 
 }) => {
     // const router = useRouter();
@@ -87,15 +85,15 @@ const FlightSearchForm = ({
                 </div> */}
                 <div className="flex items-center gap-3">
                     <label htmlFor="searchFrom">조회범위(시작시간)</label>
-                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={isLoading || isFetching}/>
+                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={displayIsLoading}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchTo">조회범위(종료시간)</label>
-                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={isLoading || isFetching}/>
+                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={displayIsLoading}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchFlightNo">편명</label>
-                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={isLoading || isFetching}/>
+                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={displayIsLoading}/>
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                     <label htmlFor="searchNumOfRows">표시수</label>
@@ -103,7 +101,7 @@ const FlightSearchForm = ({
                         id="searchNumOfRows"
                         value={searchNumOfRows}
                         onChange={(e) => setSearchNumOfRows(e.target.value)}
-                        disabled={isLoading || isFetching}
+                        disabled={displayIsLoading}
                     >
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -113,7 +111,7 @@ const FlightSearchForm = ({
                     </Select>
                 </div>
                 <div className="mt-4">
-                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={isLoading || isFetching}>검색</Button>
+                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={displayIsLoading}>검색</Button>
                 </div>
             </form>
         </div>

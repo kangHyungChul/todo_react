@@ -29,8 +29,8 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     const queryParams: FlightArrivalType | FlightDepartureType = {
         // pageNo, numOfRows, searchDate, searchFrom, searchTo는 항상 포함
         ...(getFlightId ? { flightId: getFlightId } : {}),
-        pageNo: getPageNo,
         numOfRows: getNumOfRows,
+        pageNo: getPageNo,
         searchDate: getSearchDate,
         searchFrom: getSearchFrom,
         searchTo: getSearchTo,
@@ -55,7 +55,9 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
             } else {
                 return fetchDepartureFlights(queryParams);
             }
-        }
+        },
+        staleTime: 1000 * 10, // 10초
+        gcTime: 1000 * 20, // 20초
     });
     
     // console.log('FlightSection queryParams:', queryParams);

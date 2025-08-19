@@ -31,7 +31,7 @@ const AuthForm = () => {
         console.log('entries:', [...fd.entries()]);
 
         // 파일은 필요 시 이렇게 꺼냅니다.
-        const file = fd.get('profileImage');
+        // const file = fd.get('profileImage');
 
         const nextState: AuthFormData = {
             email: String(fd.get('email') ?? ''),
@@ -57,8 +57,8 @@ const AuthForm = () => {
 
             // 응답 데이터를 반환 (기존 로직 유지)
             return response.data;
-        } catch (error: any) {
-            const message = error.response.data.message;
+        } catch (error) {
+            const message = axios.isAxiosError(error) ? error.response?.data?.message || '회원가입 중 오류가 발생했습니다' : '알 수 없는 오류가 발생했습니다';
             alert(`${message}`);
         }
     };
