@@ -30,7 +30,7 @@ const AuthForm = () => {
         // 디버깅용: 실제 들어온 폼 쌍들
         console.log('entries:', [...fd.entries()]);
 
-        // 파일은 필요 시 이렇게 꺼냅니다.
+        // 파일은 필요 시
         // const file = fd.get('profileImage');
 
         const nextState: AuthFormData = {
@@ -41,12 +41,12 @@ const AuthForm = () => {
             phone: String(fd.get('phone') ?? ''),
             birthday: String(fd.get('birthday') ?? ''),
             // profileImage를 문자열로 유지한다면 서버에서 따로 처리
-            // File로 다루려면 AuthFormData 타입을 변경하세요.
+            // File로 다루려면 AuthFormData 타입을 변경
             profileImage: fd.get('profileImage') as File | null,
         };
 
         try {
-            // axios를 통해 회원가입 요청을 보낸 후, 응답 status가 200(정상)일 경우 페이지 이동을 처리합니다.
+            // axios를 통해 회원가입 요청을 보낸 후, 응답 status가 200(정상)일 경우 페이지 이동
             const response = await axios.post('/api/auth/signup', nextState);
             // console.log('response', response);
 
