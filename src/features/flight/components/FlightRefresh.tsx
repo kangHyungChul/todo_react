@@ -15,13 +15,13 @@ import Button from '@/components/common/Button';
 const FlightRefresh = ({ 
     queryParams, 
     isFetching, 
-    isLoading, 
-    updateParams 
+    isLoading,
+    refetchParams
 }: { 
     queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, 
     isFetching: boolean,
     isLoading: boolean, 
-    updateParams: (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => void 
+    refetchParams: () => void 
 }) => {
     
     // 라우터 인스턴스 생성
@@ -30,12 +30,12 @@ const FlightRefresh = ({
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
     // const { FlightSearch } = useFlightSearch();
     // const { isLoading } = useFlightStore();
-    const searchDate = queryParams.searchDate;
-    const searchFrom = queryParams.searchFrom;
-    const searchTo = queryParams.searchTo;
-    const numOfRows = queryParams.numOfRows ? queryParams.numOfRows.toString() : '30';
-    const pageNo = queryParams.pageNo ? queryParams.pageNo.toString() : '1';
-    const flightId = queryParams.flightId ? queryParams.flightId : '';
+    // const searchDate = queryParams.searchDate;
+    // const searchFrom = queryParams.searchFrom;
+    // const searchTo = queryParams.searchTo;
+    // const numOfRows = queryParams.numOfRows ? queryParams.numOfRows.toString() : '30';
+    // const pageNo = queryParams.pageNo ? queryParams.pageNo.toString() : '1';
+    // const flightId = queryParams.flightId ? queryParams.flightId : '';
 
     // const { 
     //     flightData, totalCount, pageNo, numOfRows, searchDate, searchFrom, searchTo, 
@@ -50,15 +50,15 @@ const FlightRefresh = ({
     const handleRefresh = () => {
 
         // FlightArrivalSearch 함수를 올바르게 호출
-        const newParams = {
-            searchDate: searchDate,
-            searchFrom: searchFrom,
-            searchTo: searchTo,
-            flightId: flightId ?? '',
-            numOfRows: numOfRows,
-            pageNo: pageNo,
-        };
-        updateParams(newParams);
+        // const newParams = {
+        //     searchDate: searchDate,
+        //     searchFrom: searchFrom,
+        //     searchTo: searchTo,
+        //     flightId: flightId ?? '',
+        //     numOfRows: numOfRows,
+        //     pageNo: pageNo,
+        // };
+        refetchParams();
         // FlightSearch({
         //     searchDate: searchDate,
         //     searchFrom: searchFrom,

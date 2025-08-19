@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { supabaseAdmin } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 
 export const metadata: Metadata = {
     title: 'Signup Complete',
@@ -8,14 +8,10 @@ export const metadata: Metadata = {
 };
 
 const getEmailByUserId = async (userId: string): Promise<string | null> => {
-    'use server';
 
     // profiles 테이블에서 id로 이메일 조회
-    const { data, error } = await supabaseAdmin
-        .from('profiles') // profiles 테이블에
-        .select('email')  // email 컬럼만 선택
-        .eq('id', userId) // id가 userId와 일치하는 행만 필터링
-        .single();        // 결과가 단일 행임을 명시 (없거나 여러개면 에러)
+    const { data, error } = await supabase.auth.getUser(userId);
+    console.log('data', data);
 
     if (error) {
         // 에러 발생 시 콘솔에 출력하고 null 반환
@@ -24,7 +20,7 @@ const getEmailByUserId = async (userId: string): Promise<string | null> => {
     }
 
     // 정상적으로 조회되면 이메일 반환
-    return data?.email ?? null;
+    return data?.user?.email ?? null;
 }
 
 const Complete = async ({ params }: { params: Promise<{ id: string }> }) => {

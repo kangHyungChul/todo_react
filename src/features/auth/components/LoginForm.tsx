@@ -6,8 +6,8 @@ const LoginForm = () => {
         <div className="w-sm flex flex-col gap-8 items-center mx-auto justify-center h-screen">
             <h1 className="text-2xl font-bold">Login</h1>
             <form className="w-full flex flex-col gap-2 items-center justify-center">
-                <Input type="text" placeholder="ID" sizes="large" />
-                <Input type="password" placeholder="Password" sizes="large" />
+                <Input type="text" placeholder="ID" sizes="large" autoComplete="username" />
+                <Input type="password" placeholder="Password" sizes="large" autoComplete="current-password" />
                 <Button variant="primary" sizes="large" type="submit" className="w-full">Login</Button>
             </form>
         </div>

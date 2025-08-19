@@ -7,7 +7,7 @@ import {
     FlightDepartureItemType, FlightDepartureSearchParamsType, 
     FlightType
 } from '../types/flights';
-import { useMemo, memo, useCallback, useEffect } from 'react';
+import { useMemo, memo, useCallback, useEffect, useState } from 'react';
 import { funcTimeToHHMMReverse, funcDateTimeToType } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import { useSearchParams } from 'next/navigation';
@@ -27,7 +27,7 @@ import FlightTab from './FlightTab';
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
 
-    console.log('queryParams:', queryParams);
+    // console.log('queryParams:', queryParams);
     
     // const flightId = resFlightData.flightId ? resFlightData.flightId : '';    
     // const router = useRouter();
@@ -35,11 +35,11 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     
     const currentParams = useMemo(() => {
         const params = searchParams;
-        return params.size > 0 ? parseSearchParamsToObject(searchParams.toString()) : queryParams; // 초기 로드 시 URL에 파라미터가 없으면 서버에서 받은 props를 사용
+        return params.size > 0 ? parseSearchParamsToObject(searchParams.toString()) : queryParams; // 초기 로드 시 URL에 파라미터가 없으면 서버에서 받은 props를 사용합니다.
     }, [searchParams, queryParams]);
 
 
-    // const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
+    const [params, setParams] = useState<FlightArrivalSearchParamsType | FlightDepartureSearchParamsType>(queryParams);
 
     // 변경/확인: 최초 1회만 URL 채우기 (문자열 비교만 사용)
     // const bootedRef = useRef(false);
@@ -68,7 +68,7 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     //     return parseSearchParamsToObject(currStr) as FlightArrivalSearchParamsType | FlightDepartureSearchParamsType;
     // }, [searchParams, queryParams]);
 
-    const { data, isFetching, isLoading } = useQuery({
+    const { data, isFetching, isLoading, refetch } = useQuery({
         queryKey: ['flight', type, currentParams],
         queryFn: () => {
             if(type === 'arrival') {
@@ -87,22 +87,21 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     const updateParams = useCallback((
         newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType
     ) => {
-        // const prevStr = parseSearchParams(currentParams);
+        const prevStr = parseSearchParams(params);
         const nextStr = parseSearchParams(newParams);
 
-        // console.log('prevStr:', prevStr);
-        // console.log('nextStr:', nextStr);
-        // console.log('prevStr === nextStr:', prevStr === nextStr);
-
-        // if (prevStr === nextStr) {
-        //     console.log('refetch');
-        //     refetch();
-        //     return;
-        // }
+        if (prevStr === nextStr) {
+            refetch();
+            return;
+        }
 
         history.pushState(null, '', `?${nextStr}`);
-        // console.log('params:', params);
-    }, []);
+        setParams(newParams);
+    }, [params]);
+
+    const refetchParams = useCallback(() => {
+        refetch();
+    }, [refetch]);
 
     useEffect(() => {
         if (data) {
@@ -155,7 +154,7 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             </p>
 
             <div className="flex justify-between gap-4">
-                <FlightRefresh queryParams={currentParams} isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
+                <FlightRefresh queryParams={currentParams} isFetching={isFetching} isLoading={isLoading} refetchParams={refetchParams} />
                 <FlightReset isFetching={isFetching} isLoading={isLoading} updateParams={updateParams} />
             </div>
 

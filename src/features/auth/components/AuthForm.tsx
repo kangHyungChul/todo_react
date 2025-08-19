@@ -79,13 +79,13 @@ const AuthForm = () => {
         <div className="w-sm flex flex-col gap-8 items-center mx-auto justify-center h-screen">
             <h1 className="text-2xl font-bold">Signup</h1>
             <form className="w-full flex flex-col gap-2 items-center justify-center" action={formAction}>
-                <Input type="email" placeholder="Email" sizes="large" name="email" required value={formData.email} onChange={handleChange} disabled={isPending} />
-                <Input type="password" placeholder="Password" sizes="large" name="password" required value={formData.password} onChange={handleChange} disabled={isPending} />
-                <Input type="password" placeholder="Password Confirm" sizes="large" name="passwordConfirm" required value={formData.passwordConfirm} onChange={handleChange} disabled={isPending} />
-                <Input type="text" placeholder="Name" sizes="large" name="name" required value={formData.name} onChange={handleChange} disabled={isPending} />
-                <Input type="text" placeholder="Nickname" sizes="large" name="nickname" required value={formData.nickname} onChange={handleChange} disabled={isPending} />
-                <Input type="tel" placeholder="Phone" sizes="large" name="phone" required value={formData.phone} onChange={handleChange} disabled={isPending} />
-                <Input type="date" placeholder="Birthday" sizes="large" name="birthday" value={formData.birthday} onChange={handleChange} disabled={isPending} />
+                <Input type="email" placeholder="Email" sizes="large" name="email" required value={formData.email} onChange={handleChange} disabled={isPending} autoComplete="username" />
+                <Input type="password" placeholder="Password" sizes="large" name="password" required value={formData.password} onChange={handleChange} disabled={isPending} autoComplete="new-password" />
+                <Input type="password" placeholder="Password Confirm" sizes="large" name="passwordConfirm" required value={formData.passwordConfirm} onChange={handleChange} disabled={isPending} autoComplete="new-password" />
+                <Input type="text" placeholder="Name" sizes="large" name="name" required value={formData.name} onChange={handleChange} disabled={isPending} autoComplete="name" />
+                <Input type="text" placeholder="Nickname" sizes="large" name="nickname" required value={formData.nickname} onChange={handleChange} disabled={isPending} autoComplete="nickname" />
+                <Input type="tel" placeholder="Phone" sizes="large" name="phone" required value={formData.phone} onChange={handleChange} disabled={isPending} autoComplete="tel" />
+                <Input type="date" placeholder="Birthday" sizes="large" name="birthday" value={formData.birthday} onChange={handleChange} disabled={isPending} autoComplete="bday" />
                 <Input type="file" placeholder="Profile Image" sizes="large" name="profileImage" onChange={handleChange} disabled={isPending} />
                 <Button variant="primary" sizes="large" type="submit" className="w-full">Signup</Button>
                 {isPending ? <p>Loading...</p> : <p>{state?.email}</p>}
