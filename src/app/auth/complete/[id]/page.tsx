@@ -1,35 +1,21 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseAdmin } from '@/lib/supabase/client';
 
 export const metadata: Metadata = {
     title: 'Signup Complete',
     description: 'Signup Complete',
 };
 
-// Supabase에서 userId로 이메일을 조회하는 코드를 작성해야 합니다.
-// 1. 서버 컴포넌트에서 Supabase 클라이언트를 생성하고, userId로 profiles 테이블에서 이메일을 조회합니다.
-// 2. 이 코드는 서버 컴포넌트에서만 동작해야 하므로, 클라이언트 컴포넌트에서는 사용할 수 없습니다.
-// 3. 환경변수에서 Supabase URL과 Service Key를 가져와야 하며, 클라이언트 키(anon key)는 사용하지 않습니다.
-// 4. 아래 코드는 실제로 DB에서 이메일을 조회하는 예시입니다.
-
-
 const getEmailByUserId = async (userId: string): Promise<string | null> => {
     'use server';
 
-    // 환경변수에서 Supabase URL과 Service Key를 가져옵니다.
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-    // Supabase 서비스 키로 관리자 권한 클라이언트 생성
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
     // profiles 테이블에서 id로 이메일 조회
-    const { data, error } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('id', userId)
-        .single();
+    const { data, error } = await supabaseAdmin
+        .from('profiles') // profiles 테이블에
+        .select('email')  // email 컬럼만 선택
+        .eq('id', userId) // id가 userId와 일치하는 행만 필터링
+        .single();        // 결과가 단일 행임을 명시 (없거나 여러개면 에러)
 
     if (error) {
         // 에러 발생 시 콘솔에 출력하고 null 반환
@@ -41,8 +27,9 @@ const getEmailByUserId = async (userId: string): Promise<string | null> => {
     return data?.email ?? null;
 }
 
-const Complete = async ({ params }: { params: { id: string } }) => {
-    const email = await getEmailByUserId(params.id);
+const Complete = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
+    const email = await getEmailByUserId(id);
     return (
         <div className="w-sm flex flex-col gap-8 items-center mx-auto justify-center h-screen">
             <h1 className="text-2xl font-bold">Signup Complete</h1>
