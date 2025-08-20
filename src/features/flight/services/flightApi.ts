@@ -133,7 +133,7 @@ const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
     }
 };
 
-const fetchFlightTrack = async ( flightReg: string ) => {
+const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
     
     try {
         // // flights 데이터를 query parameter로 전달
@@ -141,24 +141,45 @@ const fetchFlightTrack = async ( flightReg: string ) => {
         //     flights: flights
         // }).toString();
 
-        console.log('flightReg:', `${path()}/api/flight/tracker?flightReg=${flightReg}`);
+        // console.log('🚀 fetchFlightTrack 요청 시작:', flightReg);
 
-        const res = await fetch(`${path()}/api/flight/tracker?flightReg=${flightReg}`, {
-            method: 'GET',
-            cache: 'no-store',
-            // signal: signal?.signal
+        const axiosInstance = axios.create({
+            baseURL: path(),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const res = await axiosInstance.get('/api/flight/tracker', {
+            params: {
+                flightReg: flightReg
+            },
+            signal: signal
         });
 
-        if (!res.ok) {
-            throw new Error(`Failed to fetch flight track: ${res.status} ${res.statusText}`);
+        if (res.status !== 200) {
+            console.error('API Response Error fetching flight track:', res.status, res.statusText);
+            throw new Error(`API Response Error fetching flight track: ${res.status} ${res.statusText}`);
         }
 
-        const data = await res.json();
-        return data;
+        return res.data;
 
     } catch (error) {
-        console.error('Error fetching flight track:', error);
-        throw error;
+
+        if(axios.isAxiosError(error)) {
+            if (error.code === 'ERR_CANCELED') {
+                console.warn('API warn: fetchFlightTrack is canceled: unmounted');
+                return;
+            }
+            console.error('API Error fetching flight track:', error.response?.data);
+            throw new Error(`API Error fetching flight track: ${error.response?.status} ${error.response?.statusText}`);
+        } else {
+            console.error('Unknown Error fetching flight track:', error);
+            throw new Error(`Unknown Error fetching flight track: ${error}`);
+        }
+
+        // console.error('Error fetching flight track:', error);
+        // throw error;
     }
 };
 

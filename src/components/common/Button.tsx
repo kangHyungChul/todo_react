@@ -41,7 +41,7 @@ const setButtonStyle = (variant: string, outline: boolean) => {
             return `
                 border-danger hover:border-danger/80 focus:border-danger/80 focus-visible:border-danger/80
                 ${outline ? 
-                    'bg-danger text-white hover:bg-danger/80 focus:bg-danger/80' : 
+                    'bg-white text-danger hover:bg-danger/10 focus:bg-danger/10' : 
                     'bg-danger text-white hover:bg-danger/80 focus:bg-danger/80'
                 }
             `;
@@ -77,7 +77,7 @@ const setButtonClasses = (variant: string, sizes: string, outline: boolean) => {
     //     return `${baseClasses} ${disabledClasses} ${setButtonSize(size)} cursor-not-allowed`;
     // }
     
-    return cn(baseClasses, setButtonStyle(variant, outline), setButtonSize(sizes), disabledClasses);
+    return `${baseClasses} ${setButtonStyle(variant, outline)} ${setButtonSize(sizes)} ${disabledClasses}`;
     
 };
 

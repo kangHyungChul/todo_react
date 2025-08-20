@@ -29,20 +29,30 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
         googleMapsApiKey: 'AIzaSyDiXtbbv1lNaJNMmgcyIl6RRb4cirSBSFs',
     });
 
-    const { data: flightTrackData, isFetching } = useQuery({
+    const { data: flightTrackData, isFetching, error } = useQuery({
         queryKey: ['flight-tracker', flightReg],
-        queryFn: () => fetchFlightTrack(flightReg),
+        queryFn: ({ signal }) => fetchFlightTrack(flightReg, signal),
         staleTime: 1000 * 10, // 10초
         enabled: !!flightReg // flightReg이 있을 때만 쿼리 실행
     });
 
     useEffect(() => {
+
+        // 위치 데이터가 없는 경우 처리
+        if (!flightTrackData || flightTrackData.states === null || error) {
+            alert('위치조회가 불가능한 항공기입니다');
+            closeModal();
+            return;
+        }
+
         if (flightTrackData) {
             try {
                 // const resFlightTrack = flightTrackData;
 
                 // console.log('resFlightTrack:', resFlightTrack);
-                
+
+                console.log('flightTrackData:', flightTrackData);
+
                 // 위치 데이터가 없는 경우 처리
                 if (!flightTrackData || flightTrackData.states === null) {
                     alert('위치조회가 불가능한 항공기입니다');
