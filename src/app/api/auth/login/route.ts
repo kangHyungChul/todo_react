@@ -1,7 +1,7 @@
 // app/api/auth/signup/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
-import { supabaseAdmin } from '@/lib/supabase/server';
+// import { supabaseAdmin } from '@/lib/supabase/server';
 
 export const POST = async (req: NextRequest) => {
     try {

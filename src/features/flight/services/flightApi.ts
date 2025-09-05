@@ -183,5 +183,70 @@ const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
     }
 };
 
+const fetchFlightDetail = async (responseBody: string) => {
 
-export { fetchArrivalFlights, fetchDepartureFlights, fetchFlightTrack };
+    try {
+
+        const axiosInstance = axios.create({
+            baseURL: path(),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        const res = await axiosInstance.get('/api/flight/detail', {
+            params: {
+                fid: responseBody,
+            },
+        });
+        
+        // 200 이 아니면 에러처리
+        // catch는 2xx범위 아닐때만 애러로 블록 이외에는 try블록
+        if (res.status !== 200) {
+            throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
+        }
+
+        const data = res.data.items[0];
+
+        if (!data) {
+            throw new Error(`no data: ${res.status} ${res.statusText}`);
+        }
+        
+        return data;
+        
+        // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
+
+        // const res = await fetch(`${path()}/api/flight/arrival?${params}`, {
+        //     method: 'GET',
+        //     cache: 'no-store',
+        // });
+
+        // if (!res.ok) {
+        //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
+        // }
+
+        // try {
+        //     const data = await res.json();
+        //     return data;
+        // } catch (error) {
+        //     const data = await res.text();
+        //     console.error('JSON Parse Error:', error);
+        //     throw new Error(`Failed to parse API response: ${data}`);
+        // }
+
+    } catch (error) {
+        if(axios.isAxiosError(error)) {
+            console.error('Error fetching flights:', error.response?.data);
+            throw new Error(`Failed to fetch flight information: ${error.response?.status} ${error.response?.statusText}`);
+        } else {
+            console.error('Error fetching flights:', error);
+            throw new Error(`Failed to fetch flight information: ${error}`);
+        }
+        // console.error('Error fetching flights:', error);
+        // throw error;
+    }
+};
+
+
+
+export { fetchArrivalFlights, fetchDepartureFlights, fetchFlightTrack, fetchFlightDetail };

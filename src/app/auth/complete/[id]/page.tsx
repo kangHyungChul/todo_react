@@ -30,7 +30,7 @@ const getEmailByUserId = async (userId: string): Promise<string | null> => {
         return null;
     }
 
-}
+};
 
 const Complete = async ({ params }: { params: Promise<{ id: string }> }) => {
 

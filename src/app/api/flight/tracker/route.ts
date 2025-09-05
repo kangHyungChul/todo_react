@@ -60,8 +60,8 @@ const GET = async (request: NextRequest) => {
             tokenResponse.json(),
         ]);
 
-        console.log('icao24:', icao24Data);
-        console.log('tokenData:', tokenData);
+        // console.log('icao24:', icao24Data);
+        // console.log('tokenData:', tokenData);
 
         if(!icao24Response.ok || !tokenResponse.ok) {
             return NextResponse.json({ error: 'Failed to fetch flight information' }, { status: 500 });
@@ -70,8 +70,8 @@ const GET = async (request: NextRequest) => {
         const icao24 = icao24Data[0].hexIcao.toLowerCase();
         const accessToken = tokenData.access_token;
 
-        console.log('icao24:', icao24);
-        console.log('accessToken:', accessToken);
+        // console.log('icao24:', icao24);
+        // console.log('accessToken:', accessToken);
 
         // const icao24Response = await fetch(`https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, {
         //     method: 'GET',

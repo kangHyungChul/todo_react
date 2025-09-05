@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { fetchArrivalFlights, fetchDepartureFlights } from './services/flightApi';
@@ -90,7 +91,9 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
         <div className="mx-auto my-6 max-w-[600px]">
             <HydrationBoundary state={dehydrate(queryClient)}>
                 {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}
-                <FlightCardList queryParams={queryParams} type={type} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <FlightCardList queryParams={queryParams} type={type} />
+                </Suspense>
                 {/* {resFlightData && <FlightCardList resFlightData={resFlightData} type={type} />} */}
             </HydrationBoundary>
         </div>

@@ -6,6 +6,7 @@ import useModalStore from '@/store/ModalStore';
 import FlightDetailModal from './FlightDetailModal';
 import FlightTrackModal from '../FlightTrackModal';
 import Button from '@/components/common/Button';
+import Link from 'next/link';
 import { funcDateTimeToType } from '@/lib/utils/dateTime';
 import { memo } from 'react';
 
@@ -49,6 +50,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                     <div className="mt-2 flex gap-4">
                         {/* <Button style="secondary" onClick={() => openModalContext(<FlightDetailModal flight={flight} />)}>useContext</Button> */}
                         <Button variant="primary" onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button>
+                        <Link href={`/flight/detail/${flight.fid}`}>상세페이지</Link>
                         {
                             (
                                 (flight.remark === null || flight.remark === '지연') && (

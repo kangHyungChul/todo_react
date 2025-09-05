@@ -41,7 +41,6 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
 
     useEffect(() => {
 
-
         // 위치 데이터가 없는 경우 처리
         if (error) {
             alert('위치조회가 불가능한 항공기입니다');
@@ -54,6 +53,8 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
                 // const resFlightTrack = flightTrackData;
 
                 // console.log('resFlightTrack:', resFlightTrack);
+
+                console.log('flightTrackData:', flightTrackData);
 
                 // 위치 데이터가 없는 경우 처리
                 if (!flightTrackData || flightTrackData.states === null) {
@@ -77,7 +78,7 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
                 closeModal();
             }
         }
-    }, [flightTrackData, closeModal, error]);
+    }, [flightTrackData, error, closeModal]);
 
     // const getFlightTrack = useCallback(async() => {
     //     try {
