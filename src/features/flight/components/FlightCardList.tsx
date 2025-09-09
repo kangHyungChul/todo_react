@@ -1,6 +1,7 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { 
     // import { fetchArrivalFlights } from '../services/flightApi';
     FlightArrivalItemType, FlightArrivalSearchParamsType, 
@@ -127,11 +128,6 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     }, [data, currentParams]);
 
     
-    if (!data) return null;
-    const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = data;
-    
-    const title = type === 'arrival' ? '도착조회' : '출발조회';
-
     // const { 
         //     setBulkState
         // } = useFlightState(resFlightData);
@@ -152,7 +148,15 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
     //     setLoadingState(false); // 새로운 데이터가 도착했을 때만 로딩 상태 해제
     // }, [resFlightData, setLoadingState]);
 
+    if (!data) return null;
+    // const flightData = data?.items || [];
+    // const totalCount = data?.totalCount || 0;
+    // const searchDate = data?.searchDate || currentParams.searchDate;
+    // const searchFrom = data?.searchFrom || currentParams.searchFrom;
+    // const searchTo = data?.searchTo || currentParams.searchTo;
+    const { items: flightData, totalCount, searchDate, searchFrom, searchTo } = data;
     const displayIsLoading = isLoading || isFetching || isPending;
+    const title = type === 'arrival' ? '도착조회' : '출발조회';
 
     return (
         <>

@@ -23,7 +23,7 @@ export interface FlightDepartureItemType {
     codeshare: string; // 코드쉐어
     chkinRange: string // 체크인카운터
     estimatedDatetime: string; // 출발발변경시간
-    fid: string; // 항공편번호
+    fid: string; // 항공편ID(무작위생성)
     flightId: string; // 항공편번호
     fstandPosition: string; // 주기장위치
     gateNumber: string; // 게이트번호
@@ -84,7 +84,7 @@ export interface FlightArrivalItemType {
     codeshare: string; // 코드쉐어
     estimatedDatetime: string; // 출발발변경시간
     exitNumber: string; // 출구번호
-    fid: string; // 항공편번호
+    fid: string; // 항공편ID(무작위생성)
     flightId: string; // 항공편번호
     fstandPosition: string; // 주기장위치치
     gateNumber: string; // 게이트번호

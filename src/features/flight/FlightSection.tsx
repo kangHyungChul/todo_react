@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { fetchArrivalFlights, fetchDepartureFlights } from './services/flightApi';
@@ -44,8 +43,15 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     // 서버에서 데이터 가져오기 - 에러 핸들링 추가
     // let queryParams: FlightArrivalResponseType | FlightDepartureResponseType | null = null;
     
-    // react-query 마이그레이션 적용용
-    const queryClient = new QueryClient();
+    // react-query 마이그레이션 적용
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                staleTime: 1000 * 10, // 서버용: 10초  
+                gcTime: 1000 * 20,    // 서버용: 20초
+            }
+        }
+    });
     
     await queryClient.prefetchQuery({
         queryKey: ['flight', type, queryParams], // queryParams 값이 바뀌면 쿼리키가 달라져서 새로운 데이터를 요청함
@@ -57,8 +63,8 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
                 return fetchDepartureFlights(queryParams);
             }
         },
-        staleTime: 1000 * 10, // 10초
-        gcTime: 1000 * 20, // 20초
+        // staleTime: 1000 * 10, // 10초
+        // gcTime: 1000 * 20, // 20초
     });
     
     // console.log('FlightSection queryParams:', queryParams);
@@ -91,9 +97,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
         <div className="mx-auto my-6 max-w-[600px]">
             <HydrationBoundary state={dehydrate(queryClient)}>
                 {/* 클라이언트 컴포넌트에 서버에서 가져온 데이터 전달 */}
-                <Suspense fallback={<div>Loading...</div>}>
-                    <FlightCardList queryParams={queryParams} type={type} />
-                </Suspense>
+                <FlightCardList queryParams={queryParams} type={type} />
                 {/* {resFlightData && <FlightCardList resFlightData={resFlightData} type={type} />} */}
             </HydrationBoundary>
         </div>

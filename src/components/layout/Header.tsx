@@ -17,11 +17,11 @@ const Header = () => {
     // };
 
     return (
-        <header className="flex items-center justify-center p-5 border-b-1 border-gray-200 border-gray-300">
-            <h1 className="text-2xl font-bold text-center"><Link href="/">FLIGHT TRACKER</Link></h1>
-            {/* <nav className="text-right">
-                <Link href="#" className="text-sm text-gray-500">Login</Link>
-            </nav> */}
+        <header className="flex items-center justify-center p-5 border-b-1 border-gray-300">
+            <h1 className="text-2xl font-bold text-center mx-auto"><Link href="/">FLIGHT TRACKER</Link></h1>
+            <nav className="text-right">
+                <Link href="/auth/login" className="text-sm text-gray-500">Login</Link>
+            </nav>
         </header>
     );
 

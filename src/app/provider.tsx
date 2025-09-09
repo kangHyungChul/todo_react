@@ -13,7 +13,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                 refetchOnWindowFocus: false, // 포커스 시 불필요한 재조회 방지
                 refetchOnReconnect: true, // 네트워크 복구 시 최신화
                 staleTime: 1000 * 30, // 캐싱시간 30초 간 fresh상태 / 이 시간 동안은 캐시된 데이터를 사용
-                gcTime: 1000 * 60, // 3분 캐시 후 메모리 제거
+                gcTime: 1000 * 60, // 
                 networkMode: 'online',
             },
             mutations: {
