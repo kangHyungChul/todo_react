@@ -1,7 +1,8 @@
 // app/api/auth/signup/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { supabaseSSR } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { EmailCheckResult } from '@/features/auth/types/auth';
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -23,45 +24,39 @@ export const POST = async (req: NextRequest) => {
             );
         }
 
-        // 2-1) 이미 가입된 이메일인지 확인
-        try {
+        // 2-1) 국내 UX 기준: 가입 전 "중복 이메일" 즉시 차단 (서버 전용 RPC)
+        //      - is_exists: 해당 이메일 존재 여부
+        //      - confirmed: 이메일 인증 완료 여부 (정책에 따라 메시지 분기 가능)
+        const { data: existRow, error: rpcError } = await supabaseAdmin.rpc('is_email_registered', { p_email: email }).single();
 
-            const { data: { users }, error: userCheckError } = await supabaseAdmin.auth.admin.listUsers();
-            console.log('users', users);
-
-            if (userCheckError) {
-                console.error('사용자 목록 조회 실패:', userCheckError);
-                return NextResponse.json(
-                    { ok: false, message: '사용자 목록 조회 실패' },
-                    { status: 500 }
-                );
-            }
-
-            const existingUser = users?.find((user) => user.email === email);
-            console.log('existingUser', existingUser);
-
-            if (existingUser) {
-                if (existingUser?.email_confirmed_at) {
-                    return NextResponse.json(
-                        { ok: false, message: '이미 가입된 이메일입니다. 로그인해 주세요.' },
-                        { status: 400 }
-                    );
-                } else {
-                    return NextResponse.json(
-                        { ok: false, message: '이미 가입 신청된 이메일입니다. 이메일 인증 후 로그인해 주세요.' },
-                        { status: 400 }
-                    );
-                }
-            }
-
-        } catch (error) {
-            console.error('사용자 목록 조회 실패:', error);
+        if (rpcError) {
+            // RPC 실패는 내부 로그만 남기고 일반 메시지로 응답
+            console.error('[RPC] is_email_registered error:', rpcError);
             return NextResponse.json(
-                { ok: false, message: '사용자 목록 조회 실패' },
+                { ok: false, message: '회원가입 처리 중 오류가 발생했습니다.' },
                 { status: 500 }
             );
         }
-        
+
+        if ((existRow as EmailCheckResult).is_exists) {
+            // 정책 1) 무조건 차단(국내 일반 패턴)
+            return NextResponse.json(
+                { ok: false, message: '이미 가입된 이메일입니다. 로그인 또는 비밀번호 재설정을 이용해 주세요.' },
+                { status: 400 }
+            );
+
+            // 정책 2) 미인증만 예외적으로 재발송하고 싶다면 아래 분기 사용
+            // if (!existRow.confirmed) {
+            //     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+            //     const origin = req.headers.get('origin') ?? supabaseUrl;
+            //     const emailRedirectTo = `${origin}/auth/callback`;
+            //     await supabaseAdmin.auth.resend({ type: 'signup', email, options: { emailRedirectTo } });
+            //     return NextResponse.json(
+            //         { ok: true, message: '이미 가입 신청된 이메일입니다. 인증 메일을 다시 보냈습니다.' },
+            //         { status: 200 }
+            //     );
+            // }
+        }
 
         // 3) Supabase 클라이언트 생성
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -72,7 +67,7 @@ export const POST = async (req: NextRequest) => {
         const emailRedirectTo = `${origin}/auth/callback`;
 
         // 5) 회원가입 요청
-        const { data: signData, error: signError } = await supabase.auth.signUp({
+        const { data: signData, error: signError } = await(await supabaseSSR()).auth.signUp({
             email,
             password,
             options: { 
@@ -88,47 +83,31 @@ export const POST = async (req: NextRequest) => {
             }
         });
 
-        if (signError) {
-            console.error('Signup error:', signError);
-            return NextResponse.json({ 
-                ok: false, 
-                message: `회원가입에 실패했습니다: ${signError.message}`
-            }, { status: 400 });
+        console.log('signData', signData.user?.identities);
+
+        // 5-1) 보조 방어: 일부 환경에서 중복 시 signError가 없을 수 있어 identities를 점검
+        //      - 신규 생성이면 해당 provider(identity)가 포함되는 것이 일반적
+        const identitiesLen = signData?.user?.identities?.length ?? 0;
+        if (!signError && identitiesLen === 0) {
+            // 중복 가능성이 매우 높으므로 국내 정책에 맞게 차단 응답
+            return NextResponse.json(
+                { ok: false, message: '이미 가입된 이메일입니다. 로그인 또는 비밀번호 재설정을 이용해 주세요.' },
+                { status: 400 }
+            );
         }
 
-        // console.log('[SIGNUP]', { hasError: !!signError, userId: signData?.user?.id, msg: signError?.message });
-
-        // const userId = signData.user?.id;
-        const userId = signData.user?.id;
-
-        const { data: profileData, error: profileError } = await supabaseAdmin
-            .from('profiles')
-            .upsert(
-                {
-                    id: userId,
-                    email: email || null,          // profiles.email을 유지한다면
-                    name: name || null,
-                    nickname: nickname || null,
-                    phone: phone || null,
-                    birthday: birthday || null,
-                    // profile_image: ... (스토리지 업로드 후 URL)
-                },
-                { onConflict: 'id' }
-            )
-            .select()
-            .single();
-
-        console.log('profileData', profileData);
-
-        if (profileError) {
-            console.error('Profile creation error:', profileError);
-            return NextResponse.json({ 
-                ok: false, 
-                message: `프로필 생성에 실패했습니다: ${profileError.message}`
-            }, { status: 400 });
+        if (signError) {
+            // 기타 오류(약한 비밀번호 정책, 메일 전송 문제 등)
+            console.error('[SIGNUP] error:', signError);
+            return NextResponse.json(
+                { ok: false, message: `회원가입에 실패했습니다: ${signError.message}` },
+                { status: 400 }
+            );
         }
         
-        // 7) 성공 응답: 확인 메일 안내
+        // 6) 성공 응답: 확인 메일 안내
+        const userId = signData.user?.id;
+
         return NextResponse.json(
             {
                 ok: true,

@@ -34,4 +34,11 @@ interface CreateProfileData {
     profileImage?: string | null;
 }
 
-export type { AuthFormData, Profile, CreateProfileData };
+// 이메일 중복 확인 타입
+interface EmailCheckResult {
+    is_exists: boolean;           // SQL과 동일한 키 이름
+    email_confirmed: boolean;  // SQL과 동일한 키 이름
+};
+
+
+export type { AuthFormData, Profile, CreateProfileData, EmailCheckResult };

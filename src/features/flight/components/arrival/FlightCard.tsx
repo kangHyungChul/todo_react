@@ -6,7 +6,7 @@ import useModalStore from '@/store/ModalStore';
 import FlightDetailModal from './FlightDetailModal';
 import FlightTrackModal from '../FlightTrackModal';
 import Button from '@/components/common/Button';
-import Link from 'next/link';
+import FlightDetailViewButton from '../FlightDetailViewButton';
 import { funcDateTimeToType } from '@/lib/utils/dateTime';
 import { memo } from 'react';
 
@@ -47,17 +47,15 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
             <p>{flight.remark}</p>
             {
                 !isCodeshare && (
-                    <div className="mt-2 flex gap-4">
+                    <div className="mt-2 flex gap-2">
                         {/* <Button style="secondary" onClick={() => openModalContext(<FlightDetailModal flight={flight} />)}>useContext</Button> */}
                         <Button variant="primary" onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button>
-                        <Link href={`/flight/detail/${flight.fid}`}>상세페이지</Link>
                         {
-                            (
-                                (flight.remark === null || flight.remark === '지연') && (
-                                    <Button variant="secondary" disabled={flight.aircraftRegNo === ''} onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
-                                )
+                            (flight.remark === null || flight.remark === '지연') && (
+                                <Button variant="secondary" disabled={flight.aircraftRegNo === ''} onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
                             )
                         }
+                        <FlightDetailViewButton path={`/flight/detail/${flight.fid}`} />
                     </div>
                 )
             }

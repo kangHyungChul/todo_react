@@ -68,6 +68,19 @@
     --color-gray-900: #111827;
     --color-black: #000000;
 
+    --color-kakao: oklch(0.9139 0.1909 101.37);
+    --color-kakao-100: oklch(0.9739 0.0956 101.37);
+    --color-kakao-200: oklch(0.9339 0.1432 101.37);
+    --color-kakao-300: oklch(0.8939 0.1909 101.37);
+    --color-kakao-400: oklch(0.8539 0.1909 101.37);
+    --color-kakao-500: oklch(0.8139 0.1909 101.37);
+    --color-kakao-600: oklch(0.7739 0.1909 101.37);
+    --color-kakao-700: oklch(0.7339 0.1909 101.37);
+    --color-kakao-800: oklch(0.6939 0.1909 101.37);
+    --color-kakao-900: oklch(0.6539 0.1909 101.37);
+    --color-kakao-symbol: rgba(0, 0, 0, 0.9);
+    --color-kakao-label: #191919;
+
     --breakpoint-mobile: 768px;
     --breakpoint-tablet: 1024px;
     --breakpoint-desktop: 1280px;

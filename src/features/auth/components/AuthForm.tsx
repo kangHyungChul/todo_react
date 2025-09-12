@@ -52,7 +52,7 @@ const AuthForm = () => {
 
             if (response.status === 200) {
                 console.log('response.data', response.data.userId);
-                router.push(`/auth/complete/${response.data.userId}`);
+                router.push('/auth/complete');
             }
 
             // 응답 데이터를 반환 (기존 로직 유지)

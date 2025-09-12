@@ -31,32 +31,11 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
         // 200 이 아니면 에러처리
         // catch는 2xx범위 아닐때만 애러로 블록 이외에는 try블록
         if (res.status !== 200) {
-            throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
+            throw new Error(res.data?.error || '항공편 도착 조회 실패');
         }
-
-        // console.log('res:', res);
         
         return res.data;
         
-        // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
-
-        // const res = await fetch(`${path()}/api/flight/arrival?${params}`, {
-        //     method: 'GET',
-        //     cache: 'no-store',
-        // });
-
-        // if (!res.ok) {
-        //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
-        // }
-
-        // try {
-        //     const data = await res.json();
-        //     return data;
-        // } catch (error) {
-        //     const data = await res.text();
-        //     console.error('JSON Parse Error:', error);
-        //     throw new Error(`Failed to parse API response: ${data}`);
-        // }
 
     } catch (error) {
         if(axios.isAxiosError(error)) {

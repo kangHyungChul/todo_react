@@ -2,9 +2,12 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuthStore } from '@/features/auth/store/authStore';
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
+
+    // React Query 설정
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
             queries: {
@@ -21,6 +24,12 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
             }
         }
     }));
+
+    // Auth Store 설정 (인증관련)
+    const { initialize } = useAuthStore();
+    useEffect(() => {
+        initialize();
+    }, [initialize]);
 
     return (
         <QueryClientProvider client={queryClient}>

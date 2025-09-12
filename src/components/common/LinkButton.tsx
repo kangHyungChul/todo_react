@@ -1,22 +1,19 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils/utils';
 import { forwardRef } from 'react';
 
 // Props 타입 정의 typescript
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    // children: React.ReactNode;
-    // type?: 'button' | 'submit' | 'reset' | 'link';
+interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+    href: string; // Next.js Link의 필수 href 속성
     variant?: 'primary' | 'secondary' | 'danger' | 'warning' | 'kakao'; // 버튼 스타일 타입
     sizes?: 'small' | 'medium' | 'large'; // 버튼 크기
-    // href?: string; // 링크 주소
     outline?: boolean; // 버튼 테두리 여부
-    // onClick?: () => void; // 클릭 이벤트 핸들러
-    // className?: string; // 추가 클래스명
 }
 
-// Button 컴포넌트 정의
+// LinkButton 컴포넌트 정의
 
 const setButtonStyle = (variant: string, outline: boolean) => {
 
@@ -85,7 +82,7 @@ const setButtonSize = (sizes: string) => {
 
 const setButtonClasses = (variant: string, sizes: string, outline: boolean) => {
 
-    const baseClasses = 'border rounded-md transition-all duration-200 outline-none';
+    const baseClasses = 'flex items-center justify-center border rounded-md transition-all duration-200 outline-none';
 
     const disabledClasses = outline ? 'disabled:border-gray-400 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed' : 'disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed';
 
@@ -97,14 +94,15 @@ const setButtonClasses = (variant: string, sizes: string, outline: boolean) => {
     
 };
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
     ({
         className = '',
         variant = 'primary',
         sizes = 'medium',
         outline = false,
+        href = '#',
         ...props
-    }, ref: React.Ref<HTMLButtonElement>
+    }, ref: React.Ref<HTMLAnchorElement>
     ) => {
         const buttonClasses = cn(setButtonClasses(variant, sizes, outline), className);
         // const buttonClasses = [
@@ -116,7 +114,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         // 버튼 컴포넌트 반환
         return (
 
-            <button 
+            <Link href={href}
                 className={buttonClasses}
                 ref={ref}
                 {...props}
@@ -125,6 +123,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 );
 
-Button.displayName = 'Button';
+LinkButton.displayName = 'LinkButton';
 
-export default Button;
+export default LinkButton;
