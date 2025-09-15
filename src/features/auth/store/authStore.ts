@@ -36,7 +36,7 @@
 
 import { create } from 'zustand';
 import { supabase } from '@/lib/supabase/client';
-import type { User, Session } from '@supabase/supabase-js';
+import type { User/*, Session */} from '@supabase/supabase-js';
 import axios from 'axios';
 import { isProtectedPath } from '@/lib/auth/route';
 

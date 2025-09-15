@@ -10,8 +10,8 @@ export const ERROR_MESSAGES = {
     
     // 로그인 관련 에러
     [ERROR_CODES.AUTH.INVALID_CREDENTIALS]: '이메일 또는 비밀번호가 올바르지 않습니다.',
-    [ERROR_CODES.AUTH.EMAIL_NOT_CONFIRMED]: '존재하지 않는 사용자입니다.',
-    [ERROR_CODES.AUTH.EMAIL_ADDRESS_INVALID]: '계정이 잠겨있습니다. 관리자에게 문의하세요.',
+    [ERROR_CODES.AUTH.EMAIL_NOT_CONFIRMED]: '이메일 인증이 되지 않았습니다.',
+    [ERROR_CODES.AUTH.EMAIL_ADDRESS_INVALID]: '이메일 형식이 올바르지 않습니다.',
     [ERROR_CODES.AUTH.TOO_MANY_ATTEMPTS]: '로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해주세요.',
     
     // // 회원가입 관련 에러

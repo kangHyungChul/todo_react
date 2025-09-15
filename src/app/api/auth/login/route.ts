@@ -2,7 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseSSR } from '@/lib/supabase/server';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
-import { ERROR_CODES } from '@/constants/errorCodes';
 
 export const POST = async (req: NextRequest) => {
     try {

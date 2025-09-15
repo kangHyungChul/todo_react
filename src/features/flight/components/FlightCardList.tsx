@@ -1,7 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { 
     // import { fetchArrivalFlights } from '../services/flightApi';
     FlightArrivalItemType, FlightArrivalSearchParamsType, 
