@@ -59,11 +59,14 @@ export const POST = async (req: NextRequest) => {
         }
 
         // 3) Supabase 클라이언트 생성
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+        // const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 
         // 4) 인증 메일 콜백 URL 구성
         //    - 배포 후에는 실제 서비스 도메인 기준으로 돌아오도록 origin 사용
-        const origin = req.headers.get('origin') ?? supabaseUrl;
+        const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host');
+        const protocol = req.headers.get('x-forwarded-proto') ?? 'https';
+        
+        const origin = `${protocol}://${host}`;
         const emailRedirectTo = `${origin}/auth/callback`;
 
         // 5) 회원가입 요청
