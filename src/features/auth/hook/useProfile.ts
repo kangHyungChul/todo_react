@@ -7,7 +7,10 @@ import { postAuthMessage } from '../utils/authChannel';
 const profileKey = (userId?: string) => ['profile', { userId }] as const;
 
 export const useProfile = () => {
-    const { user, isAuthenticated } = useAuthStore();
+
+    const user = useAuthStore(state => state.user);
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
     return useQuery({
         queryKey: profileKey(user?.id),
         enabled: isAuthenticated && !!user?.id,
@@ -28,7 +31,7 @@ export const useProfile = () => {
 
 export const useUpdateProfile = () => {
     const qc = useQueryClient();
-    const { user } = useAuthStore();
+    const user = useAuthStore(state => state.user);
 
     return useMutation({
         mutationFn: async (patch: Partial<Profile>) => {

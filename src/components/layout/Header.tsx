@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 // import axios from 'axios';
+import { memo, useCallback } from 'react';
 import { useAuth } from '@/features/auth/hook/useAuth';
 import { useProfile } from '@/features/auth/hook/useProfile';
 import LoadingProgress from '@/components/common/LoadingProgress';
@@ -9,25 +10,15 @@ import LoadingProgress from '@/components/common/LoadingProgress';
 // import styles from './Header.module.scss';
 
 const Header = () => {
-    const { user, loading, signOut } = useAuth();  // user, profile, loading, signOut 상태 사용
-    const { data: profile, isLoading: profileLoading, isPending: profilePending/*, error: profileError*/ } = useProfile();
+    const { user, loading: authLoading, signOut } = useAuth();  // user, profile, loading, signOut 상태 사용
+    const { data: profile, isLoading: profileLoading/*, error: profileError*/ } = useProfile();
 
-    const authLoading = profileLoading || profilePending || loading;
+    const nowLoading = profileLoading || authLoading;
 
-    // const currentPath = usePathname();
-
-    // const pathname = (path: string) => {
-    //     return currentPath.startsWith(path);
-    // };
-
-    // const linkStyle = (path: string) => {
-    //     return pathname(path) ? `${styles['header__dep2-link']} ${styles['header__dep2-link--active']}` : `${styles['header__dep2-link']}`;
-    // };
-    console.log('useProfile', useProfile);
-    const signout = async () => {
+    const handleSignOut = useCallback(async () => {
         const response = await signOut();
         console.log(response);
-    };
+    }, [signOut]);
 
     return (
         <>
@@ -40,17 +31,17 @@ const Header = () => {
                         ) : (
                             <div className="text-sm text-gray-500">
                                 <p>{profile?.nickname}({profile?.email})</p>
-                                <Link href="#" onClick={signout}>Logout</Link>
+                                <Link href="#" onClick={handleSignOut}>Logout</Link>
                             </div>
                         )
                     }
                 </nav>
             </header>
 
-            {authLoading && <LoadingProgress />}
+            {nowLoading && <LoadingProgress />}
         </>
     );
 
 };
 
-export default Header; 
+export default memo(Header); 

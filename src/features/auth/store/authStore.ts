@@ -8,7 +8,7 @@ import axios from 'axios';
 import { isProtectedPath } from '@/lib/auth/route';
 import { postAuthMessage, type AuthReason } from '../utils/authChannel';
 
-interface AuthStore {
+interface AuthState {
     // 상태
     user: User | null; // 현재 로그인한 사용자 정보 (Supabase User 객체)
     // session: Session | null; // 현재 인증 세션 정보 (Supabase Session 객체)
@@ -16,7 +16,9 @@ interface AuthStore {
     // profile: Profile | null; // DB에서 가져온 사용자 프로필 정보
     loading: boolean; // 인증 관련 비동기 작업 진행 중 여부
     // error: string | null; // 인증 에러 메시지 (전역 관리 필요시 유지, 단순 폼 에러면 제거 가능)
-    
+}
+
+interface AuthActions {
     // 액션
     setAuthState: (
         user: User | null, 
@@ -34,6 +36,8 @@ interface AuthStore {
     signIn: (email: string, password: string) => Promise<{ ok: boolean; error?: string; callbackUrl?: string | null }>;
     signOut: () => Promise<{ ok: boolean; error?: string }>;
 }
+
+type AuthStore = AuthState & AuthActions;
 
 export const useAuthStore = create<AuthStore>()(
     devtools((set, get) => ({
