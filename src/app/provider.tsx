@@ -5,8 +5,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/features/auth/store/authStore';
 import { useAuthSync } from '@/features/auth/hook/useAuthSync';
+import { isProtectedPath, isAuthOnlyPath } from '@/lib/auth/route';
+import { useRouter } from 'next/navigation';
 
 export const AuthProviders = () => {
+
     // Auth Store 설정 (인증관련)
     const { initialize } = useAuthStore();
     useEffect(() => {
@@ -15,6 +18,37 @@ export const AuthProviders = () => {
 
     // Auth Sync 설정 (인증관련)
     useAuthSync();
+
+    // Auth 변경 시 리다이렉트
+    const { isAuthenticated, loading } = useAuthStore();
+    const router = useRouter();
+
+    useEffect(() => {
+        // 로딩 중이거나 이미 인증된 상태라면 리다이렉트하지 않음
+        if (loading) return;
+        
+        const currentPath = window.location.pathname;
+
+        // 인증되지 않은 상태이고 현재 페이지가 보호된 경로라면 로그인 페이지로 리다이렉트
+        if (!isAuthenticated) {
+            if (isProtectedPath(currentPath)) {
+                console.log('리다이렉트');
+                const redirectUrl = new URL('/auth/login', window.location.origin);
+                redirectUrl.searchParams.set('redirectTo', currentPath);
+                router.replace(redirectUrl.toString());
+            }
+        }
+
+        // 인증된 상태이고 공개경로가 아니라면 홈으로 리다이렉트
+        if (isAuthenticated) {
+            if (isAuthOnlyPath(currentPath)) {
+                console.log('리다이렉트2');
+                const redirectUrl = new URL('/', window.location.origin);
+                router.replace(redirectUrl.toString());
+            }
+        }
+
+    }, [isAuthenticated, loading, router]);
 
     return null;
 };

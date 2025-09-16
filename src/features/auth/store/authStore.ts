@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware';
 import { supabase } from '@/lib/supabase/client';
 import type { User/*, Session */} from '@supabase/supabase-js';
 import axios from 'axios';
-import { isProtectedPath } from '@/lib/auth/route';
+// import { isProtectedPath } from '@/lib/auth/route';
 import { postAuthMessage, type AuthReason } from '../utils/authChannel';
 
 interface AuthState {
@@ -197,10 +197,10 @@ export const useAuthStore = create<AuthStore>()(
                 
                 get().setAuthState(null, false, { reason: 'logout' });
 
-                const pathname = window.location.pathname;
-                if (isProtectedPath(pathname)) {
-                    window.location.reload();
-                }
+                // const pathname = window.location.pathname;
+                // if (isProtectedPath(pathname)) {
+                //     window.location.reload();
+                // }
 
                 return { ok: true };
             } catch (error) {
