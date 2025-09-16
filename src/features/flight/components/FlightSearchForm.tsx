@@ -54,7 +54,7 @@ const FlightSearchForm = ({
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         const newParams = {
             searchDate: funcNowDate(),
             searchFrom: funcTimeToHHMM(searchFrom),

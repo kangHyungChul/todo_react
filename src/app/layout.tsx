@@ -27,14 +27,14 @@ export default function RootLayout({
         <html lang="ko">
             {/* <body className={`${nanumGothic.className}`}> */}
             <body>
-                <Header />
-                <main>
-                    <Providers>
+                <Providers>
+                    <Header />
+                    <main>
                         {children}
                         <Modal />
-                    </Providers>
-                </main>
-                <Footer />
+                    </main>
+                    <Footer />
+                </Providers>
             </body>
         </html>
     );

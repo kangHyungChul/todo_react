@@ -2,13 +2,18 @@
 import React from 'react';
 import Link from 'next/link';
 // import axios from 'axios';
-import { useAuthStore } from '@/features/auth/store/authStore';
+import { useAuth } from '@/features/auth/hook/useAuth';
+import { useProfile } from '@/features/auth/hook/useProfile';
 import LoadingProgress from '@/components/common/LoadingProgress';
 // import { usePathname } from 'next/navigation';
 // import styles from './Header.module.scss';
 
 const Header = () => {
-    const { user, profile, loading, signOut } = useAuthStore();  // user, profile, loading, signOut 상태 사용
+    const { user, loading, signOut } = useAuth();  // user, profile, loading, signOut 상태 사용
+    const { data: profile, isLoading: profileLoading, isPending: profilePending/*, error: profileError*/ } = useProfile();
+
+    const authLoading = profileLoading || profilePending || loading;
+
     // const currentPath = usePathname();
 
     // const pathname = (path: string) => {
@@ -18,7 +23,7 @@ const Header = () => {
     // const linkStyle = (path: string) => {
     //     return pathname(path) ? `${styles['header__dep2-link']} ${styles['header__dep2-link--active']}` : `${styles['header__dep2-link']}`;
     // };
-    console.log('profile', profile);
+    console.log('useProfile', useProfile);
     const signout = async () => {
         const response = await signOut();
         console.log(response);
@@ -42,7 +47,7 @@ const Header = () => {
                 </nav>
             </header>
 
-            {loading && <LoadingProgress />}
+            {authLoading && <LoadingProgress />}
         </>
     );
 

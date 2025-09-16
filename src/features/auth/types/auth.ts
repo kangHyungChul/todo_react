@@ -24,6 +24,13 @@ interface Profile {
     updated_at?: string;           // 수정일시 (자동 생성)
 }
 
+// 인증 응답 타입
+export interface AuthResponse {
+    ok: boolean;
+    error?: string;
+    callbackUrl?: string | null;
+}
+
 // 프로필 생성 시 사용할 타입 (id 제외)
 interface CreateProfileData {
     email: string;

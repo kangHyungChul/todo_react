@@ -4,6 +4,20 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/features/auth/store/authStore';
+import { useAuthSync } from '@/features/auth/hook/useAuthSync';
+
+export const AuthProviders = () => {
+    // Auth Store 설정 (인증관련)
+    const { initialize } = useAuthStore();
+    useEffect(() => {
+        initialize();
+    }, [initialize]);
+
+    // Auth Sync 설정 (인증관련)
+    useAuthSync();
+
+    return null;
+};
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
 
@@ -25,15 +39,12 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         }
     }));
 
-    // Auth Store 설정 (인증관련)
-    const { initialize } = useAuthStore();
-    useEffect(() => {
-        initialize();
-    }, [initialize]);
+
 
     return (
         <QueryClientProvider client={queryClient}>
             {children}
+            <AuthProviders />
             <ReactQueryDevtools initialIsOpen={false} /> {/* 개발 도구 활성화, 개발 환경에서만 활성화, initialIsOpen={false} 초기 상태 닫기 */}
         </QueryClientProvider>
     );
