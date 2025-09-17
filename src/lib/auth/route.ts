@@ -11,7 +11,7 @@ export const AUTH_ROUTES = {
 
     // 비공개 경로
     PROTECTED: [
-        '/flight/detail',
+        '/flight/detail/',
     ],
 
     // 인증 전용 경로

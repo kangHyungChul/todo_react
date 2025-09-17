@@ -86,7 +86,7 @@ export interface FlightArrivalItemType {
     exitNumber: string; // 출구번호
     fid: string; // 항공편ID(무작위생성)
     flightId: string; // 항공편번호
-    fstandPosition: string; // 주기장위치치
+    fstandPosition: string; // 주기장위치
     gateNumber: string; // 게이트번호
     masterFlightId: string; // 마스터항공편번호
     passengerOrCargo: string; // 여객화물구분 (P: 여객, C: 화물, default=P)

@@ -31,9 +31,7 @@ export const updateSession = async (request: NextRequest) => {
         }
     );
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
 
     // 디버깅을 위한 로그 (개발 환경에서만)
     if (process.env.NODE_ENV === 'development') {
