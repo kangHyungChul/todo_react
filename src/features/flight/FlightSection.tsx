@@ -1,5 +1,5 @@
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
-
+import getServerQueryClient from '@/lib/server-query-client';
 import { fetchArrivalFlights, fetchDepartureFlights } from './services/flightApi';
 import { 
     FlightArrivalType, FlightArrivalSearchParamsType, 
@@ -44,14 +44,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     // let queryParams: FlightArrivalResponseType | FlightDepartureResponseType | null = null;
     
     // react-query 마이그레이션 적용
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                staleTime: 1000 * 10, // 서버용: 10초  
-                gcTime: 1000 * 20,    // 서버용: 20초
-            }
-        }
-    });
+    const queryClient = getServerQueryClient();
     
     await queryClient.prefetchQuery({
         queryKey: ['flight', type, queryParams], // queryParams 값이 바뀌면 쿼리키가 달라져서 새로운 데이터를 요청함
@@ -63,8 +56,8 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
                 return fetchDepartureFlights(queryParams);
             }
         },
-        // staleTime: 1000 * 10, // 10초
-        // gcTime: 1000 * 20, // 20초
+        staleTime: 1000 * 30, // 30초
+        gcTime: 1000 * 60, // 1분
     });
     
     // console.log('FlightSection queryParams:', queryParams);

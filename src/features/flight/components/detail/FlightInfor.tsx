@@ -2,7 +2,8 @@
 
 import { FlightArrivalItemType, FlightDepartureItemType } from '../../types/flights';
 import FlightExitGate from '../FlightExitGate';
-
+import { fetchFlightDetail } from '../../services/flightApi';
+import { useQuery } from '@tanstack/react-query';
 // import useModalStore from '@/store/ModalStore';
 // import { useModalContext } from '@/contexts/ModalContext';
 // import FlightDetailModal from './FlightDetailModal';
@@ -20,8 +21,20 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
     // const isCodeshare = flightData.codeshare === 'Slave';
     // const { openModal } = useModalStore();
     // console.log(flightData);
+
+    console.log('flightData:', flightData);
+    const { data: flightDetailData, isLoading, isError } = useQuery({
+        queryKey: ['flightDetail', flightData.fid],
+        queryFn: () => fetchFlightDetail(flightData.fid),
+        initialData: flightData,
+        staleTime: 1000 * 30, // 10초
+        gcTime: 1000 * 60, // 20초
+    });
+
     return (
         <>
+            {isLoading && <div>Loading...</div>}
+            {isError && <div>Error: {isError.toString()}</div>}
             {/* data: */}
             {/* {flightData.fid}
             {flightData.flightId}
@@ -43,10 +56,10 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                         <div className="bg-slate-600 text-white rounded-t-lg p-6">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-2xl font-bold flex items-center gap-2">
-                                    {flightData.airline}
+                                    {flightDetailData.airline}
                                 </h2>
                                 <span className="bg-white text-slate-600 font-semibold px-3 py-1 rounded-full text-sm">
-                                    {flightData.aircraftRegNo}
+                                    {flightDetailData.aircraftRegNo}
                                 </span>
                             </div>
                         </div>
@@ -57,7 +70,7 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                                     <div className="flex items-center gap-3">
                                         <div>
                                             <p className="text-sm text-gray-500">항공편번호</p>
-                                            <p className="font-semibold text-lg">{flightData.flightId}</p>
+                                            <p className="font-semibold text-lg">{flightDetailData.flightId}</p>
                                         </div>
                                     </div>
 
@@ -65,7 +78,7 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                                         <span className="text-lg">#</span>
                                         <div>
                                             <p className="text-sm text-gray-500">항공기 등록번호</p>
-                                            <p className="font-semibold text-lg font-mono">{flightData.aircraftRegNo}</p>
+                                            <p className="font-semibold text-lg font-mono">{flightDetailData.aircraftRegNo}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +89,7 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                                         {/* <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div> */}
                                         <div>
                                             <p className="text-sm text-gray-500">운항 상태</p>
-                                            <p className="font-semibold text-lg">{flightData.remark}</p>
+                                            <p className="font-semibold text-lg">{flightDetailData.remark}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +107,7 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                                 </h3>
                             </div>
                             <div className="p-6">
-                                <p className="text-xl font-bold text-gray-900 mb-2">{flightData.airport}</p>
+                                <p className="text-xl font-bold text-gray-900 mb-2">{flightDetailData.airport}</p>
                             </div>
                         </div>
 
@@ -108,7 +121,7 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                             <div className="p-6">
                                 <p className="text-xl font-bold text-gray-900 mb-2">인천</p>
                                 <div className="flex items-center gap-2 text-gray-600">
-                                    <span className="text-sm">{flightData.scheduleDatetime}</span>
+                                    <span className="text-sm">{flightDetailData.scheduleDatetime}</span>
                                 </div>
                             </div>
                         </div>
@@ -123,17 +136,17 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                             <div className="grid md:grid-cols-3 gap-4 text-center">
                                 <div className="p-4 bg-slate-50 rounded-lg">
                                     <p className="text-sm text-gray-500 mb-1">터미널</p>
-                                    <p className="font-semibold text-slate-700"><FlightExitGate terminalId={flightData.terminalId} /></p>
+                                    <p className="font-semibold text-slate-700"><FlightExitGate terminalId={flightDetailData.terminalId} /></p>
                                 </div>
                                 <div className="p-4 bg-indigo-50 rounded-lg">
                                     <p className="text-sm text-gray-500 mb-1">수하물수취대</p>
                                     <p className="font-semibold text-indigo-700">
-                                        {'carousel' in flightData ? flightData.carousel : '-'}
+                                        {'carousel' in flightDetailData ? flightDetailData.carousel : '-'}
                                     </p>
                                 </div>
                                 <div className="p-4 bg-gray-50 rounded-lg">
                                     <p className="text-sm text-gray-500 mb-1">게이트번호</p>
-                                    <p className="font-semibold text-gray-700">{flightData.gateNumber}</p>
+                                    <p className="font-semibold text-gray-700">{flightDetailData.gateNumber}</p>
                                 </div>
                             </div>
                         </div>

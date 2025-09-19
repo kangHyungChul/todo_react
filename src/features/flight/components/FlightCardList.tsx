@@ -116,15 +116,16 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     useEffect(() => {
         if (data) {
-            const searchDate = currentParams.searchDate;
-            const searchFrom = currentParams.searchFrom;
-            const searchTo = currentParams.searchTo;
+            const title = type === 'arrival' ? '도착' : '출발';
+            const searchDate = funcDateTimeToType(currentParams.searchDate as string, 'YYYYMMDD');
+            const searchFrom = funcTimeToHHMMReverse(currentParams.searchFrom as string);
+            const searchTo = funcTimeToHHMMReverse(currentParams.searchTo as string);
             const flightId = currentParams.flightId;
 
-            document.title = `${flightId !== undefined ? `${flightId} - ` : ''}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
-            document.querySelector('meta[name="description"]')?.setAttribute('content', `${flightId && `${flightId} - `}항공기 도착정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`);
+            document.title = `${flightId !== undefined ? `${flightId} - ` : ''}항공기 ${title}정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`;
+            document.querySelector('meta[name="description"]')?.setAttribute('content', `${flightId && `${flightId} - `}항공기 ${title}정보 조회 : ${searchDate} ${searchFrom} ~ ${searchTo}`);
         }
-    }, [data, currentParams]);
+    }, [data, currentParams, type]);
 
     
     // const { 
