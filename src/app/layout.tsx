@@ -29,7 +29,7 @@ export default function RootLayout({
             <body>
                 <Providers>
                     <Header />
-                    <main>
+                    <main className="bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
                         {children}
                         <Modal />
                     </main>

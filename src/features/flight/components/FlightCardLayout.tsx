@@ -1,14 +1,13 @@
 'use client';
 
-import { cn } from '@/lib/utils/utils';
 import { memo } from 'react';
 
 // import { FlightArrivalItemType } from '../types/flights';
 
-const FlightCardLayout = ({ codeshare = 'Master', children }: { codeshare?: string, children: React.ReactNode }) => {
+const FlightCardLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
-        <li className={cn('p-4 border border-gray-300 rounded-lg flex flex-col items-center', codeshare === 'Slave' ? ' bg-gray-100 border-t-0 -mt-4' : '')}>
+        <li className={'w-full p-6 shadow-sm bg-white/80 rounded-b-md'}>
             {children}
         </li>
     );
