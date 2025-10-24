@@ -25,10 +25,12 @@ export type HttpStatusCode =
 export interface AppError {
     domain: ErrorDomain;
     code: string;               // 에러 식별 코드
+    statusCode: HttpStatusCode; // 상태 코드
     message: string;            // 사용자 메시지
-    statusCode: HttpStatusCode;
     details?: string;           // 선택적 추가 정보
     originalError?: Error;
+    traceId?: string;
+    cause?: string;
     // severity: ErrorSeverity;
 }
 
@@ -43,9 +45,11 @@ export interface ApiResponse<T> {
 export interface CreateErrorOptions {
     domain: ErrorDomain;
     code: string;
+    statusCode: HttpStatusCode; // 상태 코드
     message: string;
-    statusCode: HttpStatusCode;
-    context?: Record<string, unknown>;
+    details?: Record<string, unknown>;
     originalError?: Error;
+    traceId?: string;
+    cause?: string;
     // severity?: ErrorSeverity;
 }

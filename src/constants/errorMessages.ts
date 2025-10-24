@@ -13,6 +13,8 @@ export const ERROR_MESSAGES = {
     [ERROR_CODES.AUTH.EMAIL_NOT_CONFIRMED]: '이메일 인증이 되지 않았습니다.',
     [ERROR_CODES.AUTH.EMAIL_ADDRESS_INVALID]: '이메일 형식이 올바르지 않습니다.',
     [ERROR_CODES.AUTH.TOO_MANY_ATTEMPTS]: '로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해주세요.',
+    [ERROR_CODES.AUTH.UNAUTHORIZED]: '인증이 필요합니다.',
+    [ERROR_CODES.AUTH.PERMISSION_DENIED]: '접근 권한이 없습니다.',
     
     // // 회원가입 관련 에러
     // [ERROR_CODES.AUTH.SIGNUP_EMAIL_EXISTS]: '이미 가입된 이메일입니다. 로그인 또는 비밀번호 재설정을 이용해 주세요.',
