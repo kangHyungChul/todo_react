@@ -27,7 +27,7 @@ export interface AppError {
     code: string;               // 에러 식별 코드
     statusCode: HttpStatusCode; // 상태 코드
     message: string;            // 사용자 메시지
-    details?: string;           // 선택적 추가 정보
+    details?: Record<string, unknown>;           // 선택적 추가 정보
     originalError?: Error;
     traceId?: string;
     cause?: string;

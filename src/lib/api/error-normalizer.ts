@@ -19,11 +19,11 @@ export const toAppError = (e: unknown, fallbackCode = ERROR_CODES.AUTH.INVALID_C
             statusCode,
             message,
             // userMessageKey: mapCodeToUserKey(code),
-            details: JSON.stringify({
+            details: {
                 url: e.config?.url,
                 method: e.config?.method,
                 data: e.response?.data
-            }),
+            },
             traceId: e.response?.headers?.['x-trace-id'] ?? null,
             cause: 'axios'
         };
@@ -37,7 +37,7 @@ export const toAppError = (e: unknown, fallbackCode = ERROR_CODES.AUTH.INVALID_C
             statusCode: 500,
             message: e.message,
             // userMessageKey: mapCodeToUserKey(fallbackCode),
-            details: JSON.stringify({ raw: e }),
+            details: { raw: e },
             traceId: undefined,
             cause: 'error'
         };
@@ -50,7 +50,7 @@ export const toAppError = (e: unknown, fallbackCode = ERROR_CODES.AUTH.INVALID_C
         statusCode: 500,
         message: 'unknown error',
         // userMessageKey: mapCodeToUserKey(fallbackCode),
-        details: JSON.stringify({ raw: e }),
+        details: { raw: e },
         traceId: undefined,
         cause: 'unknown'
     };
