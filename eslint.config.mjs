@@ -1,3 +1,5 @@
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -21,9 +23,9 @@ const defaultRules = {
 
 // ESLint 설정
 const eslintConfig = [
-  // Next.js의 기본 ESLint, TypeScript 규칙 확장
-    ...compat.extends('next/core-web-vitals', 'next/typescript', 'plugin:tailwindcss/recommended'),
-
+    ...nextCoreWebVitals,
+    ...nextTypescript,
+    ...compat.extends("plugin:tailwindcss/recommended"),
     // ts, tsx, js, jsx 규칙
     {
         files: ['**/*.{ts,tsx,js,jsx}'], // 파일 확장자 지정
@@ -33,7 +35,9 @@ const eslintConfig = [
             // tailwindcss 규칙
         },
     },
-
+    {
+        ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"]
+    }
 ];
 
 export default eslintConfig;
