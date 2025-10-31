@@ -19,9 +19,9 @@ const FlightDetailViewButton = ({ path }: { path: string }) => {
     
     return (
         user ? (
-            <LinkButton href={path} variant="secondary">상세페이지(로그인)</LinkButton>
+            <LinkButton href={path} variant="secondary" outline={true} >상세페이지</LinkButton>
         ) : (
-            <Button onClick={() => sessionChk() } variant="secondary">상세페이지(비로그인)</Button>
+            <Button onClick={() => sessionChk() } variant="secondary" outline={true}>상세페이지</Button>
         )
     );
 };

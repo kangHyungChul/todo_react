@@ -26,7 +26,7 @@ export default function Home() {
     // };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col justify-center items-center h-screen">
             <Link href="/flight/arrival" className="text-2xl font-bold">Flight Tracker</Link>
             {/* <Link href="/flight">Flight</Link> */}
             {/* <CardSection /> */}

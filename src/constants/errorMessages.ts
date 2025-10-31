@@ -7,6 +7,7 @@ import { ERROR_CODES } from './errorCodes';
 
 export const ERROR_MESSAGES = {
     // 인증 관련 메시지 (AUTH 도메인)
+    [ERROR_CODES.AUTH.DEFAULT_ERROR]: '인증 관련 요청 중 오류가 발생했습니다.',
     
     // 로그인 관련 에러
     [ERROR_CODES.AUTH.INVALID_CREDENTIALS]: '이메일 또는 비밀번호가 올바르지 않습니다.',
@@ -30,8 +31,9 @@ export const ERROR_MESSAGES = {
     // [ERROR_CODES.AUTH.PERMISSION_DENIED]: '접근 권한이 없습니다.',
     // [ERROR_CODES.AUTH.ROLE_INSUFFICIENT]: '해당 기능을 사용할 권한이 없습니다.',
 
-    // // 항공편 관련 메시지 (FLIGHT 도메인)
-    
+    // 항공편 관련 메시지 (FLIGHT 도메인)
+    [ERROR_CODES.FLIGHT.DEFAULT_ERROR]: '항공편 정보를 불러오지 못했습니다.',
+
     // // 조회 관련 에러
     // [ERROR_CODES.FLIGHT.SEARCH_NO_RESULTS]: '검색 조건에 맞는 항공편이 없습니다.',
     // [ERROR_CODES.FLIGHT.SEARCH_INVALID_DATE]: '올바른 날짜를 입력해주세요.',
@@ -42,7 +44,7 @@ export const ERROR_MESSAGES = {
     // [ERROR_CODES.FLIGHT.DETAIL_UNAVAILABLE]: '항공편 상세 정보를 일시적으로 조회할 수 없습니다.',
     
     // // 추적 관련 에러
-    // [ERROR_CODES.FLIGHT.TRACKING_NOT_AVAILABLE]: '항공편 추적 정보를 제공할 수 없습니다.',
+    [ERROR_CODES.FLIGHT.TRACKING_NOT_AVAILABLE]: '항공편 추적 정보를 제공할 수 없습니다.',
     // [ERROR_CODES.FLIGHT.TRACKING_OUTDATED]: '추적 정보가 최신이 아닐 수 있습니다.',
     
     // // 외부 API 관련 에러
@@ -50,15 +52,16 @@ export const ERROR_MESSAGES = {
     // [ERROR_CODES.FLIGHT.API_RATE_LIMITED]: '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
     // [ERROR_CODES.FLIGHT.API_PARSE_ERROR]: '항공편 정보를 처리하는 중 오류가 발생했습니다.',
 
-    // // 네트워크 관련 메시지 (NETWORK 도메인)
+    // 네트워크 관련 메시지 (NETWORK 도메인)
+    [ERROR_CODES.NETWORK.DEFAULT_ERROR]: '네트워크 연결에 실패했습니다.',
     // [ERROR_CODES.NETWORK.CONNECTION_FAILED]: '네트워크 연결에 실패했습니다.',
     // [ERROR_CODES.NETWORK.CONNECTION_TIMEOUT]: '요청 시간이 초과되었습니다. 다시 시도해주세요.',
     // [ERROR_CODES.NETWORK.CONNECTION_REFUSED]: '서버에서 연결을 거부했습니다.',
     // [ERROR_CODES.NETWORK.DNS_RESOLUTION_FAILED]: 'DNS 조회에 실패했습니다. 네트워크 상태를 확인해주세요.',
     // [ERROR_CODES.NETWORK.SSL_HANDSHAKE_FAILED]: 'SSL 보안 연결에 실패했습니다.',
 
-    // // 검증 관련 메시지 (VALIDATION 도메인)
-    
+    // 검증 관련 메시지 (VALIDATION 도메인)
+    [ERROR_CODES.VALIDATION.DEFAULT_ERROR]: '입력값을 다시 확인해주세요.',
     // // 필드 검증 에러
     // [ERROR_CODES.VALIDATION.FIELD_REQUIRED]: '필수 항목을 입력해주세요.',
     // [ERROR_CODES.VALIDATION.FIELD_INVALID_FORMAT]: '올바른 형식으로 입력해주세요.',
@@ -71,7 +74,8 @@ export const ERROR_MESSAGES = {
     // [ERROR_CODES.VALIDATION.DATE_INVALID]: '올바른 날짜 형식을 입력해주세요.',
     // [ERROR_CODES.VALIDATION.PASSWORD_WEAK]: '더 강력한 비밀번호를 설정해주세요.',
 
-    // // 서버 관련 메시지 (SERVER 도메인)
+    // 서버 관련 메시지 (SERVER 도메인)
+    [ERROR_CODES.SERVER.DEFAULT_ERROR]: '서버 오류가 발생했습니다.',
     // [ERROR_CODES.SERVER.INTERNAL_ERROR]: '서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
     // [ERROR_CODES.SERVER.DATABASE_ERROR]: '데이터베이스 처리 중 오류가 발생했습니다.',
     // [ERROR_CODES.SERVER.DATABASE_CONNECTION_FAILED]: '데이터베이스 연결에 실패했습니다.',
@@ -80,15 +84,20 @@ export const ERROR_MESSAGES = {
     // [ERROR_CODES.SERVER.CONFIGURATION_ERROR]: '서버 설정에 문제가 있습니다.',
     // [ERROR_CODES.SERVER.DEPENDENCY_UNAVAILABLE]: '외부 서비스에 연결할 수 없습니다.',
 
-    // // 클라이언트 관련 메시지 (CLIENT 도메인)
+    // 클라이언트 관련 메시지 (CLIENT 도메인)
+    [ERROR_CODES.CLIENT.DEFAULT_ERROR]: '클라이언트에서 예상치 못한 오류가 발생했습니다.',
     // [ERROR_CODES.CLIENT.UNEXPECTED_ERROR]: '예상치 못한 오류가 발생했습니다.',
     // [ERROR_CODES.CLIENT.COMPONENT_RENDER_ERROR]: '화면 렌더링 중 오류가 발생했습니다.',
     // [ERROR_CODES.CLIENT.STATE_CORRUPTION]: '애플리케이션 상태가 손상되었습니다. 페이지를 새로고침해주세요.',
     // [ERROR_CODES.CLIENT.BROWSER_NOT_SUPPORTED]: '지원하지 않는 브라우저입니다.',
 
     // // 비즈니스 로직 관련 메시지 (BUSINESS 도메인)
+    [ERROR_CODES.BUSINESS.DEFAULT_ERROR]: '현재 작업을 진행할 수 없습니다.',
     // [ERROR_CODES.BUSINESS.OPERATION_NOT_ALLOWED]: '허용되지 않는 작업입니다.',
     // [ERROR_CODES.BUSINESS.RESOURCE_CONFLICT]: '리소스 충돌이 발생했습니다.',
     // [ERROR_CODES.BUSINESS.QUOTA_EXCEEDED]: '할당량을 초과했습니다.',
     // [ERROR_CODES.BUSINESS.FEATURE_DISABLED]: '해당 기능이 비활성화되어 있습니다.',
+
+    // 시스템 관련 메시지 (SYSTEM 도메인)
+    [ERROR_CODES.SYSTEM.DEFAULT_ERROR]: '시스템 오류가 발생했습니다.',
 } as const;

@@ -3,7 +3,7 @@
 import Button from '@/components/common/Button';
 import Select from '@/components/common/Select';
 import { funcNowDate, funcNowTime, funcNowTimeAdd, funcTimeToHHMM, funcTimeToHHMMReverse } from '@/lib/utils/dateTime';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import { 
     FlightArrivalType, 
@@ -33,24 +33,24 @@ const FlightSearchForm = ({
 
     const [searchFrom, setSearchFrom] = useState(getSearchFrom);
     const [searchTo, setSearchTo] = useState(getSearchTo);
-    const [searchNumOfRows, setSearchNumOfRows] = useState('30');
+    const [searchNumOfRows, setSearchNumOfRows] = useState(getSearchNumOfRows);
     const searchFlightNoRef = useRef<HTMLInputElement>(null);
 
     // 서버 데이터가 변경될 때마다 폼 값 업데이트
-    useEffect(() => {
-        setSearchFrom(getSearchFrom);
-        setSearchTo(getSearchTo);
-        setSearchNumOfRows(getSearchNumOfRows);
-        searchFlightNoRef.current!.value = getFlightId ? getFlightId : '';
-        // url에 flightId 파라미터가 없을 경우 searchFlightNoRef의 값을 비움
-        // if (searchFlightNoRef.current) {
-        //     if (getFlightId) {
-        //         searchFlightNoRef.current.value = getFlightId; // flightId가 있으면 값 설정
-        //     } else {
-        //         searchFlightNoRef.current.value = ''; // flightId가 없으면 값 비움
-        //     }
-        // }
-    }, [getSearchFrom, getSearchTo, getSearchNumOfRows, getFlightId]);
+    // useEffect(() => {
+    //     setSearchFrom(getSearchFrom);
+    //     setSearchTo(getSearchTo);
+    //     setSearchNumOfRows(getSearchNumOfRows);
+    //     searchFlightNoRef.current!.value = getFlightId ? getFlightId : '';
+    //     // url에 flightId 파라미터가 없을 경우 searchFlightNoRef의 값을 비움
+    //     // if (searchFlightNoRef.current) {
+    //     //     if (getFlightId) {
+    //     //         searchFlightNoRef.current.value = getFlightId; // flightId가 있으면 값 설정
+    //     //     } else {
+    //     //         searchFlightNoRef.current.value = ''; // flightId가 없으면 값 비움
+    //     //     }
+    //     // }
+    // }, [getSearchFrom, getSearchTo, getSearchNumOfRows, getFlightId]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -77,31 +77,31 @@ const FlightSearchForm = ({
     };
 
     return (
-        <div className="max-w-[600px] mx-auto my-6">
+        <div className="mx-auto my-6">
             <form onSubmit={handleSubmit}>
                 {/* <div>
                     <label htmlFor="searchDate">날짜</label>
                     <input type="date" id="searchDate" value={searchDate} onChange={(e) => setSearchDate(e.target.value)} />
                 </div> */}
-                <div className="flex items-center gap-3">
+                <div className="flex gap-3 items-center">
                     <label htmlFor="searchFrom">조회범위(시작시간)</label>
-                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={displayIsLoading}/>
+                    <input type="time" id="searchFrom" value={searchFrom} onChange={(e) => setSearchFrom(e.target.value)} max={searchTo} disabled={!!displayIsLoading}/>
                 </div>
-                <div className="flex items-center gap-3 mt-1">
+                <div className="flex gap-3 items-center mt-1">
                     <label htmlFor="searchTo">조회범위(종료시간)</label>
-                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={displayIsLoading}/>
+                    <input type="time" id="searchTo" value={searchTo} onChange={(e) => setSearchTo(e.target.value)} min={searchFrom} disabled={!!displayIsLoading}/>
                 </div>
-                <div className="flex items-center gap-3 mt-1">
+                <div className="flex gap-3 items-center mt-1">
                     <label htmlFor="searchFlightNo">편명</label>
-                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={displayIsLoading}/>
+                    <input type="text" id="searchFlightNo" defaultValue={getFlightId} ref={searchFlightNoRef} disabled={!!displayIsLoading}/>
                 </div>
-                <div className="flex items-center gap-3 mt-1">
+                <div className="flex gap-3 items-center mt-1">
                     <label htmlFor="searchNumOfRows">표시수</label>
                     <Select
                         id="searchNumOfRows"
                         value={searchNumOfRows}
                         onChange={(e) => setSearchNumOfRows(e.target.value)}
-                        disabled={displayIsLoading}
+                        disabled={!!displayIsLoading}
                     >
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -111,7 +111,7 @@ const FlightSearchForm = ({
                     </Select>
                 </div>
                 <div className="mt-4">
-                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={displayIsLoading}>검색</Button>
+                    <Button type="submit" sizes="large" variant="primary" className="w-full" disabled={!!displayIsLoading}>검색</Button>
                 </div>
             </form>
         </div>

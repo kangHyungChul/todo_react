@@ -1,11 +1,12 @@
 'use client';
 
 // import { fetchArrivalFlights } from '../services/flightApi';
-import { 
-    FlightArrivalSearchParamsType,
-    FlightDepartureSearchParamsType
-} from '../types/flights';
-import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
+import { useRouter, usePathname } from 'next/navigation';
+// import { 
+//     FlightArrivalSearchParamsType,
+//     FlightDepartureSearchParamsType
+// } from '../types/flights';
+// import { funcNowDate, funcNowTime, funcNowTimeAdd } from '@/lib/utils/dateTime';
 // import FlightCard from './FlightCard';
 import Button from '@/components/common/Button';
 // import { useRouter } from 'next/navigation';
@@ -15,15 +16,15 @@ import Button from '@/components/common/Button';
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightReset = ({ 
     displayIsLoading, 
-    updateParams 
+    // updateParams 
 }: { 
     displayIsLoading: boolean, 
-    updateParams: (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => void 
+    // updateParams: (newParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType) => void 
 }) => {
     
     // 라우터 인스턴스 생성
-    // const router = useRouter();
-
+    const router = useRouter();
+    const pathname = usePathname();
     // useFlightArrivalSearch Hook 사용 - 올바른 Hook 사용법
     // const { FlightSearch } = useFlightSearch();
     // const { isLoading } = useFlightStore();
@@ -41,15 +42,16 @@ const FlightReset = ({
         //     pageNo: '1',
         // });
 
-        const newParams = {
-            searchDate: funcNowDate(),
-            searchFrom: funcNowTime(),
-            searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),
-            flightId: '',
-            numOfRows: '30',
-            pageNo: '1',
-        };
-        updateParams(newParams);
+        router.replace(pathname);
+        // const newParams = {
+        //     searchDate: funcNowDate(),
+        //     searchFrom: funcNowTime(),
+        //     searchTo: Number(funcNowTimeAdd(60)) >= 2400 ? '2359' : funcNowTimeAdd(60),
+        //     flightId: '',
+        //     numOfRows: '30',
+        //     pageNo: '1',
+        // };
+        // updateParams(newParams);
         // setIsLoading(true);
         // try {
 
@@ -74,7 +76,7 @@ const FlightReset = ({
     };
 
     return (
-        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={displayIsLoading}>
+        <Button variant="secondary" className="mb-4" onClick={handleReset} disabled={!!displayIsLoading}>
             {displayIsLoading ? '조회중...' : '초기화'}
         </Button>
     );

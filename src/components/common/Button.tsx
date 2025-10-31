@@ -114,12 +114,16 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         //     className,
         // ].filter(Boolean).join(' ');
         // 버튼 컴포넌트 반환
+        // disabled prop을 명시적으로 boolean으로 변환하여 Hydration 오류 방지
+        const disabled = props.disabled !== undefined ? Boolean(props.disabled) : false;
+        
         return (
 
             <button 
                 className={buttonClasses}
                 ref={ref}
                 {...props}
+                disabled={disabled}
             />
         );
     }

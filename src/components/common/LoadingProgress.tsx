@@ -3,10 +3,10 @@
 const LoadingProgress = (
 ) => {
     return (
-        <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center">
-            <div className="flex items-center justify-center">
+        <div className="flex fixed inset-0 justify-center items-center w-full h-full bg-black/50">
+            <div className="flex justify-center items-center">
                 <svg
-                    className="animate-spin w-16 h-16 text-primary"
+                    className="w-16 h-16 animate-spin text-primary"
                     viewBox="0 0 50 50"
                     fill="none"
                 >

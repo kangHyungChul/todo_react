@@ -94,27 +94,27 @@
 /* @layer components {
 
     .button {
-        @apply h-8 px-1 py-2 border-none rounded-md text-base leading-1 font-medium cursor-pointer transition-all duration-200 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply px-1 py-2 h-8 text-base font-medium rounded-md border-none transition-all duration-200 cursor-pointer leading-1 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     .button--primary {
-        @apply bg-primary text-white;
+        @apply text-white bg-primary;
     }
 
     .button--secondary {
-        @apply bg-secondary text-black;
+        @apply text-black bg-secondary;
     }
 
     .button--danger {
-        @apply bg-danger text-white;
+        @apply text-white bg-danger;
     }
 
     .button--small {
-        @apply h-6 px-2 py-1 text-sm;
+        @apply px-2 py-1 h-6 text-sm;
     }
 
     .button--large {
-        @apply h-12 px-4 py-2 text-lg;
+        @apply px-4 py-2 h-12 text-lg;
     }
 
     .button--disabled {
@@ -257,3 +257,13 @@
     }
 }
  */
+
+/* ::view-transition-group(.slow-fade) {
+    animation-duration: 300ms;
+} */
+/* ::view-transition-old(.slow-fade) {
+    animation-duration: 300ms;
+}
+::view-transition-new(.slow-fade) {
+    animation-duration: 300ms;
+} */

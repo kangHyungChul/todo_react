@@ -89,7 +89,7 @@ const FlightRefresh = ({
     };
 
     return (
-        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={displayIsLoading}>
+        <Button variant="primary" className="mb-4" onClick={handleRefresh} disabled={!!displayIsLoading}>
             {displayIsLoading ? '조회중...' : '새로고침'}
         </Button>
     );

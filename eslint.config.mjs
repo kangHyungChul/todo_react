@@ -33,6 +33,7 @@ const eslintConfig = [
             ...defaultRules,
             semi: ['warn', 'always'], // 세미콜론 사용 권장
             // tailwindcss 규칙
+            'tailwindcss/classnames-order': 'off', // Tailwind 클래스 순서 경고 비활성화
         },
     },
     {

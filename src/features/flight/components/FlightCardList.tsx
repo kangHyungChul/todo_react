@@ -163,30 +163,35 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
             {/* { `isLoading: ${isLoading}` }, { `isFetching: ${isFetching}` }, { `isPending: ${isPending}` } */}
             <FlightTab />
 
-            <FlightSearchForm queryParams={currentParams} updateParams={updateParams} displayIsLoading={displayIsLoading} />
+            <FlightSearchForm 
+                queryParams={currentParams} 
+                updateParams={updateParams} 
+                displayIsLoading={displayIsLoading}
+                key={JSON.stringify(currentParams)}
+            />
 
-            <h2 className="text-2xl font-bold mb-4 text-center">{`${title} - ${totalCount}건`}</h2>
-            <p className="text-center mb-4">
+            <h2 className="mb-4 text-2xl font-bold text-center">{`${title} - ${totalCount}건`}</h2>
+            <p className="mb-4 text-center">
                 {`${funcDateTimeToType(searchDate, 'YYYYMMDD')} ${funcTimeToHHMMReverse(searchFrom)} ~ ${funcTimeToHHMMReverse(searchTo)}`}
             </p>
 
-            <div className="flex justify-between gap-4">
+            <div className="flex gap-4 justify-between">
                 <FlightRefresh displayIsLoading={displayIsLoading} refetchParams={refetchParams} />
-                <FlightReset displayIsLoading={displayIsLoading} updateParams={updateParams} />
+                <FlightReset displayIsLoading={displayIsLoading} />
             </div>
 
             {
                 displayIsLoading ? (
                     <ul className="flex flex-col gap-4">
                         <FlightCardLayout>
-                            <div className="w-full flex flex-col justify-center items-center gap-2">
-                                <div className="h-4 w-1/4 bg-gray-200 rounded animate-pulse" />
-                                <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse" />
-                                <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse" />
-                                <div className="h-4 w-1/3 bg-gray-200 rounded animate-pulse" />
+                            <div className="flex flex-col gap-2 justify-center items-center w-full">
+                                <div className="w-1/4 h-4 bg-gray-200 rounded animate-pulse" />
+                                <div className="w-2/3 h-4 bg-gray-200 rounded animate-pulse" />
+                                <div className="w-1/2 h-4 bg-gray-200 rounded animate-pulse" />
+                                <div className="w-1/3 h-4 bg-gray-200 rounded animate-pulse" />
                                 <div className="flex gap-2 mt-2">
-                                    <div className="h-8 w-20 bg-gray-200 rounded animate-pulse" />
-                                    <div className="h-8 w-20 bg-gray-100 rounded animate-pulse" />
+                                    <div className="w-20 h-8 bg-gray-200 rounded animate-pulse" />
+                                    <div className="w-20 h-8 bg-gray-100 rounded animate-pulse" />
                                 </div>
                             </div>
                         </FlightCardLayout>

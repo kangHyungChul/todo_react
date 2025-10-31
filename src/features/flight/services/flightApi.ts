@@ -1,115 +1,55 @@
-import axios from 'axios';
+import { flightHttpClient } from '@/lib/api/httpClient';
+import { ERROR_CODES } from '@/constants/errorCodes';
+import type { AppError } from '@/lib/types/error';
 import { FlightArrivalType, FlightDepartureType } from '../types/flights';
-
-const path = () => {
-    if(process.env.NEXT_PUBLIC_VERCEL_URL === undefined) {
-        return `${process.env.NEXT_PUBLIC_BASE_URL}`;
-    } else {
-        return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-    }
-};
 
 const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     // console.log('로그확인 - flightApi_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL);
 
-    try {
+    // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
 
-        // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
-        
-        const axiosInstance = axios.create({
-            baseURL: path(),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        
-        const res = await axiosInstance.get('/api/flight/arrival', {
-            params: responseBody,
-        });
-        
-        // 200 이 아니면 에러처리
-        // catch는 2xx범위 아닐때만 애러로 블록 이외에는 try블록
-        if (res.status !== 200) {
-            throw new Error(res.data?.error || '항공편 도착 조회 실패');
-        }
-        
-        return res.data;
-        
+    const res = await flightHttpClient.get('/api/flight/arrival', {
+        params: responseBody,
+    });
 
-    } catch (error) {
-        if(axios.isAxiosError(error)) {
-            console.error('Error fetching flights:', error.response?.data);
-            throw new Error(`Failed to fetch flight information: ${error.response?.status} ${error.response?.statusText}`);
-        } else {
-            console.error('Error fetching flights:', error);
-            throw new Error(`Failed to fetch flight information: ${error}`);
-        }
-        // console.error('Error fetching flights:', error);
-        // throw error;
-    }
+    // axios 인터셉터가 2xx 범위 이외의 응답을 예외로 던지므로 여기서는 데이터만 반환
+    return res.data;
 };
 
 const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
 
     // console.log('로그확인 - flightApi_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL);
 
-    try {
+    // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
 
-        // console.log('로그확인 - flightApi_2', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL, path());
+    const res = await flightHttpClient.get('/api/flight/departure', {
+        params: responseBody,
+    });
 
-        const axiosInstance = axios.create({
-            baseURL: path(),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        
-        const res = await axiosInstance.get('/api/flight/departure', {
-            params: responseBody,
-        });
-        
-        // 200 이 아니면 에러처리
-        // catch는 2xx범위 아닐때만 애러로 블록 이외에는 try블록
-        if (res.status !== 200) {
-            throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
-        }
+    // console.log('res:', res);
 
-        // console.log('res:', res);
-        
-        return res.data;
+    return res.data;
 
-        // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
+    // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
 
-        // const res = await fetch(`${path()}/api/flight/departure?${params}`, {
-        //     method: 'GET',
-        //     cache: 'no-store',
-        // });
+    // const res = await fetch(`${path()}/api/flight/departure?${params}`, {
+    //     method: 'GET',
+    //     cache: 'no-store',
+    // });
 
-        // if (!res.ok) {
-        //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
-        // }
+    // if (!res.ok) {
+    //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
+    // }
 
-        // try {
-        //     const data = await res.json();
-        //     return data;
-        // } catch (error) {
-        //     const data = await res.text();
-        //     console.error('JSON Parse Error:', error);
-        //     throw new Error(`Failed to parse API response: ${data}`);
-        // }
-
-    } catch (error) {
-        if(axios.isAxiosError(error)) {
-            console.error('Error fetching flights:', error.response?.data);
-            throw new Error(`Failed to fetch flight information: ${error.response?.status} ${error.response?.statusText}`);
-        } else {
-            console.error('Error fetching flights:', error);
-            throw new Error(`Failed to fetch flight information: ${error}`);
-        }
-        // console.error('Error fetching flights:', error);
-        // throw error;
-    }
+    // try {
+    //     const data = await res.json();
+    //     return data;
+    // } catch (error) {
+    //     const data = await res.text();
+    //     console.error('JSON Parse Error:', error);
+    //     throw new Error(`Failed to parse API response: ${data}`);
+    // }
 };
 
 const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
@@ -122,110 +62,73 @@ const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
 
         // console.log('🚀 fetchFlightTrack 요청 시작:', flightReg);
 
-        const axiosInstance = axios.create({
-            baseURL: path(),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        
-        const res = await axiosInstance.get('/api/flight/tracker', {
+        const res = await flightHttpClient.get('/api/flight/tracker', {
             params: {
                 flightReg: flightReg
             },
             signal: signal
         });
 
-        if (res.status !== 200) {
-            console.error('API Response Error fetching flight track:', res.status, res.statusText);
-            throw new Error(`API Response Error fetching flight track: ${res.status} ${res.statusText}`);
-        }
-
         return res.data;
 
     } catch (error) {
 
-        if(axios.isAxiosError(error)) {
-            if (error.code === 'ERR_CANCELED') {
-                console.warn('API warn: fetchFlightTrack is canceled: unmounted');
-                return;
-            }
-            console.error('API Error fetching flight track:', error.response?.data);
-            throw new Error(`API Error fetching flight track: ${error.response?.status} ${error.response?.statusText}`);
-        } else {
-            console.error('Unknown Error fetching flight track:', error);
-            throw new Error(`Unknown Error fetching flight track: ${error}`);
+        const appError = error as AppError;
+        if (appError.code === ERROR_CODES.NETWORK.REQUEST_CANCELLED) {
+            console.warn('API warn: fetchFlightTrack is canceled: unmounted');
+            return;
         }
 
-        // console.error('Error fetching flight track:', error);
-        // throw error;
+        throw error;
     }
 };
 
 const fetchFlightDetail = async (responseBody: string) => {
 
-    try {
+    const res = await flightHttpClient.get('/api/flight/detail', {
+        params: {
+            fid: responseBody,
+        },
+    });
+    
+    const data = res.data.items?.[0];
 
-        const axiosInstance = axios.create({
-            baseURL: path(),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        
-        const res = await axiosInstance.get('/api/flight/detail', {
-            params: {
-                fid: responseBody,
-            },
-        });
-        
-        // 200 이 아니면 에러처리
-        // catch는 2xx범위 아닐때만 애러로 블록 이외에는 try블록
-        if (res.status !== 200) {
-            throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
-        }
-
-        const data = res.data.items[0];
-
-        if (!data) {
-            throw new Error(`no data: ${res.status} ${res.statusText}`);
-        }
-        
-        return data;
-        
-        // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
-
-        // const res = await fetch(`${path()}/api/flight/arrival?${params}`, {
-        //     method: 'GET',
-        //     cache: 'no-store',
-        // });
-
-        // if (!res.ok) {
-        //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
-        // }
-
-        // try {
-        //     const data = await res.json();
-        //     return data;
-        // } catch (error) {
-        //     const data = await res.text();
-        //     console.error('JSON Parse Error:', error);
-        //     throw new Error(`Failed to parse API response: ${data}`);
-        // }
-
-    } catch (error) {
-        if(axios.isAxiosError(error)) {
-            console.error('Error fetching flights:', error.response?.data);
-            throw new Error(`Failed to fetch flight information: ${error.response?.status} ${error.response?.statusText}`);
-        } else {
-            console.error('Error fetching flights:', error);
-            throw new Error(`Failed to fetch flight information: ${error}`);
-        }
-        // console.error('Error fetching flights:', error);
-        // throw error;
+    if (!data) {
+        throw new Error('no data');
     }
+    
+    return data;
+    
+    // const params = new URLSearchParams(responseBody as Record<string, string>).toString();
+
+    // const res = await fetch(`${path()}/api/flight/arrival?${params}`, {
+    //     method: 'GET',
+    //     cache: 'no-store',
+    // });
+
+    // if (!res.ok) {
+    //     throw new Error(`Failed to fetch flight information: ${res.status} ${res.statusText}`);
+    // }
+
+    // try {
+    //     const data = await res.json();
+    //     return data;
+    // } catch (error) {
+    //     const data = await res.text();
+    //     console.error('JSON Parse Error:', error);
+    //     throw new Error(`Failed to parse API response: ${data}`);
+    // }
 };
 
+const fetchFlightInfor = async (flightCode: string) => {
 
+    const res = await flightHttpClient.get('/api/flight/infor', {
+        params: {
+            airline_iata: flightCode
+        },
+    });
 
-export { fetchArrivalFlights, fetchDepartureFlights, fetchFlightTrack, fetchFlightDetail };
+    return res.data.response.body;
+};
+
+export { fetchArrivalFlights, fetchDepartureFlights, fetchFlightTrack, fetchFlightDetail, fetchFlightInfor };
