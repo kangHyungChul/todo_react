@@ -129,9 +129,9 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     
     // const { 
-        //     setBulkState
-        // } = useFlightState(resFlightData);
-        
+    //     setBulkState
+    // } = useFlightState(resFlightData);
+    
     // const { isLoading, setLoadingState } = useFlightStore();
     // useEffect(() => {
     //     // // 새로운 데이터가 도착하면 로딩 상태 해제

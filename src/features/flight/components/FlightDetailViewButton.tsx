@@ -15,7 +15,7 @@ const FlightDetailViewButton = ({ path }: { path: string }) => {
         if (confirm) {
             router.push(path);
         }
-    }
+    };
     
     return (
         user ? (

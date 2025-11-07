@@ -3,7 +3,7 @@
 // import { FlightArrivalItemType } from '../types/flights';
 import { useQuery } from '@tanstack/react-query';
 import useModalStore from '@/store/ModalStore';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { fetchFlightTrack } from '../services/flightApi';
 import { GoogleMap, useJsApiLoader, OverlayView } from '@react-google-maps/api';
 // import type { Map } from '@react-google-maps/api';
@@ -20,7 +20,7 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
 
     // const [flightTrack, setFlightTrack] = useState([]);
     // const [isLoaded, setIsLoaded] = useState(false);
-    const [flightTrack, setFlightTrack] = useState<LatLngLiteral | null>(null);
+    // const [flightTrack, setFlightTrack] = useState<LatLngLiteral | null>(null);
 
     // Google Maps API 로드 설정
     const { isLoaded } = useJsApiLoader({
@@ -39,6 +39,14 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
         enabled: !!flightReg // flightReg이 있을 때만 쿼리 실행
     });
 
+    const flightTrack = useMemo(() => {
+        return {
+            lat: flightTrackData?.states[0][6],
+            lng: flightTrackData?.states[0][5],
+            rotation: Math.round(flightTrackData?.states[0][10] - 45)
+        } as LatLngLiteral;
+    }, [flightTrackData]);
+
     useEffect(() => {
 
         // 위치 데이터가 없는 경우 처리
@@ -48,35 +56,9 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
             return;
         }
 
-        if (flightTrackData) {
-            try {
-                // const resFlightTrack = flightTrackData;
-
-                // console.log('resFlightTrack:', resFlightTrack);
-
-                console.log('flightTrackData:', flightTrackData);
-
-                // 위치 데이터가 없는 경우 처리
-                if (!flightTrackData || flightTrackData.states === null) {
-                    alert('위치조회가 불가능한 항공기입니다');
-                    closeModal();
-                    return;
-                }
-                
-                // 비행 추적 데이터 설정
-                setFlightTrack({ 
-                    lat: flightTrackData.states[0][6], 
-                    lng: flightTrackData.states[0][5], 
-                    rotation: Math.round(flightTrackData.states[0][10] - 45) 
-                });
-
-                // console.log('flightTrack:', flightTrack);
-                
-            } catch (error) {
-                console.error('비행기 추적 데이터 처리 실패:', error);
-                alert('이미 착륙했거나 위치조회가 불가능한 항공기입니다');
-                closeModal();
-            }
+        if (flightTrackData && !flightTrackData.states?.[0]) {
+            alert('위치조회가 불가능한 항공기입니다');
+            closeModal();
         }
     }, [flightTrackData, error, closeModal]);
 

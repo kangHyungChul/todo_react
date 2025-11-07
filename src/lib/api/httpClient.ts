@@ -1,5 +1,6 @@
 // src/lib/api/httpClient.ts
 import axios, { AxiosInstance } from 'axios';
+import { Logger } from './error/logger';
 import { NormalizerOptions, toAppError } from './error-normalizer';
 import { ERROR_CODES } from '@/constants/errorCodes';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
@@ -12,7 +13,11 @@ export const createHttpClient = (options?: NormalizerOptions): AxiosInstance => 
 
     instance.interceptors.response.use(
         (response) => response,
-        (error) => { throw toAppError(error, options); }
+        async (error) => { 
+            const appError = toAppError(error, options);
+            await Logger.error(appError);
+            throw appError;
+        }
     );
 
     return instance;

@@ -54,6 +54,9 @@ export const ERROR_MESSAGES = {
 
     // 네트워크 관련 메시지 (NETWORK 도메인)
     [ERROR_CODES.NETWORK.DEFAULT_ERROR]: '네트워크 연결에 실패했습니다.',
+    [ERROR_CODES.NETWORK.TIMEOUT]: '요청 시간이 초과되었습니다. 다시 시도해주세요.',
+    [ERROR_CODES.NETWORK.UNREACHABLE]: '네트워크 연결에 실패했습니다. 네트워크 상태를 확인해주세요.',
+    [ERROR_CODES.NETWORK.REQUEST_CANCELLED]: '요청이 취소되었습니다.',
     // [ERROR_CODES.NETWORK.CONNECTION_FAILED]: '네트워크 연결에 실패했습니다.',
     // [ERROR_CODES.NETWORK.CONNECTION_TIMEOUT]: '요청 시간이 초과되었습니다. 다시 시도해주세요.',
     // [ERROR_CODES.NETWORK.CONNECTION_REFUSED]: '서버에서 연결을 거부했습니다.',

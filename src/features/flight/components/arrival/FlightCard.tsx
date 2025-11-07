@@ -3,7 +3,7 @@
 import { FlightArrivalItemType } from '../../types/flights';
 import useModalStore from '@/store/ModalStore';
 // import { useModalContext } from '@/contexts/ModalContext';
-import FlightDetailModal from './FlightDetailModal';
+// import FlightDetailModal from './FlightDetailModal';
 import FlightLogo from '../FlightLogo';
 import FlightExitGate from '../FlightExitGate';
 import FlightRemark from '../FlightRemark';

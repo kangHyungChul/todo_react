@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import Button from '@/components/common/Button';
 import { useRouter } from 'next/navigation';
@@ -19,14 +19,67 @@ const AuthCallbackPage = () => {
     const router = useRouter();
 
     // 상태 관리
-    const [status, setStatus] = useState<AuthStatus>('idle');
+    const [status, setStatus] = useState<AuthStatus>('loading');
     const [result, setResult] = useState<AuthResult | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string>('');
 
+    // 초기 인증 상태 확인 함수
+    const checkInitialAuthState = useCallback(async () => {
+        try {
+            // setStatus('loading');
+            
+            const { data: { session }, error } = await supabase.auth.getSession();
+            
+            if (error) {
+                console.log('세션 확인 오류:', error);
+                
+                // 토큰 만료 에러인지 확인
+                if (error.message.includes('expired') || error.message.includes('invalid')) {
+                    setStatus('expired');
+                    setErrorMessage('인증 토큰이 만료되었습니다. 새로운 인증 메일을 발송해주세요.');
+                    
+                    // URL에서 이메일 정보 추출 시도
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const email = urlParams.get('email');
+                    if (email) {
+                        setUserEmail(email);
+                    }
+                } else {
+                    setStatus('error');
+                    setErrorMessage('인증 처리 중 오류가 발생했습니다.');
+                }
+                return;
+            }
+
+            // 세션이 있지만 이메일이 확인되지 않은 경우
+            if (session?.user && !session.user.email_confirmed_at) {
+                setStatus('expired');
+                setErrorMessage('이메일 인증이 완료되지 않았습니다. 인증 메일을 다시 발송해주세요.');
+                setUserEmail(session.user.email || '');
+            } else if (session?.user?.email_confirmed_at) {
+                // 이미 인증된 경우
+                setStatus('success');
+                setResult({
+                    success: true,
+                    message: '이미 인증이 완료된 계정입니다.',
+                    userId: session.user.id
+                });
+            }
+            
+        } catch (error) {
+            console.error('초기 인증 상태 확인 오류:', error);
+            setStatus('error');
+            setErrorMessage('인증 상태 확인 중 오류가 발생했습니다.');
+        }
+    }, []);
+
     useEffect(() => {
         // 초기 상태 확인
-        checkInitialAuthState();
+        // checkInitialAuthState();
+        (async () => {
+            await checkInitialAuthState();
+        })();
 
         // Supabase 인증 상태 변경 감지
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -72,57 +125,7 @@ const AuthCallbackPage = () => {
         );
 
         return () => subscription.unsubscribe();
-    }, []);
-
-    // 초기 인증 상태 확인 함수
-    const checkInitialAuthState = async () => {
-        try {
-            setStatus('loading');
-            
-            const { data: { session }, error } = await supabase.auth.getSession();
-            
-            if (error) {
-                console.log('세션 확인 오류:', error);
-                
-                // 토큰 만료 에러인지 확인
-                if (error.message.includes('expired') || error.message.includes('invalid')) {
-                    setStatus('expired');
-                    setErrorMessage('인증 토큰이 만료되었습니다. 새로운 인증 메일을 발송해주세요.');
-                    
-                    // URL에서 이메일 정보 추출 시도
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const email = urlParams.get('email');
-                    if (email) {
-                        setUserEmail(email);
-                    }
-                } else {
-                    setStatus('error');
-                    setErrorMessage('인증 처리 중 오류가 발생했습니다.');
-                }
-                return;
-            }
-
-            // 세션이 있지만 이메일이 확인되지 않은 경우
-            if (session?.user && !session.user.email_confirmed_at) {
-                setStatus('expired');
-                setErrorMessage('이메일 인증이 완료되지 않았습니다. 인증 메일을 다시 발송해주세요.');
-                setUserEmail(session.user.email || '');
-            } else if (session?.user?.email_confirmed_at) {
-                // 이미 인증된 경우
-                setStatus('success');
-                setResult({
-                    success: true,
-                    message: '이미 인증이 완료된 계정입니다.',
-                    userId: session.user.id
-                });
-            }
-            
-        } catch (error) {
-            console.error('초기 인증 상태 확인 오류:', error);
-            setStatus('error');
-            setErrorMessage('인증 상태 확인 중 오류가 발생했습니다.');
-        }
-    };
+    }, [checkInitialAuthState]);
 
     // 인증 메일 재전송 함수
     const handleResendEmail = async () => {
