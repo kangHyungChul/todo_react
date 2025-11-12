@@ -15,7 +15,10 @@ export const createHttpClient = (options?: NormalizerOptions): AxiosInstance => 
         (response) => response,
         async (error) => { 
             const appError = toAppError(error, options);
-            await Logger.error(appError);
+            // 요청 취소는 로깅하지 않음 (Strict Mode, unmount 등 정상 동작)
+            if (appError.code !== 'NETWORK_REQUEST_CANCELLED') {
+                await Logger.error(appError);
+            }
             throw appError;
         }
     );

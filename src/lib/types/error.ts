@@ -22,9 +22,8 @@ export type ErrorSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 //    에러가 어느 계층(서버/클라이언트/네트워크)에서 발생했는지 표현하기 위한 보조 타입입니다.
 export type AppErrorOrigin = 'server' | 'client' | 'network' | 'unknown';
 
-// 4. 공통 필드 묶음(AppErrorBase)
-//    AppError와 CreateErrorOptions에서 동시에 사용하는 공통 필드를 한 번만 정의해 중복을 제거합니다.
-export interface AppErrorBase {
+// 4. AppError
+export interface AppError {
     domain: ErrorDomain;                 // 에러가 발생한 도메인
     code: string;                        // 에러 식별 코드 (서버/클라이언트 정의)
     message: string;                     // 사용자에게 노출할 메시지(초기엔 서버 문자열 그대로 사용)
@@ -32,26 +31,28 @@ export interface AppErrorBase {
     statusCode: HttpStatusCode;          // HTTP 상태 코드 (없으면 0 등으로 설정 가능)
     origin: AppErrorOrigin;              // 에러 발생 출처
     
-    severity?: ErrorSeverity;              // 에러 심각도 레벨
+    severity?: ErrorSeverity;            // 에러 심각도 레벨
     details?: Record<string, unknown>;   // 디버깅용 부가 정보 (요청 URL, 응답 body 등)
-    traceId?: string | null;             // 서버/외부 API가 내려준 추적 ID
+    traceId?: string;                    // 서버/외부 API가 내려준 추적 ID
     meta?: Record<string, unknown>;      // 재시도 가능 여부 등 UI에서 바로 쓰고 싶은 부가 정보
-}
-
-// 5. 통합 에러 인터페이스(AppError)
-//    런타임에서 사용되는 최종 에러 객체로, timestamp와 originalError를 포함합니다.
-export interface AppError extends AppErrorBase {
     timestamp?: string;                  // 에러 감지 시간 (ISO 문자열 등)
     originalError?: Error;               // 원본 Error 인스턴스
 }
 
+// 5. 통합 에러 인터페이스(AppError)
+//    런타임에서 사용되는 최종 에러 객체로, timestamp와 originalError를 포함합니다.
+// export interface AppError extends AppErrorBase {
+//     timestamp?: string;                  // 에러 감지 시간 (ISO 문자열 등)
+//     originalError?: Error;               // 원본 Error 인스턴스
+// }
+
 // 6. 에러 생성 옵션(CreateErrorOptions)
 //    노멀라이저나 헬퍼 함수에서 AppError를 만들 때 사용할 설정 값입니다.
 //    기본적으로 AppError와 같은 구조를 공유하며, 생성 시점에 timestamp/originalError를 같이 넘길 수 있도록 동일 필드를 노출합니다.
-export interface CreateErrorOptions extends AppErrorBase {
-    timestamp?: string;
-    originalError?: Error;
-}
+// export interface CreateErrorOptions extends AppErrorBase {
+//     timestamp?: string;
+//     originalError?: Error;
+// }
 
 
 // 7. 노멀라이저 전용 타입(NormalizerOptions 등)

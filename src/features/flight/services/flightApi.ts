@@ -53,6 +53,8 @@ const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
 };
 
 const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
+
+    console.log('🚀 [fetchFlightTrack] 요청 시작, flightReg:', flightReg, 'signal:', signal);
     
     try {
         // // flights 데이터를 query parameter로 전달
@@ -69,15 +71,22 @@ const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
             signal: signal
         });
 
+        console.log('✅ [fetchFlightTrack] 요청 성공, res:', res);
+
         return res.data;
 
     } catch (error) {
+
+        console.log('❌ [fetchFlightTrack] 에러 발생, error:', error);
+
 
         const appError = error as AppError;
         if (appError.code === ERROR_CODES.NETWORK.REQUEST_CANCELLED) {
             console.warn('API warn: fetchFlightTrack is canceled: unmounted');
             return;
         }
+
+        console.error('🔴 [fetchFlightTrack] 에러 throw');
 
         throw error;
     }

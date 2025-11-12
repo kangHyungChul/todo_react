@@ -2,13 +2,20 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { ReactNode } from 'react';
+import type { ReactNode, ComponentType } from 'react';
 
-type ModalStore = {
+interface ModalStore {
     isOpen: boolean;
     content: ReactNode | null;
+    component: ComponentType<Record<string, unknown>> | null;
+    props: Record<string, unknown> | null;
     modalSize: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | null;
     openModal: (content: ReactNode, size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl') => void;
+    openModalWithComponent: <P extends Record<string, unknown>>(
+        component: ComponentType<P>,
+        props: P,
+        size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+    ) => void;
     closeModal: () => void;
 }
 
@@ -51,6 +58,8 @@ const useModalStore = create<ModalStore>()(
         (set) => ({
             isOpen: false,
             content: null,
+            component: null,
+            props: null,
             modalSize: 'md',
             openModal: (content, size = 'md') => {
                 // console.log('openModal size:', size);
@@ -58,6 +67,18 @@ const useModalStore = create<ModalStore>()(
                     ...state, 
                     isOpen: true, 
                     content,
+                    component: null,
+                    props: null,
+                    modalSize: size
+                }));
+            },
+            openModalWithComponent: (component, props, size = 'md') => {
+                set((state) => ({ 
+                    ...state, 
+                    isOpen: true, 
+                    content: null,  // content 방식과 구분
+                    component: component as ComponentType<Record<string, unknown>>,
+                    props: props as Record<string, unknown>,
                     modalSize: size
                 }));
             },
@@ -65,6 +86,8 @@ const useModalStore = create<ModalStore>()(
                 ...state, 
                 isOpen: false, 
                 content: null,
+                component: null,
+                props: null,
                 modalSize: 'md'
             })),
         }), // 로직과 상태 정의 전달

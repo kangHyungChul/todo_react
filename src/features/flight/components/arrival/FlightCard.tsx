@@ -18,7 +18,7 @@ import { memo } from 'react';
 const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
 
     // const { openModalContext } = useModalContext();
-    const openModal = useModalStore((state) => state.openModal);
+    const openModalWithComponent = useModalStore((state) => state.openModalWithComponent);
     const scheduleDatetime = funcDateTimeToType(flight.scheduleDatetime, 'HHMM');
     const estimatedDatetime = funcDateTimeToType(flight.estimatedDatetime, 'HHMM');
     // const isCodeshare = flight.codeshare === 'Slave';
@@ -99,7 +99,18 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                     {/* <Button variant="primary" outline={true} onClick={() => openModal(<FlightDetailModal flight={flight} />)}>상세보기</Button> */}
                     {
                         (flight.remark === null || flight.remark === '지연') && (
-                            <Button variant="primary" outline={true} disabled={flight.aircraftRegNo === ''} onClick={() => openModal(<FlightTrackModal flightId={flight.flightId} flightReg={flight.aircraftRegNo} />, '2xl')}>현재위치</Button>
+                            <Button 
+                                variant="primary" 
+                                outline={true} 
+                                disabled={flight.aircraftRegNo === ''} 
+                                onClick={() => openModalWithComponent(
+                                    FlightTrackModal, 
+                                    { flightId: flight.flightId, flightReg: flight.aircraftRegNo },
+                                    '2xl'
+                                )}
+                            >
+                                현재위치
+                            </Button>
                         )
                     }
                     <FlightDetailViewButton path={`/flight/detail/${flight.fid}`} />

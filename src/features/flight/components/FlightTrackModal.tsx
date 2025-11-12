@@ -15,6 +15,8 @@ interface LatLngLiteral {
 }
 
 const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId: string }) => {
+    
+    console.log('🔵 [FlightTrackModal] 렌더링 시작, flightReg:', flightReg);
 
     const closeModal = useModalStore((state) => state.closeModal);
 
@@ -32,35 +34,59 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     const { data: flightTrackData, isFetching, error } = useQuery({
         queryKey: ['flight-tracker', flightReg],
         queryFn: ({ signal }) => {
-            console.log('signal:', signal);
+            console.log('🟢 [useQuery] queryFn 실행, signal:', signal, 'flightReg:', flightReg);
             return fetchFlightTrack(flightReg, signal);
         },
         staleTime: 1000 * 10, // 10초
         enabled: !!flightReg // flightReg이 있을 때만 쿼리 실행
     });
 
+    // 42번째 줄 위에 추가
+    console.log('🟡 [FlightTrackModal] 상태 체크:', {
+        isFetching,
+        hasData: !!flightTrackData,
+        hasError: !!error,
+        flightReg
+    });
+
     const flightTrack = useMemo(() => {
+        // flightTrackData나 states가 없거나 빈 배열인 경우 null 반환
+        if (!flightTrackData?.states || flightTrackData.states.length === 0) {
+            return null;
+        }
+
+        const state = flightTrackData.states[0];
+        // state가 null이거나 필요한 인덱스가 없는 경우 null 반환
+        if (!state || state.length < 11) {
+            return null;
+        }
+
         return {
-            lat: flightTrackData?.states[0][6],
-            lng: flightTrackData?.states[0][5],
-            rotation: Math.round(flightTrackData?.states[0][10] - 45)
+            lat: state[6],
+            lng: state[5],
+            rotation: Math.round(state[10] - 45)
         } as LatLngLiteral;
     }, [flightTrackData]);
 
     useEffect(() => {
+        // 로딩 중이면 체크하지 않음
+        if (isFetching) {
+            return;
+        }
 
-        // 위치 데이터가 없는 경우 처리
+        // 에러가 발생한 경우 처리
         if (error) {
             alert('위치조회가 불가능한 항공기입니다');
             closeModal();
             return;
         }
-
-        if (flightTrackData && !flightTrackData.states?.[0]) {
+        
+        // 로딩이 완료되었는데 데이터가 없거나 유효하지 않은 경우 처리
+        if (!flightTrackData || !flightTrackData.states || flightTrackData.states.length === 0) {
             alert('위치조회가 불가능한 항공기입니다');
             closeModal();
         }
-    }, [flightTrackData, error, closeModal]);
+    }, [flightTrackData, error, isFetching, closeModal]);
 
     // const getFlightTrack = useCallback(async() => {
     //     try {

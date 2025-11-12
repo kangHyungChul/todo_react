@@ -4,6 +4,8 @@
 // severity에 따라 로깅 여부를 결정하고, 환경에 맞는 로깅 방식을 사용합니다.
 
 import type { AppError } from '@/lib/types/error';
+import { sendToSlack } from './slack';
+import { sendToSentry } from './sentry';
 
 export const Logger = {
     /**
@@ -12,6 +14,10 @@ export const Logger = {
      * - 프로덕션: severity가 high/critical인 경우만 로깅
      */
     error: async (error: AppError) => {
+
+        // 환경 구분
+        const isServer = typeof window === 'undefined';
+        
         // 개발 환경에서는 모든 에러 출력
         if (process.env.NODE_ENV === 'development') {
             console.error('[Logger]', {
@@ -26,6 +32,7 @@ export const Logger = {
                 traceId: error.traceId,
                 timestamp: error.timestamp
             });
+            sendToSentry(error);
             return;
         }
 
@@ -34,8 +41,7 @@ export const Logger = {
             return;
         }
 
-        // 환경 구분
-        const isServer = typeof window === 'undefined';
+        sendToSentry(error);
 
         if (isServer) {
             // 서버: console.error (나중에 Slack, Sentry 등 추가 가능)
@@ -49,8 +55,12 @@ export const Logger = {
                 timestamp: error.timestamp
             });
 
-            // TODO: Slack/Sentry 전송
-            // await sendToSlack(error);
+            // Slack 전송 (실패해도 로깅은 계속 진행)
+            try {
+                await sendToSlack(error);
+            } catch (slackError) {
+                console.error('Slack 전송 중 에러 발생:', slackError);
+            }
         } else {
             // 클라이언트: console.error (나중에 Sentry 추가 가능)
             console.error('[Client Error]', {

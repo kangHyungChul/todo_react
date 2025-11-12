@@ -34,7 +34,9 @@ export const ERROR_MESSAGES = {
     // 항공편 관련 메시지 (FLIGHT 도메인)
     [ERROR_CODES.FLIGHT.DEFAULT_ERROR]: '항공편 정보를 불러오지 못했습니다.',
 
-    // // 조회 관련 에러
+    // 조회 관련 에러
+    [ERROR_CODES.FLIGHT.ARRIVAL_SEARCH_ERROR]: '도착 항공편 정보를 불러오지 못했습니다.',
+    [ERROR_CODES.FLIGHT.DEPARTURE_SEARCH_ERROR]: '출발 항공편 정보를 불러오지 못했습니다.',
     // [ERROR_CODES.FLIGHT.SEARCH_NO_RESULTS]: '검색 조건에 맞는 항공편이 없습니다.',
     // [ERROR_CODES.FLIGHT.SEARCH_INVALID_DATE]: '올바른 날짜를 입력해주세요.',
     // [ERROR_CODES.FLIGHT.SEARCH_INVALID_ROUTE]: '유효하지 않은 항공 경로입니다.',

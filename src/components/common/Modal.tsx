@@ -4,6 +4,7 @@
 import useModalStore from '@/store/ModalStore';
 import { cn } from '@/lib/utils/utils';
 // import { useShallow } from 'zustand/react/shallow';
+import { createElement, useMemo } from 'react';
 
 const Modal = () => {
     // const { isOpen, content, closeModal } = useModal();
@@ -28,8 +29,18 @@ const Modal = () => {
     
     const isOpen = useModalStore((state) => state.isOpen);
     const content = useModalStore((state) => state.content);
+    const component = useModalStore((state) => state.component);
+    const props = useModalStore((state) => state.props);
     const modalSize = useModalStore((state) => state.modalSize);
     const closeModal = useModalStore((state) => state.closeModal);
+
+    
+    const renderedContent = useMemo(() => {
+        if (component && props) {
+            return createElement(component, props);
+        }
+        return content;
+    }, [component, props, content]);
         
     if (!isOpen) return null;
 
@@ -45,7 +56,8 @@ const Modal = () => {
         <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center" onClick={closeModal}>
             <div className={cn('bg-white p-6 rounded shadow-lg w-full relative', sizeClass)} onClick={(e) => e.stopPropagation()}>
                 <div className="overflow-y-auto">
-                    {content}
+                    {/* component가 있으면 Component 렌더링, 없으면 content 렌더링 */}
+                    { renderedContent }
                 </div>
                 <button type="button" onClick={closeModal} className="absolute top-3 right-3">
                     <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

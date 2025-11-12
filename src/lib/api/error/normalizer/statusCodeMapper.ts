@@ -23,7 +23,7 @@ export const DOMAIN_DEFAULT_CODES: Record<ErrorDomain, string> = {
 // 도메인별 기본 severity 매핑 추가
 export const DOMAIN_DEFAULT_SEVERITY: Record<ErrorDomain, ErrorSeverity> = {
     AUTH: 'HIGH',        // 인증/인가 오류는 중요
-    FLIGHT: 'MEDIUM',    // 항공편 정보 오류는 중간
+    FLIGHT: 'HIGH',    // 항공편 정보 오류는 중간(medium)
     NETWORK: 'LOW',      // 네트워크 오류는 낮음 (재시도 가능)
     SERVER: 'HIGH',      // 서버 오류는 중요
     CLIENT: 'MEDIUM',    // 클라이언트 오류는 중간
