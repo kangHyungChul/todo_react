@@ -42,15 +42,19 @@ export const ERROR_MESSAGES = {
     // [ERROR_CODES.FLIGHT.SEARCH_INVALID_ROUTE]: '유효하지 않은 항공 경로입니다.',
     
     // // 상세 정보 에러
-    // [ERROR_CODES.FLIGHT.DETAIL_NOT_FOUND]: '해당 항공편 정보를 찾을 수 없습니다.',
+    [ERROR_CODES.FLIGHT.DETAIL_NOT_FOUND]: '해당 항공편 정보를 찾을 수 없습니다.',
+    [ERROR_CODES.FLIGHT.DETAIL_ERROR]: '항공편 상세 정보를 불러오지 못했습니다.',
+    [ERROR_CODES.FLIGHT.INFOR_SEARCH_ERROR]: '항공사 이미지 정보를 불러오지 못했습니다.',
     // [ERROR_CODES.FLIGHT.DETAIL_UNAVAILABLE]: '항공편 상세 정보를 일시적으로 조회할 수 없습니다.',
     
     // // 추적 관련 에러
     [ERROR_CODES.FLIGHT.TRACKING_NOT_AVAILABLE]: '항공편 추적 정보를 제공할 수 없습니다.',
+    [ERROR_CODES.FLIGHT.TRACKING_ERROR]: '항공편 추적 정보를 불러오지 못했습니다.',
     // [ERROR_CODES.FLIGHT.TRACKING_OUTDATED]: '추적 정보가 최신이 아닐 수 있습니다.',
     
     // // 외부 API 관련 에러
-    // [ERROR_CODES.FLIGHT.API_UNAVAILABLE]: '항공편 정보 서비스를 일시적으로 이용할 수 없습니다.',
+    [ERROR_CODES.FLIGHT.AERODATABOX_DEFAULT_ERROR]: 'AERODATABOX 외부 API 오류가 발생했습니다.',
+    [ERROR_CODES.FLIGHT.OPENSKY_DEFAULT_ERROR]: 'OPENSKY 외부 API 오류가 발생했습니다.',
     // [ERROR_CODES.FLIGHT.API_RATE_LIMITED]: '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
     // [ERROR_CODES.FLIGHT.API_PARSE_ERROR]: '항공편 정보를 처리하는 중 오류가 발생했습니다.',
 

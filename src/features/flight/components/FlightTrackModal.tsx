@@ -16,7 +16,7 @@ interface LatLngLiteral {
 
 const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId: string }) => {
     
-    console.log('🔵 [FlightTrackModal] 렌더링 시작, flightReg:', flightReg);
+    // console.log('🔵 [FlightTrackModal] 렌더링 시작, flightReg:', flightReg);
 
     const closeModal = useModalStore((state) => state.closeModal);
 
@@ -34,7 +34,7 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     const { data: flightTrackData, isFetching, error } = useQuery({
         queryKey: ['flight-tracker', flightReg],
         queryFn: ({ signal }) => {
-            console.log('🟢 [useQuery] queryFn 실행, signal:', signal, 'flightReg:', flightReg);
+            // console.log('🟢 [useQuery] queryFn 실행, signal:', signal, 'flightReg:', flightReg);
             return fetchFlightTrack(flightReg, signal);
         },
         staleTime: 1000 * 10, // 10초
@@ -42,12 +42,12 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
     });
 
     // 42번째 줄 위에 추가
-    console.log('🟡 [FlightTrackModal] 상태 체크:', {
-        isFetching,
-        hasData: !!flightTrackData,
-        hasError: !!error,
-        flightReg
-    });
+    // console.log('🟡 [FlightTrackModal] 상태 체크:', {
+    //     isFetching,
+    //     hasData: !!flightTrackData,
+    //     hasError: !!error,
+    //     flightReg
+    // });
 
     const flightTrack = useMemo(() => {
         // flightTrackData나 states가 없거나 빈 배열인 경우 null 반환

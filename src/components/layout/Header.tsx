@@ -27,8 +27,8 @@ const AuthComponent = () => {
                 <Link href="#" onClick={handleSignOut}>Logout</Link>
             </div>
         )
-    )
-}
+    );
+};
 
 const Header = () => {
     const { loading: authLoading } = useAuth();  // user, profile, loading, signOut 상태 사용

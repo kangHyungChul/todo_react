@@ -1,7 +1,8 @@
 import { flightHttpClient } from '@/lib/api/httpClient';
-import { ERROR_CODES } from '@/constants/errorCodes';
-import type { AppError } from '@/lib/types/error';
+// import type { AppError } from '@/lib/types/error';
 import { FlightArrivalType, FlightDepartureType } from '../types/flights';
+import { ERROR_CODES } from '@/constants/errorCodes';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 
 const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
@@ -11,6 +12,11 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     const res = await flightHttpClient.get('/api/flight/arrival', {
         params: responseBody,
+        metadata: {
+            category: 'ARRIVAL',
+            code: ERROR_CODES.FLIGHT.ARRIVAL_SEARCH_ERROR,
+            message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.ARRIVAL_SEARCH_ERROR],
+        },
     });
 
     // axios 인터셉터가 2xx 범위 이외의 응답을 예외로 던지므로 여기서는 데이터만 반환
@@ -25,6 +31,11 @@ const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
 
     const res = await flightHttpClient.get('/api/flight/departure', {
         params: responseBody,
+        metadata: {
+            category: 'DEPARTURE',
+            code: ERROR_CODES.FLIGHT.DEPARTURE_SEARCH_ERROR,
+            message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.DEPARTURE_SEARCH_ERROR],
+        },
     });
 
     // console.log('res:', res);
@@ -54,42 +65,58 @@ const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
 
 const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
 
-    console.log('🚀 [fetchFlightTrack] 요청 시작, flightReg:', flightReg, 'signal:', signal);
+    // console.log('🚀 [fetchFlightTrack] 요청 시작, flightReg:', flightReg, 'signal:', signal);
+
+    const res = await flightHttpClient.get('/api/flight/tracker', {
+        params: {
+            flightReg: flightReg
+        },
+        metadata: {
+            category: 'TRACKER',
+            code: ERROR_CODES.FLIGHT.TRACKING_ERROR,
+            message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.TRACKING_ERROR],
+        },
+        signal: signal
+    });
     
-    try {
-        // // flights 데이터를 query parameter로 전달
-        // const queryParams = new URLSearchParams({
-        //     flights: flights
-        // }).toString();
+    return res.data;
+    // try {
+    //     // // flights 데이터를 query parameter로 전달
+    //     // const queryParams = new URLSearchParams({
+    //     //     flights: flights
+    //     // }).toString();
 
-        // console.log('🚀 fetchFlightTrack 요청 시작:', flightReg);
+    //     // console.log('🚀 fetchFlightTrack 요청 시작:', flightReg);
 
-        const res = await flightHttpClient.get('/api/flight/tracker', {
-            params: {
-                flightReg: flightReg
-            },
-            signal: signal
-        });
+    //     const res = await flightHttpClient.get('/api/flight/tracker333', {
+    //         params: {
+    //             flightReg: flightReg
+    //         },
+    //         metadata: {
+    //             category: 'TRACKER',
+    //         },
+    //         signal: signal
+    //     });
 
-        console.log('✅ [fetchFlightTrack] 요청 성공, res:', res);
+    //     // console.log('✅ [fetchFlightTrack] 요청 성공, res:', res);
 
-        return res.data;
+    //     return res.data;
 
-    } catch (error) {
+    // } catch (error) {
 
-        console.log('❌ [fetchFlightTrack] 에러 발생, error:', error);
+    //     // console.log('❌ [fetchFlightTrack] 에러 발생, error:', error);
 
 
-        const appError = error as AppError;
-        if (appError.code === ERROR_CODES.NETWORK.REQUEST_CANCELLED) {
-            console.warn('API warn: fetchFlightTrack is canceled: unmounted');
-            return;
-        }
+    //     const appError = error as AppError;
+    //     if (appError.code === ERROR_CODES.NETWORK.REQUEST_CANCELLED) {
+    //         console.warn('API warn: fetchFlightTrack is canceled: unmounted');
+    //         return;
+    //     }
 
-        console.error('🔴 [fetchFlightTrack] 에러 throw');
+    //     // console.error('🔴 [fetchFlightTrack] 에러 throw');
 
-        throw error;
-    }
+    //     throw error;
+    // }
 };
 
 const fetchFlightDetail = async (responseBody: string) => {
@@ -98,13 +125,14 @@ const fetchFlightDetail = async (responseBody: string) => {
         params: {
             fid: responseBody,
         },
+        metadata: {
+            category: 'DETAIL',
+            code: ERROR_CODES.FLIGHT.DETAIL_ERROR,
+            message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.DETAIL_ERROR],
+        },
     });
     
     const data = res.data.items?.[0];
-
-    if (!data) {
-        throw new Error('no data');
-    }
     
     return data;
     
@@ -134,6 +162,9 @@ const fetchFlightInfor = async (flightCode: string) => {
     const res = await flightHttpClient.get('/api/flight/infor', {
         params: {
             airline_iata: flightCode
+        },
+        metadata: {
+            category: 'INFOR',
         },
     });
 

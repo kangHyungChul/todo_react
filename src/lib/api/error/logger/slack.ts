@@ -6,44 +6,94 @@
 // 에러 정보를 담은 JSON 객체를 Slack Webhook으로 전송합니다.
 // 전송 실패 시 console.error로 에러 로깅합니다.
 
-import type { AppError } from '@/lib/types/error';
+import type { AppError } from '../types';
 
 export const sendToSlack = async (error: AppError) => {
     const webhookUrl = process.env.SLACK_WEBHOOK_URL;
-    console.log('logger/slack.ts', webhookUrl, process.env.NODE_ENV);
+    console.log('logger/slack.ts', webhookUrl, error);
     if (!webhookUrl) return;
 
     const message = {
-        text: `🚨 에러 발생: ${error.message}`,
+        text: `🚨[${error.origin}] 에러 발생: ${error.message}`,
         blocks: [
             {
-                type: 'section',
+                type: 'header',
                 text: {
-                    type: 'mrkdwn',
-                    text: `*에러 발생*\n*도메인:* ${error.domain}\n*코드:* ${error.code}\n*메시지:* ${error.message}`
+                    type: 'plain_text',
+                    text: `🚨[${error.origin}] 에러 발생: ${error.message}`,
+                    emoji: true
                 }
             },
             {
                 type: 'section',
-                fields: [
-                    {
-                        type: 'mrkdwn',
-                        text: `*상태 코드:*\n${error.statusCode}`
-                    },
-                    {
-                        type: 'mrkdwn',
-                        text: `*심각도:*\n${error.severity || 'N/A'}`
-                    },
-                    {
-                        type: 'mrkdwn',
-                        text: `*Trace ID:*\n${error.traceId || 'N/A'}`
-                    },
-                    {
-                        type: 'mrkdwn',
-                        text: `*발생 시간:*\n${error.timestamp || 'N/A'}`
-                    }
-                ]
-            }
+                text: {
+                    type: 'mrkdwn',
+                    text: `*URL:* ${error.details?.url || 'N/A'}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*도메인:* ${error.domain}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*카테고리:* ${error.details?.category || 'N/A'}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*코드:* ${error.code}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*메시지:* ${error.message}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*RAW:* ${error.rawMessage}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*상태 코드:* ${error.statusCode}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*심각도:* ${error.severity || 'N/A'}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*Trace ID:* ${error.traceId || 'N/A'}`
+                }
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*발생 시간:* ${error.timestamp || 'N/A'}`
+                }
+            },
         ]
     };
 
