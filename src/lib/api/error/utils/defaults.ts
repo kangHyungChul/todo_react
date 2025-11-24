@@ -43,11 +43,15 @@ export const getDefaultOptions = (options?: NormalizerOptions) => {
     // 도메인 기본값: 'FLIGHT' (항공편 서비스가 메인 도메인)
     // - 프로젝트의 메인 비즈니스 도메인으로 설정
     // - 다른 도메인을 기본값으로 하고 싶으면 여기서 변경
-    const domain: ErrorDomain = options?.domain ?? 'FLIGHT';
+    const domain: ErrorDomain = options?.domain ?? 'UNKNOWN';
     
     return {
-        // 도메인: options에서 지정하거나 기본값 'FLIGHT'
+        // 도메인: options에서 지정하거나 기본값 'UNKNOWN'
         domain,
+
+        // 에러 타입: options에서 지정하거나 undefined
+        // - undefined인 경우 핸들러에서 자동 추론
+        type: options?.type,
         
         // 에러 코드: options에서 지정하거나 도메인별 기본 코드
         // - DOMAIN_DEFAULT_CODES[domain] 사용

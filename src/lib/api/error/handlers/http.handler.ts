@@ -71,10 +71,12 @@ export const handleHttpError = (
     const status = (response?.status as HttpStatusCode | undefined) ?? defaults.status;
     
     // 3) ErrorType 결정: HTTP 상태 코드 기반으로 분류
+    // - options.type이 지정되면 최우선 적용 (강제 지정)
+    // - 없으면 HTTP 상태 코드로 자동 분류
     // - 500 이상 → SYSTEM
     // - 400, 422 → VALIDATION
     // - 400 이상 → BUSINESS
-    const errorType = mapStatusToErrorType(status);
+    const errorType = defaults.type ?? mapStatusToErrorType(status);
     
     // 4) origin 결정: HTTP 상태 코드 기반으로 결정
     // - 500 이상 → 'server'

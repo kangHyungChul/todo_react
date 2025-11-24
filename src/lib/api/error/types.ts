@@ -30,8 +30,8 @@
 // - 비즈니스 도메인만 포함 (AUTH, FLIGHT 등)
 export type ErrorDomain =
     'AUTH'      // 인증/인가 관련 에러 (로그인, 권한 등)
-    | 'FLIGHT';  // 항공편 서비스 관련 에러 (조회, 예약 등)
-
+    | 'FLIGHT'  // 항공편 서비스 관련 에러 (조회, 예약 등)
+    | 'UNKNOWN';  // 알수없음
 // ------------------------------------------------------------
 // ErrorType
 // ------------------------------------------------------------
@@ -241,6 +241,11 @@ export interface NormalizerOptions {
     // - 예: 500 (서버 에러)
     // - 기본값: 500
     status?: number;
+
+    // 에러 타입을 강제로 지정하고 싶을 때 사용
+    // - 예: 'VALIDATION', 'BUSINESS'
+    // - 지정 시 자동 추론보다 우선 적용됨
+    type?: ErrorType;
     
     // 서버가 code를 보내주지 않을 때 사용할 기본 코드
     // - 예: 'FLIGHT_DEFAULT_ERROR'

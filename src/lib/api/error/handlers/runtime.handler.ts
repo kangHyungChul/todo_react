@@ -17,10 +17,10 @@
 // 2. ErrorType: 'RUNTIME', origin: 실행 환경 기반 결정
 // 3. 메시지 해석 및 AppError 생성
 
-import type { AppError, NormalizerOptions } from '../types';
+import type { AppError, AppErrorOrigin, NormalizerOptions } from '../types';
 import { resolveMessage } from '../mappers/message.mapper';
-import { ERROR_TYPE_DEFAULT_CODES } from '../mappers/status.mapper';
 import { getDefaultOptions } from '../utils/defaults';
+import { mapStatusToErrorType, mapStatusToOrigin, ERROR_TYPE_DEFAULT_CODES } from '../mappers/status.mapper';
 
 // ------------------------------------------------------------
 // handleRuntimeError
@@ -51,6 +51,19 @@ export const handleRuntimeError = (
     
     // 실행 환경 확인 (서버/클라이언트)
     const isServer = typeof window === 'undefined';
+
+    // 1. options.type 지정 시 최우선
+    // 2. status가 있으면 그에 맞춰 추론 (예: 400 -> VALIDATION)
+    // 3. 없으면 기본값 RUNTIME
+    const errorType = 
+        defaults.type ?? 
+        (options?.status ? mapStatusToErrorType(options.status) : 'RUNTIME');
+
+    // [개선] Origin 결정: status 기반 추론 > 실행 환경
+    // - status가 명시된 경우(예: 400)에는 해당 의미를 따름 (client error)
+    const origin: AppErrorOrigin = options?.status 
+        ? mapStatusToOrigin(options.status) 
+        : (isServer ? 'server' : 'client');
     
     // Error 인스턴스인 경우
     if (error instanceof Error) {
@@ -67,12 +80,12 @@ export const handleRuntimeError = (
         // AppError 생성
         return {
             domain: defaults.domain,        // 비즈니스 도메인
-            type: 'RUNTIME',                // 에러 타입: 항상 RUNTIME
+            type: errorType,                // 에러 타입: options > status > 기본값 RUNTIME
             code,                           // 에러 코드
             message,                        // 사용자 메시지
             rawMessage: error.message,      // 원본 Error 메시지
             statusCode: defaults.status,    // HTTP 상태 코드 (기본값: 500)
-            origin: isServer ? 'server' : 'client', // 실행 환경 기반 origin
+            origin: origin,                 // 에러 발생 출처
             details: {
                 stack: error.stack,         // Stack trace (디버깅용)
                 rawMessage: error.message   // 원본 메시지
@@ -107,12 +120,12 @@ export const handleRuntimeError = (
     // AppError 생성
     return {
         domain: defaults.domain,        // 비즈니스 도메인
-        type: 'RUNTIME',                // 에러 타입: 항상 RUNTIME
+        type: errorType,                // 에러 타입: options > status > 기본값 RUNTIME
         code,                           // 에러 코드
         message: finalMessage,          // 사용자 메시지
         rawMessage,                     // 원본 값 (문자열인 경우)
         statusCode: defaults.status,    // HTTP 상태 코드 (기본값: 500)
-        origin: 'unknown',              // 알 수 없는 값이므로 'unknown'
+        origin: origin,                 // 에러 발생 출처
         details: {
             raw: error,                 // 원본 값 (디버깅용)
             rawMessage                  // 원본 메시지 (문자열인 경우)

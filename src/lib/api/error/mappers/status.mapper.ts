@@ -38,6 +38,7 @@ import { ERROR_CODES } from '@/constants/errorCodes';
 export const DOMAIN_DEFAULT_CODES: Record<ErrorDomain, string> = {
     AUTH: ERROR_CODES.AUTH.DEFAULT_ERROR,      // 인증/인가 관련 기본 에러 코드
     FLIGHT: ERROR_CODES.FLIGHT.DEFAULT_ERROR,  // 항공편 서비스 관련 기본 에러 코드
+    UNKNOWN: ERROR_CODES.SYSTEM.DEFAULT_ERROR, // 알 수 없는 도메인은 시스템 기본 에러 코드
 };
 
 // ------------------------------------------------------------
@@ -108,6 +109,7 @@ export const ERROR_TYPE_DEFAULT_SEVERITY: Record<ErrorType, ErrorSeverity> = {
 export const DOMAIN_DEFAULT_SEVERITY: Record<ErrorDomain, ErrorSeverity> = {
     AUTH: 'HIGH',      // 인증/인가 오류는 보안 관련이므로 높은 심각도
     FLIGHT: 'HIGH',    // 항공편 정보 오류는 서비스 핵심 기능이므로 높은 심각도
+    UNKNOWN: 'MEDIUM', // 알 수 없는 도메인은 중간 심각도
 };
 
 // ------------------------------------------------------------

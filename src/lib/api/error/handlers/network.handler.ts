@@ -85,11 +85,14 @@ export const handleNetworkError = (
         message: options?.message,
         serverMessage: rawMessage
     });
+
+    // ErrorType 결정: options.type > 'NETWORK' 기본값
+    const errorType = defaults.type ?? 'NETWORK';
     
     // 4) AppError 생성
     return {
         domain: defaults.domain,        // 비즈니스 도메인 (FLIGHT, AUTH 등)
-        type: 'NETWORK',                 // 에러 타입: 항상 NETWORK
+        type: errorType,                 // 에러 타입: options > 기본값 NETWORK
         code,                            // 에러 코드 (매핑된 코드 또는 기본값)
         message,                         // 사용자 메시지
         rawMessage,                      // 원본 네트워크 에러 메시지
