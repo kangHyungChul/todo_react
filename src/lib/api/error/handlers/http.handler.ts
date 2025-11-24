@@ -97,6 +97,8 @@ export const handleHttpError = (
         message: options?.message,
         serverMessage: rawMessage
     });
+
+    // console.log('🚀 [handleHttpError] message:', code, message, rawMessage);
     
     // 7) traceId 추출: 헤더의 x-trace-id > 바디의 traceId
     const traceIdFromHeaders = 

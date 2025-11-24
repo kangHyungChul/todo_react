@@ -34,10 +34,12 @@ export const safeServerFetch = async <T = unknown>(
 
     // 서버 환경의 기본 도메인 설정
     // metadata의 code/message를 normalizedOptions에 병합
-    // - 'SERVER' 도메인은 ErrorDomain에 없으므로 'FLIGHT'를 기본값으로 사용
     // - fallbackOptions에서 domain을 지정할 수 있음
+
+    // console.log('🚀 [safeServerFetch] options:', options);
+
     const normalizedOptions: NormalizerOptions = {
-        domain: 'FLIGHT',  // 기본값: 'FLIGHT' (프로젝트의 메인 도메인)
+        domain: 'UNKNOWN',  // 기본값: 'UNKNOWN' (알 수 없는 도메인)
         ...fallbackOptions,
         // metadata의 code와 message를 normalizedOptions에 병합
         ...(metadata?.code && { code: metadata.code }),
@@ -91,7 +93,6 @@ export const safeServerFetch = async <T = unknown>(
                     appError.severity = metadata.severity;
                 }
             }
-
 
             await Logger.error(appError);
             throw appError;

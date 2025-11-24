@@ -76,19 +76,22 @@ export const resolveMessage = ({
     message,
     serverMessage
 }: ResolveMessageParams): string => {
-    // 1) 서버에서 내려준 원본 메시지가 있다면 최우선 사용 (가장 구체적이고 정확)
-    // - 서버가 보내준 메시지는 가장 구체적이고 정확한 정보
-    // - 예: '항공편 FL1234를 찾을 수 없습니다.'
-    if (serverMessage && serverMessage.trim().length > 0) {
-        return serverMessage;
-    }
 
-    // 2) code가 존재하고 ERROR_MESSAGES에 매핑되어 있다면 그 문구 사용 (일관성 유지)
+    // console.log('🚀 [resolveMessage] code:', code, 'message:', message, 'serverMessage:', serverMessage);
+
+    // 1) code가 존재하고 ERROR_MESSAGES에 매핑되어 있다면 그 문구 사용 (일관성 유지)
     // - 코드 기반 메시지는 일관된 사용자 경험 제공
     // - 예: 'FLIGHT_DEFAULT_ERROR' → '항공편 정보를 불러올 수 없습니다.'
     if (code) {
         const preset = ERROR_MESSAGES[code as keyof typeof ERROR_MESSAGES];
         if (preset) return preset;
+    }
+
+    // 2) 서버에서 내려준 원본 메시지가 있다면 사용 (가장 구체적이고 정확)
+    // - 서버가 보내준 메시지는 가장 구체적이고 정확한 정보
+    // - 예: '항공편 FL1234를 찾을 수 없습니다.'
+    if (serverMessage && serverMessage.trim().length > 0) {
+        return serverMessage;
     }
 
     // 3) 클라이언트가 지정한 message가 있다면 사용 (fallback)

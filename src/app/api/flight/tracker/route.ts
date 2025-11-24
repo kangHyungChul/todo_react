@@ -19,12 +19,12 @@ const GET = async (request: NextRequest) => {
         // console.log('flightReg:', request.nextUrl.search, `https://aerodatabox.p.rapidapi.com/aircrafts/reg/${flightReg}/all`, `${process.env.FLIGHT_X_RAPIDAPI_KEY}`);
 
         const [icao24Response, tokenResponse] = await Promise.all([
-            safeFlightFetch<Array<{ hexIcao: string }>>(`https://prod.api.market/api/v1/aedbx/aerodatabox/aircrafts/Reg/${flightReg}/registrations1`, {
+            safeFlightFetch<Array<{ hexIcao: string }>>(`https://prod.api.market/api/v1/aedbx/aerodatabox/aircrafts/Reg/${flightReg}/registrations`, {
                 method: 'GET',
                 metadata: {
                     category: 'AERODATABOX',
                     severity: 'CRITICAL',
-                    code: 'AERODATABOX_DEFAULT_ERROR',
+                    code: ERROR_CODES.FLIGHT.AERODATABOX_DEFAULT_ERROR,
                     message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.AERODATABOX_DEFAULT_ERROR]
                 },
                 headers: {
@@ -36,7 +36,7 @@ const GET = async (request: NextRequest) => {
                 metadata: {
                     category: 'OPENSKY',
                     severity: 'CRITICAL',
-                    code: 'OPENSKY_DEFAULT_ERROR',
+                    code: ERROR_CODES.FLIGHT.OPENSKY_DEFAULT_ERROR,
                     message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.OPENSKY_DEFAULT_ERROR]
                 },
                 headers: {
@@ -61,7 +61,7 @@ const GET = async (request: NextRequest) => {
             metadata: {
                 category: 'TRACKER',
                 severity: 'CRITICAL',
-                code: 'TRACKING_ERROR',
+                code: ERROR_CODES.FLIGHT.TRACKING_ERROR,
                 message: ERROR_MESSAGES[ERROR_CODES.FLIGHT.TRACKING_ERROR]
             },
             headers: {
@@ -69,7 +69,7 @@ const GET = async (request: NextRequest) => {
             },
         });
         // API 응답 데이터를 콘솔에 출력하여 확인하는 코드 추가
-        console.log('API Response Text:', `${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}&time=0`, res);
+        // console.log('API Response Text:', `${process.env.FLIGHT_TRACK_API_URL}?icao24=${icao24}&time=0`, res);
 
         return NextResponse.json(res);
 
@@ -77,7 +77,7 @@ const GET = async (request: NextRequest) => {
         // AppError 처리
         if (error && typeof error === 'object' && 'domain' in error && 'code' in error) {
             const appError = error as AppError;
-            console.log('🚀 [GET] appError:', appError);
+            // console.log('🚀 [GET] appError:', appError);
             return NextResponse.json(
                 { error: appError.message },
                 { status: appError.statusCode || 500 }

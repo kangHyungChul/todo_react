@@ -10,7 +10,7 @@ import type { AppError } from '../types';
 
 export const sendToSlack = async (error: AppError) => {
     const webhookUrl = process.env.SLACK_WEBHOOK_URL;
-    console.log('logger/slack.ts', webhookUrl, error);
+    // console.log('logger/slack.ts', webhookUrl, error);
     if (!webhookUrl) return;
 
     const message = {
