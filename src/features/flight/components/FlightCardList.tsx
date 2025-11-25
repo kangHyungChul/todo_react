@@ -23,6 +23,7 @@ import FlightArrivalCard from './arrival/FlightCard';
 import FlightDepartureCard from './departure/FlightCard';
 import FlightSearchForm from './FlightSearchForm';
 import FlightTab from './FlightTab';
+import { toast } from "sonner"
 
 // 클라이언트 컴포넌트 - 상태 관리와 이벤트 핸들링 담당
 const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearchParamsType | FlightDepartureSearchParamsType, type: FlightType }) => {
@@ -160,6 +161,9 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     return (
         <>
+            <button onClick={() => toast("Event has been created")}>
+                Default
+            </button>
             {/* { `isLoading: ${isLoading}` }, { `isFetching: ${isFetching}` }, { `isPending: ${isPending}` } */}
             <FlightTab />
 

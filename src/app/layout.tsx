@@ -7,6 +7,7 @@ import Footer from '../components/layout/Footer';
 // import { ModalProvider } from '@/contexts/ModalContext';
 import Modal from '@/components/common/Modal';
 import Providers from './provider';
+import { Toaster } from '@/components/ui/sonner';
 // import ModalContext from '@/components/common/ModalContext';
 // const nanumGothic = Nanum_Gothic({
 //     weight: ['400', '700', '800'],
@@ -34,6 +35,7 @@ export default function RootLayout({
                         <Modal />
                     </main>
                     <Footer />
+                    <Toaster />
                 </Providers>
             </body>
         </html>
