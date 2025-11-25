@@ -3,6 +3,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { toAppError, Logger } from '@/lib/api/error';
 
 type GlobalErrorProps = {
     error: Error;
@@ -15,8 +16,18 @@ const GlobalError = ({ error, reset }: GlobalErrorProps) => {
 
     // 개발환경용 콘솔애러
     useEffect(() => {
-        if (isDev) {
-            console.error('[GlobalError] ', error);
+        // 1. AppError로 변환 (기본적으로 RUNTIME 타입이 됨)
+        const appError = toAppError(error, { 
+            type: 'RUNTIME'
+        });
+
+        // 2. 통합 로거를 통해 Sentry/Slack 전송
+        // (비동기 함수이므로 void 처리)
+        void Logger.error(appError);
+        
+        // 개발 환경 콘솔 출력은 Logger 내부에서 처리하거나, 필요시 유지
+        if (process.env.NODE_ENV === 'development') {
+            console.error('[GlobalError Caught]', error);
         }
     }, [error]);
 

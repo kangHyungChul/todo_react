@@ -1,6 +1,6 @@
 'use client';
 
-import { FlightArrivalItemType } from '../../types/flights';
+import { FlightArrivalItemType, FlightType } from '../../types/flights';
 import useModalStore from '@/store/ModalStore';
 // import { useModalContext } from '@/contexts/ModalContext';
 // import FlightDetailModal from './FlightDetailModal';
@@ -15,7 +15,7 @@ import PinIcon from '@/components/icon/pin';
 import { funcDateTimeToType } from '@/lib/utils/dateTime';
 import { memo } from 'react';
 
-const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
+const FlightCard = ({ flight, type }: { flight: FlightArrivalItemType, type: FlightType }) => {
 
     // const { openModalContext } = useModalContext();
     const openModalWithComponent = useModalStore((state) => state.openModalWithComponent);
@@ -25,10 +25,6 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
     // const { openModal } = useModalStore();
     return (
         <>
-            {/* 
-                상위 div: flex로 좌우 정렬, 내부에 2개의 주요 영역(좌측: 아이콘+항공편정보, 우측: 상태+뱃지)
-                class -> className으로 변경 필요, 코드 가독성 향상을 위해 들여쓰기 및 줄바꿈 정렬
-            */}
             <div className="flex justify-between items-center">
                 {/* 좌측: 아이콘 + 항공편명/항공사 */}
                 <div className="flex gap-4 items-center">
@@ -44,9 +40,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                 {/* 우측: 상태 아이콘 + 뱃지 */}
                 <FlightRemark remark={flight.remark} />
             </div>
-            {/* 
-                주요 정보(출발지, 도착지, 시간 등) 정렬 및 가독성 향상을 위해 코드 정렬
-            */}
+
             <div className="pt-6">
                 <div className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
                     {/* 출발지 정보 */}
@@ -113,7 +107,7 @@ const FlightCard = ({ flight }: { flight: FlightArrivalItemType }) => {
                             </Button>
                         )
                     }
-                    <FlightDetailViewButton path={`/flight/detail/${flight.fid}`} />
+                    <FlightDetailViewButton path={`/flight/${type}/detail/${flight.fid}`} />
                 </div>
             </div>
         </>

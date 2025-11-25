@@ -1,6 +1,6 @@
 'use client';
 
-import { FlightArrivalItemType, FlightDepartureItemType } from '../../types/flights';
+import { FlightType } from '../../types/flights';
 import FlightExitGate from '../FlightExitGate';
 import { fetchFlightDetail } from '../../services/flightApi';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 // import Link from 'next/link';
 // import { funcDateTimeToType } from '@/lib/utils/dateTime';
 
-const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | FlightDepartureItemType }) => {
+const FlightInfor = ({ flightId, type }: { flightId: string, type: FlightType }) => {
 
     // const { openModalContext } = useModalContext();
     // const openModal = useModalStore((state) => state.openModal);
@@ -22,11 +22,11 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
     // const { openModal } = useModalStore();
     // console.log(flightData);
 
-    console.log('flightData:', flightData);
+    // console.log('flightData:', flightData);
     const { data: flightDetailData, isLoading, isError } = useQuery({
-        queryKey: ['flightDetail', flightData.fid],
-        queryFn: () => fetchFlightDetail(flightData.fid),
-        initialData: flightData,
+        queryKey: ['flightDetail', flightId],
+        queryFn: () => fetchFlightDetail(flightId, type),
+        placeholderData: (prev) => prev,
         staleTime: 1000 * 30, // 10초
         gcTime: 1000 * 60, // 20초
     });
@@ -88,7 +88,7 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                                     <div className="flex items-center gap-3">
                                         {/* <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div> */}
                                         <div>
-                                            <p className="text-sm text-gray-500">운항 상태</p>
+                                            <p className="text-sm text-gray-500">상태</p>
                                             <p className="font-semibold text-lg">{flightDetailData.remark}</p>
                                         </div>
                                     </div>
@@ -99,32 +99,65 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
 
                     {/* 출발/도착 정보 */}
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
-                        {/* 출발지 */}
-                        <div className="bg-white rounded-lg border border-gray-200 shadow-lg">
-                            <div className="bg-emerald-50 p-4 rounded-t-lg">
-                                <h3 className="text-lg font-semibold flex items-center gap-2 text-emerald-700">
-                                    출발지
-                                </h3>
-                            </div>
-                            <div className="p-6">
-                                <p className="text-xl font-bold text-gray-900 mb-2">{flightDetailData.airport}</p>
-                            </div>
-                        </div>
-
-                        {/* 도착지 */}
-                        <div className="bg-white rounded-lg border border-gray-200 shadow-lg">
-                            <div className="bg-amber-50 p-4 rounded-t-lg">
-                                <h3 className="text-lg font-semibold flex items-center gap-2 text-amber-700">
-                                    도착지
-                                </h3>
-                            </div>
-                            <div className="p-6">
-                                <p className="text-xl font-bold text-gray-900 mb-2">인천</p>
-                                <div className="flex items-center gap-2 text-gray-600">
-                                    <span className="text-sm">{flightDetailData.scheduleDatetime}</span>
+                        {type === 'arrival' ? (
+                            <>
+                                {/* 출발지 */}
+                                <div className="bg-white rounded-lg border border-gray-200 shadow-lg">
+                                    <div className="bg-emerald-50 p-4 rounded-t-lg">
+                                        <h3 className="text-lg font-semibold flex items-center gap-2 text-emerald-700">
+                                            출발지
+                                        </h3>
+                                    </div>
+                                    <div className="p-6">
+                                        <p className="text-xl font-bold text-gray-900 mb-2">{flightDetailData.airport}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+
+                                {/* 도착지 */}
+                                <div className="bg-white rounded-lg border border-gray-200 shadow-lg">
+                                    <div className="bg-amber-50 p-4 rounded-t-lg">
+                                        <h3 className="text-lg font-semibold flex items-center gap-2 text-amber-700">
+                                            도착지
+                                        </h3>
+                                    </div>
+                                    <div className="p-6">
+                                        <p className="text-xl font-bold text-gray-900 mb-2">인천</p>
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <span className="text-sm">{flightDetailData.scheduleDatetime}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {/* 출발지 */}
+                                <div className="bg-white rounded-lg border border-gray-200 shadow-lg">
+                                    <div className="bg-emerald-50 p-4 rounded-t-lg">
+                                        <h3 className="text-lg font-semibold flex items-center gap-2 text-emerald-700">
+                                            출발지
+                                        </h3>
+                                    </div>
+                                    <div className="p-6">
+                                        <p className="text-xl font-bold text-gray-900 mb-2">인천</p>
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <span className="text-sm">{flightDetailData.scheduleDatetime}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 도착지 */}
+                                <div className="bg-white rounded-lg border border-gray-200 shadow-lg">
+                                    <div className="bg-amber-50 p-4 rounded-t-lg">
+                                        <h3 className="text-lg font-semibold flex items-center gap-2 text-amber-700">
+                                            도착지
+                                        </h3>
+                                    </div>
+                                    <div className="p-6">
+                                        <p className="text-xl font-bold text-gray-900 mb-2">{flightDetailData.airport}</p>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* 추가 정보 */}
@@ -138,16 +171,35 @@ const FlightInfor = ({ flightData }: { flightData: FlightArrivalItemType | Fligh
                                     <p className="text-sm text-gray-500 mb-1">터미널</p>
                                     <p className="font-semibold text-slate-700"><FlightExitGate terminalId={flightDetailData.terminalId} /></p>
                                 </div>
-                                <div className="p-4 bg-indigo-50 rounded-lg">
-                                    <p className="text-sm text-gray-500 mb-1">수하물수취대</p>
-                                    <p className="font-semibold text-indigo-700">
-                                        {'carousel' in flightDetailData ? flightDetailData.carousel : '-'}
-                                    </p>
-                                </div>
-                                <div className="p-4 bg-gray-50 rounded-lg">
-                                    <p className="text-sm text-gray-500 mb-1">게이트번호</p>
-                                    <p className="font-semibold text-gray-700">{flightDetailData.gateNumber}</p>
-                                </div>
+
+                                {type === 'arrival' ? (
+                                    <>
+                                        <div className="p-4 bg-gray-50 rounded-lg">
+                                            <p className="text-sm text-gray-500 mb-1">나오는곳</p>
+                                            <p className="font-semibold text-gray-700">{flightDetailData.exitNumber}</p>
+                                        </div>
+                                        <div className="p-4 bg-indigo-50 rounded-lg">
+                                            <p className="text-sm text-gray-500 mb-1">수하물수취대</p>
+                                            <p className="font-semibold text-indigo-700">
+                                                {'carousel' in flightDetailData ? flightDetailData.carousel : '-'}
+                                            </p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="p-4 bg-gray-50 rounded-lg">
+                                            <p className="text-sm text-gray-500 mb-1">체크인카운터</p>
+                                            <p className="font-semibold text-gray-700">
+                                                {'chkinRange' in flightDetailData ? flightDetailData.chkinRange : '-'}
+                                            </p>
+                                        </div>
+                                        <div className="p-4 bg-indigo-50 rounded-lg">
+                                            <p className="text-sm text-gray-500 mb-1">게이트번호</p>
+                                            <p className="font-semibold text-indigo-700">{flightDetailData.gateNumber}</p>
+                                        </div>
+                                    </>
+                                )}
+                                
                             </div>
                         </div>
                     </div>

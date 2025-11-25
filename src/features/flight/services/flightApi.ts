@@ -1,10 +1,10 @@
 import { flightHttpClient } from '@/lib/api/httpClient';
 // import type { AppError } from '@/lib/types/error';
-import { FlightArrivalType, FlightDepartureType } from '../types/flights';
+import { FlightArrivalType, FlightDepartureType, FlightType } from '../types/flights';
 import { ERROR_CODES } from '@/constants/errorCodes';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 
-const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
+export const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
 
     // console.log('로그확인 - flightApi_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL);
 
@@ -23,7 +23,7 @@ const fetchArrivalFlights = async (responseBody: FlightArrivalType) => {
     return res.data;
 };
 
-const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
+export const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
 
     // console.log('로그확인 - flightApi_1', process.env.NODE_ENV, process.env.VERCEL_URL, process.env.NEXT_PUBLIC_VERCEL_URL, process.env.BASE_URL);
 
@@ -63,7 +63,7 @@ const fetchDepartureFlights = async (responseBody: FlightDepartureType) => {
     // }
 };
 
-const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
+export const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
 
     // console.log('🚀 [fetchFlightTrack] 요청 시작, flightReg:', flightReg, 'signal:', signal);
 
@@ -119,11 +119,14 @@ const fetchFlightTrack = async ( flightReg: string, signal?: AbortSignal ) => {
     // }
 };
 
-const fetchFlightDetail = async (responseBody: string) => {
+export const fetchFlightDetail = async (responseBody: string, type: FlightType) => {
 
     const res = await flightHttpClient.get('/api/flight/detail', {
         params: {
             fid: responseBody,
+        },
+        headers: {
+            'x-flight-type': type,
         },
         metadata: {
             category: 'DETAIL',
@@ -157,7 +160,7 @@ const fetchFlightDetail = async (responseBody: string) => {
     // }
 };
 
-const fetchFlightInfor = async (flightCode: string) => {
+export const fetchFlightInfor = async (flightCode: string) => {
 
     const res = await flightHttpClient.get('/api/flight/infor', {
         params: {
@@ -171,4 +174,4 @@ const fetchFlightInfor = async (flightCode: string) => {
     return res.data.response.body;
 };
 
-export { fetchArrivalFlights, fetchDepartureFlights, fetchFlightTrack, fetchFlightDetail, fetchFlightInfor };
+export const flightWish = async (flightCode: string) => {};

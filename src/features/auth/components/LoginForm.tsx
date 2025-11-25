@@ -62,7 +62,7 @@ const LoginForm = () => {
                         <p className="text-blue-600 text-sm text-center">로그인 중입니다...</p>
                     </div>
                 )}
-                
+
                 {/* 에러 메시지 표시 */}
                 {(!loading && error) && (
                     <div className="w-full p-3 bg-red-50 border border-red-200 rounded-md">

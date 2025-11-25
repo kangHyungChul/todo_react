@@ -9,7 +9,8 @@ import { ERROR_CODES } from '@/constants/errorCodes';
 const GET = async (request: NextRequest) => {
     try {
 
-        const url = process.env.FLIGHT_ARRIVAL_API_URL;
+        const flightType = request.headers.get('x-flight-type');
+        const url = flightType === 'arrival' ? process.env.FLIGHT_ARRIVAL_API_URL : process.env.FLIGHT_DEPARTURE_API_URL;
         const apiKey = process.env.FLIGHT_API_KEY;
         
         // 환경변수 체크

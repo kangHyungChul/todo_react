@@ -23,7 +23,7 @@ const FlightSection = async({ parsedParams, type } : { parsedParams : FlightArri
     const getSearchFrom = parsedParams.searchFrom ?? funcNowTime();
     const getSearchTo = parsedParams.searchTo ?? setSearchTo;
     const getPageNo = parsedParams.pageNo ?? '1';
-    const getNumOfRows = parsedParams.numOfRows ?? '30';
+    const getNumOfRows = parsedParams.numOfRows ?? '1000';
     const getFlightId = parsedParams.flightId ?? '';
 
     const queryParams: FlightArrivalType | FlightDepartureType = {

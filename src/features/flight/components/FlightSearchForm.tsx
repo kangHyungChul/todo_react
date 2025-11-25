@@ -28,7 +28,7 @@ const FlightSearchForm = ({
     // 서버에서 받은 데이터를 기반으로 초기값 설정
     const getSearchFrom = queryParams?.searchFrom ? funcTimeToHHMMReverse(queryParams.searchFrom) : funcTimeToHHMMReverse(funcNowTime());
     const getSearchTo = queryParams?.searchTo ? funcTimeToHHMMReverse(queryParams.searchTo) : funcTimeToHHMMReverse(funcNowTimeAdd(30));
-    const getSearchNumOfRows = queryParams?.numOfRows ? queryParams.numOfRows.toString() : '30';
+    const getSearchNumOfRows = queryParams?.numOfRows ? queryParams.numOfRows.toString() : '1000';
     const getFlightId = queryParams?.flightId ? queryParams.flightId : '';
 
     const [searchFrom, setSearchFrom] = useState(getSearchFrom);
@@ -103,11 +103,12 @@ const FlightSearchForm = ({
                         onChange={(e) => setSearchNumOfRows(e.target.value)}
                         disabled={!!displayIsLoading}
                     >
-                        <option value="10">10</option>
-                        <option value="20">20</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
+                        <option value="300">300</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
                     </Select>
                 </div>
                 <div className="mt-4">

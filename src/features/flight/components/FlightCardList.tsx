@@ -203,9 +203,9 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
                                 {flightData.map((flight: FlightArrivalItemType | FlightDepartureItemType) => (
                                     <FlightCardLayout key={flight.fid}>
                                         {type === 'arrival' ? (
-                                            <FlightArrivalCard flight={flight as FlightArrivalItemType} />
+                                            <FlightArrivalCard flight={flight as FlightArrivalItemType} type={type} />
                                         ) : (
-                                            <FlightDepartureCard flight={flight as FlightDepartureItemType} />
+                                            <FlightDepartureCard flight={flight as FlightDepartureItemType} type={type} />
                                         )}
                                     </FlightCardLayout>
                                 ))}

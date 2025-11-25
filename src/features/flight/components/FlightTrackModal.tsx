@@ -131,11 +131,11 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
 
     // onLoad 함수 단순화
     const onLoad = useCallback(() => {
-        console.log('mount');
+        // console.log('mount');
     }, []);
 
     const onUnmount = useCallback(() => {
-        console.log('unmount');
+        // console.log('unmount');
     }, []);
 
     const handleMarkerClick = () => {
