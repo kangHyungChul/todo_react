@@ -6,7 +6,7 @@ import useModalStore from '@/store/ModalStore';
 import { useCallback, useEffect, useMemo } from 'react';
 import { fetchFlightTrack } from '../services/flightApi';
 import { GoogleMap, useJsApiLoader, OverlayView } from '@react-google-maps/api';
-// import type { Map } from '@react-google-maps/api';
+import { toast } from 'sonner';
 
 interface LatLngLiteral {
     lat: number,
@@ -76,14 +76,14 @@ const FlightTrackModal = ({ flightReg, flightId }: { flightReg: string, flightId
 
         // 에러가 발생한 경우 처리
         if (error) {
-            alert('위치조회가 불가능한 항공기입니다');
+            toast.error('위치조회가 불가능한 항공기입니다');
             closeModal();
             return;
         }
         
         // 로딩이 완료되었는데 데이터가 없거나 유효하지 않은 경우 처리
         if (!flightTrackData || !flightTrackData.states || flightTrackData.states.length === 0) {
-            alert('위치조회가 불가능한 항공기입니다');
+            toast.error('위치조회가 불가능한 항공기입니다');
             closeModal();
         }
     }, [flightTrackData, error, isFetching, closeModal]);

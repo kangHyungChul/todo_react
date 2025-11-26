@@ -58,6 +58,8 @@ const GET = async (request: NextRequest) => {
 
     } catch (error) {
 
+        console.log(error);
+
         // AppError 처리
         if (error && typeof error === 'object' && 'domain' in error && 'code' in error) {
             const appError = error as AppError;

@@ -1,12 +1,14 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '@/features/auth/store/authStore';
 import { useAuthSync } from '@/features/auth/hook/useAuthSync';
 import { isProtectedPath, isAuthOnlyPath } from '@/lib/auth/route';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import type { AppError } from '@/lib/api/error/types';
 
 export const AuthProviders = () => {
     const { initialize } = useAuthStore();
@@ -68,11 +70,48 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                 staleTime: 1000 * 30, // 캐싱시간 30초 간 fresh상태 / 이 시간 동안은 캐시된 데이터를 사용
                 gcTime: 1000 * 60, // 
                 networkMode: 'online',
+                // 중요: 초기 로딩 중 에러 발생 시 Error Boundary(error.tsx)로 에러 전파
+                // throwOnError란? 에러가 발생했을 때 에러 바운더리로 전파할지 여부를 결정하는 옵션
+                throwOnError: (error, query) => {
+                    // 데이터가 없는 상태에서 에러가 났을 때만 true 반환 -> error.tsx로 이동
+                    // 백그라운드 갱신 에러는 false -> 컴포넌트 유지 + 토스트
+                    return query.state.data === undefined;
+                },
             },
             mutations: {
                 retry: 0 // POST/PUT/DELETE 중복 요청 방지
-            }
-        }
+            },
+        },
+        // 1. 쿼리(조회) 에러 전역 핸들링
+        queryCache: new QueryCache({
+            onError: (error, query) => {
+
+                const appError = error as unknown as AppError;
+                
+                // 3. 네트워크 에러 우선 체크
+                if (error.message === 'Network request failed' || appError.type === 'NETWORK') {
+                    toast.error('ERROR: 네트워크 연결 상태를 확인해 주세요.');
+                    return;
+                }
+
+                // 2. 데이터가 이미 있는 경우 (백그라운드 갱신 실패) -> 토스트만
+                if (query.state.data !== undefined) {
+                    toast.error(`ERROR: ${error.message}`);
+                    return;
+                }
+
+                // 1. 초기 데이터 로딩 실패 -> 토스트 띄우기 (화면은 error.tsx가 처리하겠지만 알림도 줌)
+                // 필요 없다면 이 부분은 생략 가능
+                toast.error(`ERROR: ${error.message}`);
+            },
+        }),
+        // 2. 뮤테이션(수정/삭제) 에러 전역 핸들링
+        mutationCache: new MutationCache({
+            onError: (error) => {
+                // 4. 사용자 액션 실패 -> 무조건 토스트
+                toast.error(`ERROR: ${error.message}`);
+            },
+        }),
     }));
 
     return (

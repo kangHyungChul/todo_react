@@ -267,3 +267,27 @@
 ::view-transition-new(.slow-fade) {
     animation-duration: 300ms;
 } */
+
+[data-sonner-toast][data-styled=true][data-type="success"] {
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-900);
+    border-color: var(--color-primary-200);
+}
+
+[data-sonner-toast][data-styled="true"][data-type="warning"] {
+    background-color: var(--color-warning-100);
+    color: var(--color-warning-900);
+    border-color: var(--color-warning-200);
+}
+
+[data-sonner-toast][data-styled="true"][data-type="error"] {
+    background-color: var(--color-danger-100);
+    color: var(--color-danger-900);
+    border-color: var(--color-danger-200);
+}
+
+[data-sonner-toast][data-styled="true"][data-type="info"] {
+    background-color: var(--color-secondary-100);
+    color: var(--color-secondary-900);
+    border-color: var(--color-secondary-200);
+}

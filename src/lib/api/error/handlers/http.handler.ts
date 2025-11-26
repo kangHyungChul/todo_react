@@ -120,7 +120,6 @@ export const handleHttpError = (
             url: request?.url,
             method: request?.method,
             data: body,
-            rawMessage
         },
         traceId,
         timestamp: new Date().toISOString()

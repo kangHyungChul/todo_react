@@ -161,9 +161,6 @@ const FlightCardList = ({ queryParams, type }: { queryParams: FlightArrivalSearc
 
     return (
         <>
-            <button onClick={() => toast("Event has been created")}>
-                Default
-            </button>
             {/* { `isLoading: ${isLoading}` }, { `isFetching: ${isFetching}` }, { `isPending: ${isPending}` } */}
             <FlightTab />
 

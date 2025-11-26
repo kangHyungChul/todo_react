@@ -1,29 +1,31 @@
-// src/app/error.tsx
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
-import { toAppError, Logger } from '@/lib/api/error';
+import { useRouter } from 'next/navigation';
+// import { RefreshCcwIcon } from 'lucide-react';
+// import { toAppError } from '@/lib/api/error';
+// import { Logger } from '@/lib/api/error/logger';
+import Button from '@/components/common/Button';
+import LinkButton from '@/components/common/LinkButton';
 
-type GlobalErrorProps = {
-    error: Error;
+export default function Error({
+    error,
+    reset,
+}: {
+    error: Error & { digest?: string };
     reset: () => void;
-};
+}) {
+    const router = useRouter();
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-const GlobalError = ({ error, reset }: GlobalErrorProps) => {
-
-    // 개발환경용 콘솔애러
     useEffect(() => {
-        // 1. AppError로 변환 (기본적으로 RUNTIME 타입이 됨)
-        const appError = toAppError(error, { 
-            type: 'RUNTIME'
-        });
+        // // 1. AppError로 변환 (기본적으로 RUNTIME 타입이 됨)
+        // const appError = toAppError(error, { 
+        //     type: 'RUNTIME', 
+        // });
 
-        // 2. 통합 로거를 통해 Sentry/Slack 전송
-        // (비동기 함수이므로 void 처리)
-        void Logger.error(appError);
+        // // 2. 통합 로거를 통해 Sentry/Slack 전송
+        // // (비동기 함수이므로 void 처리)
+        // void Logger.error(appError);
         
         // 개발 환경 콘솔 출력은 Logger 내부에서 처리하거나, 필요시 유지
         if (process.env.NODE_ENV === 'development') {
@@ -31,51 +33,52 @@ const GlobalError = ({ error, reset }: GlobalErrorProps) => {
         }
     }, [error]);
 
+    const handleReset = () => {
+        // 1. 서버 컴포넌트 데이터 갱신 (RSC Refresh)
+        //    - 이를 통해 서버 컴포넌트를 다시 실행하고 새로운 데이터를 받아옵니다.
+        router.refresh();
+        
+        // 2. Error Boundary 리셋
+        //    - UI 상태를 초기화하고 다시 렌더링을 시도합니다.
+        reset();
+    };
+
     return (
-        <div className="flex flex-col gap-6 justify-center items-center p-6 mx-auto max-w-screen-sm min-h-dvh">
-            <h1 className="text-2xl font-semibold text-red-500">ERROR!</h1>
-            <p className="text-base text-neutral-700">문제가 발생했습니다. 잠시 후 다시 시도해 주세요.</p>
-
-            {/* 개발환경용 디버깅 메세지 */}
-            {isDev && (
-                <details className="p-4 w-full text-sm bg-white rounded-lg border border-neutral-200 text-neutral-800">
-                    <summary className="font-medium cursor-pointer select-none">
-                        디버그 정보(개발환경에서만 표시)
-                    </summary>
-                    <pre className="overflow-auto mt-3 text-xs leading-relaxed whitespace-pre-wrap">
-                        {String(error?.stack || error?.message || 'no stack')}
-                    </pre>
-                </details>
-            )}
-
-            <div className="flex gap-3 items-center mt-2">
-                <button
-                    type="button"
-                    onClick={() => reset()}
-                    className="px-4 py-2 text-sm font-medium bg-white rounded-xl border border-neutral-300 hover:bg-neutral-100 active:bg-neutral-200"
-                    aria-label="다시 시도"
-                >
-                    다시 시도
-                </button>
-
-                <Link
-                    href="/"
-                    className="px-4 py-2 text-sm font-medium text-white rounded-xl bg-neutral-900 hover:bg-neutral-800 active:bg-neutral-700"
-                    aria-label="홈으로 이동"
-                >
-                    홈으로
-                </Link>
-
-                <Link
-                    href="/support"
-                    className="px-4 py-2 text-sm font-medium bg-white rounded-xl border border-neutral-300 hover:bg-neutral-100 active:bg-neutral-200"
-                    aria-label="문의하기"
-                >
-                    문의하기
-                </Link>
+        <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 text-center">
+            <div className="space-y-4">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg
+                        className="w-8 h-8 text-red-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                    </svg>
+                </div>
+                <h2 className="text-2xl font-semibold tracking-tight text-center">
+                    문제가 발생했습니다
+                </h2>
+                <p className="text-muted-foreground max-w-[500px] mx-auto">
+                    페이지를 불러오는 도중 예기치 않은 오류가 발생했습니다.<br />
+                    잠시 후 다시 시도해 주세요.
+                </p>
+                {process.env.NODE_ENV === 'development' && (
+                    <div className="mt-4 p-4 bg-slate-100 rounded-lg text-sm overflow-auto max-w-[600px] max-h-[200px] text-center">
+                        <p className="font-bold text-red-500">{error.name}</p>
+                        <p className="text-slate-700">{error.message}</p>
+                    </div>
+                )}
+            </div>
+            <div className="mt-8 flex gap-4">
+                <Button onClick={() => handleReset()}>다시 시도</Button>
+                <LinkButton variant="primary" href="/">홈으로 이동</LinkButton>
             </div>
         </div>
     );
-};
-
-export default GlobalError;
+}
